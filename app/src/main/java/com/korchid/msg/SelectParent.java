@@ -1,5 +1,7 @@
 package com.korchid.msg;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,12 @@ public class SelectParent extends AppCompatActivity {
         MyAdapter adapter = new MyAdapter();
         pager.setAdapter(adapter);
 
+        button2 = (Button) findViewById(R.id.button2);
+        button3 = (Button) findViewById(R.id.button3);
+        button4 = (Button) findViewById(R.id.button4);
+
+
+        // SeekBar setting
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         seekBar.setMax(pager.getAdapter().getCount() - 1);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -52,6 +60,8 @@ public class SelectParent extends AppCompatActivity {
             }
         });
 
+
+        // Pager setting
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -59,9 +69,30 @@ public class SelectParent extends AppCompatActivity {
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(final int position) {
                 seekBar.setProgress(position);
 
+                button2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNum[position]));
+                        startActivity(intent);
+                    }
+                });
+
+                button3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                button4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
             }
 
             @Override
@@ -71,6 +102,7 @@ public class SelectParent extends AppCompatActivity {
         });
     }
 
+    // Pager Adapter
     class MyAdapter extends PagerAdapter {
 
         @Override
