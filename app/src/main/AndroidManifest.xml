@@ -15,6 +15,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:name=".service.MqttService" android:process=":MqttSubProcess"></service>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +25,9 @@
         </activity>
         <activity android:name=".SplashActivity"></activity>
         <activity android:name=".SelectParent"></activity>
+        <activity android:name=".ChattingActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
     </application>
 
 </manifest>

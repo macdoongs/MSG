@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@drawable/chat">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/size"
+        android:layout_weight="0.99"
+        android:weightSum="1"
+        android:layout_height="0px">
+    <ListView
+        android:id="@+id/messageView"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:transcriptMode="alwaysScroll"
+        android:divider="#FFFFFF"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_weight="1.36" />
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="54dp"
+            android:layout_height="36dp"
+            android:text="설정"
+            android:id="@+id/setting"
+            android:background="@drawable/setting" />
+
+        <Button
+            android:layout_width="46dp"
+            android:layout_height="52dp"
+            android:text="나가기"
+            android:id="@+id/quit"
+            android:background="@drawable/door" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:background="@android:color/background_light">
+
+        <EditText
+            android:id="@+id/publishEditView"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:layout_weight="0.81">
+            <requestFocus />
+        </EditText>
+
+        <Button
+        android:id="@+id/publishButton"
+        android:layout_width="66dp"
+        android:layout_height="46dp"
+        android:text="보내기"
+            android:background="@drawable/set" />
+        </LinearLayout>
+
+</LinearLayout>

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SelectParent extends AppCompatActivity {
     ViewPager pager;
@@ -72,6 +73,7 @@ public class SelectParent extends AppCompatActivity {
             public void onPageSelected(final int position) {
                 seekBar.setProgress(position);
 
+                // Call button
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -80,17 +82,22 @@ public class SelectParent extends AppCompatActivity {
                     }
                 });
 
+                // Chatting button
                 button3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
+                        Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
+                        intent.putExtra("topic", topic[position]);
+                        startActivity(intent);
                     }
                 });
 
+                // Setting button
                 button4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Toast.makeText(getApplicationContext(), "Click setting button", Toast.LENGTH_LONG).show();
                     }
                 });
             }
