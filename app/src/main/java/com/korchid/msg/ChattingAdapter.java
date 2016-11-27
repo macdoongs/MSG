@@ -27,37 +27,26 @@ public class ChattingAdapter extends BaseAdapter {
         private String message = "";
 
         public ChattingAdapter (Activity act, ArrayList<Chatting> mArr) {
-
             this.MessagingActivity = act;
-
-            messageArray = mArr;
-
-            //설명 1:
+            this.messageArray = mArr;
 
             mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         }
 
         //설명 2:
 
         @Override
         public int getCount() {
-
             return messageArray.size();
-
         }
 
         @Override
         public Object getItem(int position) {
-
             return messageArray.get(position);
-
         }
 
         public long getItemId(int position){
-
             return position;
-
         }
 
         //설명 3:

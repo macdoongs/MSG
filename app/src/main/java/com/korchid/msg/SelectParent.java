@@ -40,6 +40,7 @@ public class SelectParent extends AppCompatActivity {
         button3 = (Button) findViewById(R.id.button3);
         button4 = (Button) findViewById(R.id.button4);
 
+        buttonListener(button2, button3, button4, 0);
 
         // SeekBar setting
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -73,33 +74,7 @@ public class SelectParent extends AppCompatActivity {
             public void onPageSelected(final int position) {
                 seekBar.setProgress(position);
 
-                // Call button
-                button2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNum[position]));
-                        startActivity(intent);
-                    }
-                });
-
-                // Chatting button
-                button3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
-                        Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
-                        intent.putExtra("topic", topic[position]);
-                        startActivity(intent);
-                    }
-                });
-
-                // Setting button
-                button4.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(getApplicationContext(), "Click setting button", Toast.LENGTH_LONG).show();
-                    }
-                });
+                buttonListener(button2, button3, button4, position);
             }
 
             @Override
@@ -144,5 +119,34 @@ public class SelectParent extends AppCompatActivity {
         }
     }
 
+    public void buttonListener(Button b1, Button b2, Button b3, final int idx){
+        // Call button
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNum[idx]));
+                startActivity(intent);
+            }
+        });
 
+        // Chatting button
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
+                intent.putExtra("topic", topic[idx]);
+                startActivity(intent);
+            }
+        });
+
+        // Setting button
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 }

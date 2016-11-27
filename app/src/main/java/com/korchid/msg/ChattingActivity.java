@@ -70,7 +70,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
-        Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
 
         setting = (Button)findViewById(R.id.setting);
         quit = (Button)findViewById(R.id.quit);
@@ -121,7 +121,9 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Click setting menu", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Click setting menu", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                startActivity(intent);
             }
         });
 

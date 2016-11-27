@@ -28,6 +28,8 @@
         <activity android:name=".ChattingActivity"
             android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
+        <activity android:name=".SettingActivity">
+        </activity>
     </application>
 
 </manifest>
