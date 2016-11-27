@@ -9,6 +9,8 @@ import android.util.Log;
  * Created by mac0314 on 2016-11-28.
  */
 
+
+// Loading screen
 public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +19,7 @@ public class SplashActivity extends Activity {
 
         Log.d("Loading", "SplashActivity Ok");
         Handler handler = new Handler();
+        // Duration : 2 second
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
