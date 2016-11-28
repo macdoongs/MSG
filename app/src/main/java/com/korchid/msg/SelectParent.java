@@ -124,7 +124,14 @@ public class SelectParent extends AppCompatActivity {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Show dial
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNum[idx]));
+
+                //Direct call
+                //Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum[idx]));
+                startActivity(intent);
+
+
                 startActivity(intent);
             }
         });

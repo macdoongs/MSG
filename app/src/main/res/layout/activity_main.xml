@@ -10,6 +10,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.korchid.msg.MainActivity">
 
+    <TextView
+        android:id="@+id/userName"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!" />
+
+    <Button
+        android:id="@+id/btn_con"
+        android:onClick="mOnClick"
+        android:text="접속"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:text="Next"
         android:layout_width="wrap_content"

@@ -27,5 +27,15 @@ dependencies {
     compile project(':org.eclipse.paho.client.mqttv3')
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
+    compile 'com.google.android.gms:play-services-plus:10.0.0'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
+    compile 'com.google.http-client:google-http-client-android:+'
+    compile 'com.google.api-client:google-api-client-android:+'
+    compile 'com.google.api-client:google-api-client-gson:+'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.mcxiaoke.volley:library:1.0.18'
+    compile 'com.github.bumptech.glide:glide:3.6.0'
+    compile 'com.google.android.gms:play-services-auth:10.0.0'
+    compile 'com.google.android.gms:play-services-gcm:10.0.0'
     testCompile 'junit:junit:4.12'
 }
