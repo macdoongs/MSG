@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1014588174923",
+    "firebase_url": "https://mfg-project.firebaseio.com",
+    "project_id": "mfg-project",
+    "storage_bucket": "mfg-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014588174923:android:e61a833d14141e18",
+        "android_client_info": {
+          "package_name": "com.korchid.msg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014588174923-pl33q2sh8nj94oqdk7rq3pvgaqjau54v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsX4QbchQzhmbBZuq7lG3HaLrxvcRTLis"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

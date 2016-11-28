@@ -14,6 +14,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * Created by mac0314 on 2016-11-28.
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     TextView userName;
     Button button;
 
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         userName = (TextView) findViewById(R.id.userName);
 
