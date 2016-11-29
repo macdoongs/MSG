@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_select_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1">
 
-    <SeekBar
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:progress="0"
-        android:id="@+id/seekBar" />
-
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="405dp"
-        android:layout_weight="0.97">
+        android:layout_height="365dp"
+        android:background="@drawable/kakao_default_profile_image">
+
     </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.40" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/button3"
+            android:layout_weight="0.1"
+            android:background="@drawable/message" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.40" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,26 +44,33 @@
         android:layout_height="43dp">
 
         <Button
-            android:text="Call"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/button2"
-            android:layout_weight="1" />
+            android:layout_weight="0.01"
+            android:background="@drawable/call" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
 
         <Button
-            android:text="Chatting"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button3"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="Setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/button4"
-            android:layout_weight="1" />
+            android:layout_weight="0.01"
+            android:background="@drawable/plane" />
+
     </LinearLayout>
+
+    <SeekBar
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="0"
+        android:id="@+id/seekBar"
+        android:layout_weight="0.97" />
 
 
 </LinearLayout>

@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +37,8 @@ import com.korchid.msg.service.MqttService.ConnectionStatus;
 
 public class ChattingActivity extends AppCompatActivity implements MessageHandler, StatusHandler {
     private Button setting;
-    private Button quit;
+    private Button menu;
+    private Button plus;
 
     private Handler handler = new Handler();
 
@@ -47,6 +51,10 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private MessageReceiver msgReceiver;
     private StatusReceiver statusReceiver;
 
+    Animation aleft;
+    Animation bleft;
+
+    LinearLayout slidingPanel;
     ListView messageView;
 
     private EditText publishEditView;
@@ -58,6 +66,13 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
+
+
+        aleft = AnimationUtils.loadAnimation(this, R.anim.aleft);
+        bleft = AnimationUtils.loadAnimation(this, R.anim.bleft);
+
+        slidingPanel = (LinearLayout) findViewById(R.id.slidingPanel);
+
 
         Intent intent = getIntent();
 //        pic = data.getByteArrayExtra("pic");
@@ -72,8 +87,11 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
         //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
 
+
         setting = (Button)findViewById(R.id.setting);
-        quit = (Button)findViewById(R.id.quit);
+        menu = (Button)findViewById(R.id.menu);
+        plus = (Button)findViewById(R.id.plus);
+
 
         messageView = (ListView)findViewById(R.id.messageView);
 
@@ -121,18 +139,40 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), "Click setting menu", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Click setting", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
                 startActivity(intent);
             }
         });
 
-        quit.setOnClickListener(new View.OnClickListener() {
+        menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Toast.makeText(getApplicationContext(), "Sliding menu", Toast.LENGTH_LONG).show();
+                slidingPanel.setVisibility(View.VISIBLE);
+                slidingPanel.startAnimation(aleft);
             }
         });
+
+        plus.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(slidingPanel.getVisibility() == View.VISIBLE){
+            slidingPanel.startAnimation(bleft);
+            slidingPanel.setVisibility(View.GONE);
+
+            return;
+        }else{
+            super.onBackPressed();
+        }
 
     }
 

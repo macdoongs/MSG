@@ -32,13 +32,13 @@ public class SettingActivity extends AppCompatActivity {
 
         ListView listV = (ListView)findViewById(R.id.listView2);
 
-        m_arry.add(new Setting("닉네임 바꾸기","@drawable/image", nickname, 0, title));
+        m_arry.add(new Setting("메시지 설정","@drawable/image", nickname, 0, title));
 
-        m_arry.add(new Setting("공지","@drawable/image", nickname, 2, title));
+        m_arry.add(new Setting("사용자 추가","@drawable/image", nickname, 2, title));
 
-        m_arry.add(new Setting("알림","@drawable/image", nickname, 3, title));
+        m_arry.add(new Setting("환경 설정","@drawable/image", nickname, 3, title));
 
-        m_arry.add(new Setting("방으로 돌아가기","@drawable/image", nickname, 4, title));
+        m_arry.add(new Setting("돌아가기","@drawable/image", nickname, 4, title));
 
         adapter = new SettingAdapter(SettingActivity.this, m_arry);
 

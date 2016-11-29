@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -18,13 +19,13 @@ public class SelectParent extends AppCompatActivity {
     ViewPager pager;
     SeekBar seekBar;
     Button button, button2, button3, button4;
-
+    ImageView imageView;
 
     // Temp Data Array
     String[] parent = {"Father", "Mother", "StepMother"};
     String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
     String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
-
+    int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,10 @@ public class SelectParent extends AppCompatActivity {
 
         MyAdapter adapter = new MyAdapter();
         pager.setAdapter(adapter);
+
+        //imageView = (ImageView) findViewById(R.id.imageView);
+
+        //imageView.setImageResource(imageId[0]);
 
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
@@ -74,6 +79,7 @@ public class SelectParent extends AppCompatActivity {
             public void onPageSelected(final int position) {
                 seekBar.setProgress(position);
 
+                //imageView.setImageResource(imageId[position]);
                 buttonListener(button2, button3, button4, position);
             }
 
@@ -107,11 +113,18 @@ public class SelectParent extends AppCompatActivity {
             LinearLayout layout = new LinearLayout(getApplicationContext());
             layout.setOrientation(LinearLayout.VERTICAL);
 
+
+
             TextView textview = new TextView(getApplicationContext());
             textview.setText(parent[position]);
             textview.setTextSize(40.0f);
 
+            ImageView imageView = new ImageView(getApplicationContext());
+            imageView.setImageResource(imageId[position]);
+
+
             layout.addView(textview);
+            layout.addView(imageView);
 
             container.addView(layout);
 

@@ -8,21 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.korchid.msg.MainActivity">
-
-    <TextView
-        android:id="@+id/userName"
-        android:textSize="30sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-
-    <Button
-        android:id="@+id/btn_con"
-        android:onClick="mOnClick"
-        android:text="접속"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    tools:context="com.korchid.msg.MainActivity"
+    android:background="@drawable/background2">
 
     <Button
         android:text="Next"
@@ -51,4 +38,45 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="198dp" />
+
+    <TextView
+        android:id="@+id/userName"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MFG"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/btn_con"
+            android:onClick="mOnClick"
+            android:text="Google Login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="47dp" />
+
+        <Button
+            android:text="Facebook login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button5" />
+
+        <Button
+            android:text="KaKao Login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button6" />
+    </LinearLayout>
 </RelativeLayout>
