@@ -8,15 +8,16 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 /**
- * Created by mac0314 on 2016-11-28.
+ * Created by mac0314 on 2016-11-30.
  */
 
-public class SettingActivity extends AppCompatActivity {
+public class MessageSettingActivity extends AppCompatActivity {
     String nickname;
     String title;
-    private ArrayList<Setting> m_arry;
 
-    private SettingAdapter adapter;
+    private ArrayList<Setting> m_arry;
+    private MessageSettingAdapter adapter;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
@@ -33,15 +34,15 @@ public class SettingActivity extends AppCompatActivity {
 
         ListView listV = (ListView)findViewById(R.id.listView2);
 
-        m_arry.add(new Setting("메시지 설정","@drawable/image", nickname, 0, title));
+        m_arry.add(new Setting("잘지내시죠?","@drawable/image", nickname, 0, title));
 
-        m_arry.add(new Setting("사용자 추가","@drawable/image", nickname, 2, title));
+        m_arry.add(new Setting("별일 없으신가요?","@drawable/image", nickname, 2, title));
 
-        m_arry.add(new Setting("환경 설정","@drawable/image", nickname, 3, title));
+        m_arry.add(new Setting("건강은 어떠세요?","@drawable/image", nickname, 3, title));
 
-        m_arry.add(new Setting("돌아가기","@drawable/image", nickname, 4, title));
+        m_arry.add(new Setting("식사하셨어요?","@drawable/image", nickname, 4, title));
 
-        adapter = new SettingAdapter(SettingActivity.this, m_arry);
+        adapter = new MessageSettingAdapter(MessageSettingActivity.this, m_arry);
 
         listV.setAdapter(adapter);
 

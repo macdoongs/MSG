@@ -51,6 +51,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private MessageReceiver msgReceiver;
     private StatusReceiver statusReceiver;
 
+    Boolean slidingState = false;
     Animation aleft;
     Animation bleft;
 
@@ -148,9 +149,11 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Sliding menu", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Sliding menu", Toast.LENGTH_LONG).show();
+                slidingPanel.bringToFront();
                 slidingPanel.setVisibility(View.VISIBLE);
                 slidingPanel.startAnimation(aleft);
+                slidingState = true;
             }
         });
 
@@ -165,15 +168,14 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
     @Override
     public void onBackPressed() {
-        if(slidingPanel.getVisibility() == View.VISIBLE){
+        if(slidingState == true){
+            slidingPanel.bringToFront();
             slidingPanel.startAnimation(bleft);
             slidingPanel.setVisibility(View.GONE);
-
-            return;
+            slidingState = false;
         }else{
             super.onBackPressed();
         }
-
     }
 
     public class MobiusConfig{

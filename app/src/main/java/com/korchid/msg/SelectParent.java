@@ -160,11 +160,11 @@ public class SelectParent extends AppCompatActivity {
             }
         });
 
-        // Setting button
+        // Message Setting button
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
                 startActivity(intent);
             }
         });

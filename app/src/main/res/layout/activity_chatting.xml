@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1"
     android:background="@drawable/background2">
 
     <LinearLayout
@@ -26,31 +26,31 @@
         android:layout_height="match_parent"
         android:background="@drawable/background2">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@android:color/holo_purple"
-        android:weightSum="1">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@android:color/holo_purple"
+            android:weightSum="1">
 
-        <Button
-            android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:id="@+id/menu"
-            android:layout_weight="0.2"
-            android:background="@drawable/menu" />
+            <Button
+                android:layout_width="46dp"
+                android:layout_height="match_parent"
+                android:id="@+id/menu"
+                android:layout_weight="0.2"
+                android:background="@drawable/menu" />
 
-        <Space android:layout_height="match_parent"
-            android:layout_width="270dp"
-            android:layout_weight="0.6"/>
+            <Space android:layout_height="match_parent"
+                android:layout_width="270dp"
+                android:layout_weight="0.6"/>
 
-        <Button
-            android:layout_width="54dp"
-            android:layout_height="match_parent"
-            android:id="@+id/setting"
-            android:background="@drawable/setting3"
-            android:layout_weight="0.2"/>
-    </LinearLayout>
+            <Button
+                android:layout_width="54dp"
+                android:layout_height="match_parent"
+                android:id="@+id/setting"
+                android:background="@drawable/setting3"
+                android:layout_weight="0.2"/>
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -70,36 +70,36 @@
             android:layout_weight="1.36" />
     </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:orientation="horizontal"
-            android:weightSum="1"
-            android:background="@android:color/background_light">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:background="@android:color/background_light">
 
-            <Button
-                android:id="@+id/plus"
-                android:background="@drawable/plus"
-                android:layout_weight="0.1"
-                android:layout_height="match_parent"
-                android:layout_width="46dp" />
+        <Button
+            android:id="@+id/plus"
+            android:background="@drawable/plus"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:layout_width="46dp" />
 
-            <EditText
-                android:id="@+id/publishEditView"
-                android:layout_width="280dp"
-                android:layout_height="match_parent"
-                android:inputType="text"
-                android:ems="10"
-                android:layout_weight="0.8">
-                <requestFocus />
-            </EditText>
+        <EditText
+            android:id="@+id/publishEditView"
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:ems="10"
+            android:layout_weight="0.8">
+            <requestFocus />
+        </EditText>
 
-            <Button
-                android:id="@+id/publishButton"
-                android:layout_width="66dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.1"
-                android:background="@drawable/plane" />
-            </LinearLayout>
+        <Button
+            android:id="@+id/publishButton"
+            android:layout_width="66dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:background="@drawable/plane" />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
