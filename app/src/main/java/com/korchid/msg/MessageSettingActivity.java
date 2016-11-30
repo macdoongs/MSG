@@ -23,8 +23,8 @@ public class MessageSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         Intent data = getIntent();
-        nickname = data.getStringExtra("nickname");
-        title = data.getStringExtra("title");
+        nickname = "aa";
+        title = "aa";
         setList();
     }
 

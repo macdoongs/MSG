@@ -90,6 +90,11 @@ public class SelectParent extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     // Pager Adapter
     class MyAdapter extends PagerAdapter {
 
