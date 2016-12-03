@@ -160,7 +160,9 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         plus.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), ChattingSubActivity.class);
+                startActivity(intent);
             }
         });
 

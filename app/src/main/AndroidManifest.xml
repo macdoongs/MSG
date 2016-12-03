@@ -11,9 +11,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +25,6 @@
         <service
             android:name=".service.MqttService"
             android:process=":MqttSubProcess" />
-
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -40,6 +40,8 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".MessageSettingActivity" />
         <activity android:name=".SettingActivity" />
+        <activity android:name=".ChattingSubActivity" />
+        <activity android:name=".DBTest"></activity>
     </application>
 
 </manifest>
