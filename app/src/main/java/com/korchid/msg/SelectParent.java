@@ -123,13 +123,18 @@ public class SelectParent extends AppCompatActivity {
             TextView textview = new TextView(getApplicationContext());
             textview.setText(parent[position]);
             textview.setTextSize(40.0f);
-
-            ImageView imageView = new ImageView(getApplicationContext());
-            imageView.setImageResource(imageId[position]);
-
-
             layout.addView(textview);
-            layout.addView(imageView);
+
+            RoundedImageView circularImageView = new RoundedImageView(getApplicationContext());
+            circularImageView.setImageResource(imageId[position]);
+            layout.addView(circularImageView);
+
+            //ImageView imageView = new ImageView(getApplicationContext());
+            //imageView.setImageResource(imageId[position]);
+
+
+            //layout.addView(textview);
+            //layout.addView(imageView);
 
             container.addView(layout);
 

@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:orientation="horizontal"
-            android:background="@android:color/holo_purple"
+            android:background="@color/colorPrimary"
             android:weightSum="1"
             android:layout_weight="0.2">
 
