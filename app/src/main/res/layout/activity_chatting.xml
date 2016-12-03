@@ -10,8 +10,8 @@
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:id="@+id/slidingPanel"
-        android:background="@android:color/holo_purple"
-        android:visibility="visible"
+        android:background="@color/colorPrimary"
+        android:visibility="gone"
         android:layout_width="200dp">
 
         <ImageView
@@ -34,32 +34,35 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background2">
+        android:background="@color/colorWhite">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:orientation="horizontal"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/layout_round_border"
             android:weightSum="1"
             android:layout_weight="0.2">
 
             <Button
                 android:layout_width="46dp"
                 android:layout_height="match_parent"
+                android:layout_margin="4dp"
                 android:id="@+id/menu"
                 android:layout_weight="0.2"
-                android:background="@drawable/menu" />
+                android:background="@drawable/slidingmenu" />
 
             <Space android:layout_height="match_parent"
                 android:layout_width="270dp"
-                android:layout_weight="0.6"/>
+                android:layout_weight="0.6"
+                android:background="@drawable/layout_border" />
 
             <Button
                 android:layout_width="54dp"
                 android:layout_height="match_parent"
+                android:layout_margin="4dp"
                 android:id="@+id/setting"
-                android:background="@drawable/setting3"
+                android:background="@drawable/mainsetting"
                 android:layout_weight="0.2"/>
 
         </LinearLayout>
@@ -87,11 +90,12 @@
         android:layout_height="54dp"
         android:orientation="horizontal"
         android:weightSum="1"
-        android:background="@android:color/background_light"
+        android:background="@drawable/layout_round_border"
             android:layout_weight="0.2">
 
         <Button
             android:id="@+id/plus"
+            android:layout_margin="4dp"
             android:background="@drawable/plus"
             android:layout_weight="0.1"
             android:layout_height="wrap_content"
@@ -103,13 +107,15 @@
             android:layout_height="match_parent"
             android:inputType="text"
             android:ems="10"
-            android:layout_weight="0.8">
+            android:layout_weight="0.8"
+            android:background="@drawable/layout_border">
             <requestFocus />
         </EditText>
 
         <Button
             android:id="@+id/publishButton"
             android:layout_width="66dp"
+            android:layout_margin="4dp"
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:background="@drawable/plane" />
