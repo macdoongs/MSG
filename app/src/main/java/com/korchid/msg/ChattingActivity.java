@@ -10,6 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,14 +54,18 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private StatusReceiver statusReceiver;
 
     Boolean slidingState = false;
+    Boolean expandedState = false;
     Animation aleft;
     Animation bleft;
 
     LinearLayout slidingPanel;
+    GridLayout expandedMenu;
     ListView messageView;
+
 
     private EditText publishEditView;
     private Button publishButton;
+    private ImageView profileImage;
     private ArrayList<Chatting> m_arr;
     private ChattingAdapter adapter;
     private static String chatMessage = new String();
@@ -73,6 +79,8 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         bleft = AnimationUtils.loadAnimation(this, R.anim.bleft);
 
         slidingPanel = (LinearLayout) findViewById(R.id.slidingPanel);
+        expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
+        profileImage = (ImageView) findViewById(R.id.imageView);
 
 
         Intent intent = getIntent();
@@ -161,8 +169,20 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), ChattingSubActivity.class);
-                startActivity(intent);
+
+                // /Intent intent = new Intent(getApplicationContext(), ChattingSubActivity.class);
+                //startActivity(intent);
+
+                if(expandedState){
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.GONE);
+                    expandedState = false;
+                }else{
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.VISIBLE);
+                    expandedState = true;
+                }
+
             }
         });
 
