@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.korchid.msg.service.MqttService;
 import com.korchid.msg.service.MqttService.ConnectionStatus;
@@ -13,6 +14,8 @@ import java.util.List;
 
 public class MqttServiceDelegate
 {
+	private static final String TAG = "Topic";
+
 	public interface MessageHandler{
 		public void handleMessage(String topic, byte[] payload);
 	}
@@ -109,6 +112,7 @@ public class MqttServiceDelegate
 	    {  
 	        Bundle notificationData = intent.getExtras();
 	        String topic = notificationData.getString(MqttService.MQTT_MSG_RECEIVED_TOPIC);
+			Log.d(TAG, "Delegate Topic : " + MqttService.MQTT_MSG_RECEIVED_TOPIC);
 	        byte[] payload  = notificationData.getByteArray(MqttService.MQTT_MSG_RECEIVED_MSG);    	  
 	        
 	        for(MessageHandler messageHandler : messageHandlers){
