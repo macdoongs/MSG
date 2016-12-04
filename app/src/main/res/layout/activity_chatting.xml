@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:orientation="horizontal"
-            android:background="@drawable/layout_round_border"
+            android:background="@drawable/layout_border"
             android:weightSum="1"
             android:layout_weight="0.2">
 
@@ -90,7 +90,7 @@
         android:layout_height="54dp"
         android:orientation="horizontal"
         android:weightSum="1"
-        android:background="@drawable/layout_round_border"
+        android:background="@drawable/layout_border"
             android:layout_weight="0.2">
 
         <Button
