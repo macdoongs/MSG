@@ -27,7 +27,7 @@
                 android:id="@+id/vi_image"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:background="@drawable/setting" />
+                android:background="@drawable/mainsetting" />
 
         </LinearLayout>
 

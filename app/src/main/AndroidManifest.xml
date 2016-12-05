@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -52,6 +53,8 @@
         <activity android:name=".InviteActivity" />
         <activity android:name=".SMSAuth" />
         <activity android:name=".ReserveActivity"></activity>
+        <activity android:name=".ChattingSubActivity" />
+        <activity android:name=".DBTest"></activity>
     </application>
 
 </manifest>

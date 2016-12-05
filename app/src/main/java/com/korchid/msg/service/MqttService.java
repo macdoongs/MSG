@@ -1,6 +1,7 @@
 package com.korchid.msg.service;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -13,11 +14,16 @@ import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings.Secure;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.korchid.msg.ChattingActivity;
+import com.korchid.msg.R;
 import com.korchid.msg.impl.MqttConnectOptions;
 import com.korchid.msg.impl.MqttException;
 import com.korchid.msg.impl.MqttMessage;
@@ -89,8 +95,13 @@ public class MqttService extends Service implements IMqttCallback
     // constants used by status bar notifications
     public static final int MQTT_NOTIFICATION_ONGOING = 1;  
     public static final int MQTT_NOTIFICATION_UPDATE  = 2;
-    
-    
+
+    private  static  final String TAG = "Topic";
+
+    Notification notification;
+    NotificationManager notificationManager;
+    ServiceThread thread;
+
     // constants used to define MQTT connection status
     public enum ConnectionStatus 
     {
@@ -136,7 +147,7 @@ public class MqttService extends Service implements IMqttCallback
     private int             		brokerPortNumber     = 1883;
     private IMqttPersistence 		usePersistence       = null;
     private boolean         		cleanStart           = false;
-    private String username			 = "guest";
+    private String                 username			 = "guest";
     private char[]					password			 = "guest".toCharArray();
 
     //  how often should the app ping the server to keep the connection alive?
@@ -187,7 +198,9 @@ public class MqttService extends Service implements IMqttCallback
         super.onCreate();
         
         initLog();
-        
+
+        disconnectFromBroker();
+
         // reset status variable to initial state
         changeStatus(ConnectionStatus.INITIAL);
         
@@ -201,6 +214,11 @@ public class MqttService extends Service implements IMqttCallback
         //SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
         brokerHostName = "52.78.68.226";
         topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
+        //topics.add(new MqttTopic("/oneM2M/req/" + MQTT_MSG_RECEIVED_TOPIC + "/:mobius-yt/xml"));
+        for(int i=0; i<topics.size(); i++){
+            Log.d(TAG, "MqttService Topic : "+ i + " " + topics.get(i).toString());
+        }
+
 
         mqttClientFactory = new PahoMqttClientFactory();
 
@@ -222,6 +240,12 @@ public class MqttService extends Service implements IMqttCallback
     @Override
     public int onStartCommand(final Intent intent, int flags, final int startId)
     {
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        myServiceHandler handler = new myServiceHandler();
+        thread = new ServiceThread(handler);
+        thread.start();
+
+
    // 	LOG.debug("onStartCommand: intent="+intent+", flags="+flags+", startId="+startId);
     	doStart(intent, startId);
 
@@ -230,6 +254,38 @@ public class MqttService extends Service implements IMqttCallback
         //  be restarted
         return START_STICKY;
     }
+
+    class myServiceHandler extends Handler {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            Intent intent = new Intent(MqttService.this, ChattingActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(MqttService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notification = new Notification.Builder(getApplicationContext())
+                    .setContentTitle("Content Title")
+                    .setContentText("Content Text")
+                    .setTicker("알림!!!")
+                    .setSmallIcon(R.drawable.logo)
+                    .setContentIntent(pendingIntent)
+                    .build();
+
+            //소리추가
+            notification.defaults = Notification.DEFAULT_SOUND;
+
+            //알림 소리를 한번만 내도록
+            notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+
+            //확인하면 자동으로 알림이 제거 되도록
+            notification.flags = Notification.FLAG_AUTO_CANCEL;
+
+
+            notificationManager.notify( 777 , notification);
+
+            //토스트 띄우기
+            Toast.makeText(MqttService.this, "뜸?", Toast.LENGTH_LONG).show();
+        }
+    };
+
 
     private void doStart(final Intent intent, final int startId){
     	initMqttClient();

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -70,7 +71,8 @@ public class ChattingAdapter extends BaseAdapter {
 
 
             LinearLayout layout_view = (LinearLayout) convertView.findViewById(R.id.vi_view);
-            LinearLayout layout_view2 = (LinearLayout) convertView.findViewById(R.id.vi_view2);
+            GridLayout layout_view2 = (GridLayout) convertView.findViewById(R.id.vi_view2);
+            //LinearLayout layout_view2 = (LinearLayout) convertView.findViewById(R.id.vi_view2);
 
             if(name.equals(messageArray.get(position).user)){
                 TextView id = (TextView) convertView.findViewById(R.id.text_id);

@@ -10,58 +10,37 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="365dp"
-        android:background="@drawable/kakao_default_profile_image">
+        android:background="@color/colorWhite"
+        android:layout_height="380dp">
 
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="64dp">
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.40" />
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/button2"
+            android:layout_weight="0.40"
+            android:background="@drawable/call" />
+
+        <Button
             android:layout_height="match_parent"
             android:id="@+id/button3"
             android:layout_weight="0.1"
-            android:background="@drawable/message" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.40" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="43dp">
+            android:background="@drawable/message"
+            android:layout_width="120dp" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/button2"
-            android:layout_weight="0.01"
-            android:background="@drawable/call" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
-
-        <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:id="@+id/button4"
-            android:layout_weight="0.01"
-            android:background="@drawable/plane" />
-
+            android:layout_weight="0.40"
+            android:background="@drawable/messagesetting" />
     </LinearLayout>
 
     <SeekBar

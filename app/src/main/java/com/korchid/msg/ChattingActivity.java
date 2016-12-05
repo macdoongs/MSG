@@ -10,6 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,14 +54,18 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private StatusReceiver statusReceiver;
 
     Boolean slidingState = false;
+    Boolean expandedState = false;
     Animation aleft;
     Animation bleft;
 
     LinearLayout slidingPanel;
+    GridLayout expandedMenu;
     ListView messageView;
+
 
     private EditText publishEditView;
     private Button publishButton;
+    private ImageView profileImage;
     private ArrayList<Chatting> m_arr;
     private ChattingAdapter adapter;
     private static String chatMessage = new String();
@@ -73,6 +79,8 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         bleft = AnimationUtils.loadAnimation(this, R.anim.bleft);
 
         slidingPanel = (LinearLayout) findViewById(R.id.slidingPanel);
+        expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
+        profileImage = (ImageView) findViewById(R.id.imageView);
 
 
         Intent intent = getIntent();
@@ -160,7 +168,21 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         plus.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
+
+                // /Intent intent = new Intent(getApplicationContext(), ChattingSubActivity.class);
+                //startActivity(intent);
+
+                if(expandedState){
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.GONE);
+                    expandedState = false;
+                }else{
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.VISIBLE);
+                    expandedState = true;
+                }
+
             }
         });
 
@@ -186,71 +208,89 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         void getResponseBody(String msg);
     }
 
-    class RetrieveRequest extends Thread {
-
-        //private final Logger LOG = Logger.getLogger(RetrieveRequest.class.getName());
-
-        private IReceived receiver;
-
-
-        private String ae_name = "Sajouiot03"; //change to your ae name
-        private String container_name = "arduino"; //change to your sensing data container name
-
-        public RetrieveRequest(String aeName, String containerName){
-            this.ae_name = aeName;
-            this.container_name = containerName;
-        }
-
-        public RetrieveRequest(){
-
-        }
-
-        public void setReceiver(IReceived hanlder){
-            this.receiver = hanlder;
-        }
+    class RequestProfile extends Thread {
+        Handler handler;
 
         @Override
         public void run() {
-            try{
+            StringBuilder stringBuilder = new StringBuilder();
+            String urlStr = "https://www.korchid.com/images/app_icon.jpg";
 
-                StringBuilder sb = new StringBuilder();
-                sb.append(MobiusConfig.MOBIUS_ROOT_URL).append("/")
-                        .append(ae_name).append("/")
-                        .append(container_name).append("/")
-                        .append("latest");
 
-                URL mUrl = new URL(sb.toString());
+            try {
 
-                HttpURLConnection conn = (HttpURLConnection)mUrl.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.setDoOutput(false);
+            }catch (Exception e){
 
-                conn.setRequestProperty("Accept", "application/xml");
-                conn.setRequestProperty("X-M2M-RI", "12345");
-                conn.setRequestProperty("X-M2M-Origin", "SOrigin");
-                conn.setRequestProperty("nmtype", "long");
-
-                conn.connect();
-
-                String strResp = "";
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String strLine;
-                while((strLine = in.readLine()) != null) {
-                    strResp += strLine;
-                }
-
-                if(receiver != null){
-                    receiver.getResponseBody(strResp);
-                }
-                conn.disconnect();
-
-            }catch(Exception exp){
-                //LOG.log(Level.WARNING, exp.getMessage());
             }
         }
     }
+
+
+//    class RetrieveRequest extends Thread {
+//
+//        //private final Logger LOG = Logger.getLogger(RetrieveRequest.class.getName());
+//
+//        private IReceived receiver;
+//
+//
+//        private String ae_name = "Sajouiot03"; //change to your ae name
+//        private String container_name = "arduino"; //change to your sensing data container name
+//
+//        public RetrieveRequest(String aeName, String containerName){
+//            this.ae_name = aeName;
+//            this.container_name = containerName;
+//        }
+//
+//        public RetrieveRequest(){
+//
+//        }
+//
+//        public void setReceiver(IReceived hanlder){
+//            this.receiver = hanlder;
+//        }
+//
+//        @Override
+//        public void run() {
+//            try{
+//
+//                StringBuilder sb = new StringBuilder();
+//                sb.append(MobiusConfig.MOBIUS_ROOT_URL).append("/")
+//                        .append(ae_name).append("/")
+//                        .append(container_name).append("/")
+//                        .append("latest");
+//
+//                URL mUrl = new URL(sb.toString());
+//
+//                HttpURLConnection conn = (HttpURLConnection)mUrl.openConnection();
+//                conn.setRequestMethod("GET");
+//                conn.setDoInput(true);
+//                conn.setDoOutput(false);
+//
+//                conn.setRequestProperty("Accept", "application/xml");
+//                conn.setRequestProperty("X-M2M-RI", "12345");
+//                conn.setRequestProperty("X-M2M-Origin", "SOrigin");
+//                conn.setRequestProperty("nmtype", "long");
+//
+//                conn.connect();
+//
+//                String strResp = "";
+//
+//                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//                String strLine;
+//                while((strLine = in.readLine()) != null) {
+//                    strResp += strLine;
+//                }
+//
+//                if(receiver != null){
+//                    receiver.getResponseBody(strResp);
+//                }
+//                conn.disconnect();
+//
+//            }catch(Exception exp){
+//                //LOG.log(Level.WARNING, exp.getMessage());
+//            }
+//        }
+//    }
 
     @Override
     protected void onDestroy()
