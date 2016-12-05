@@ -62,10 +62,39 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textView8" />
 
-            <Spinner
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner" />
+                android:layout_height="100dp">
+
+                <TextView
+                    android:text="Week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/textView4"
+                    android:layout_weight="1" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/weekPicker"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="Times"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/textView5"
+                    android:layout_weight="1" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberPicker"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <TextView
                 android:text="Plane message"
@@ -99,12 +128,6 @@
                     android:id="@+id/inPersonButton"
                     android:layout_weight="1" />
             </LinearLayout>
-
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_arrow_back_black_24dp"
-                android:id="@+id/imageButton" />
 
         </LinearLayout>
 

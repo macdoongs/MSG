@@ -1,6 +1,8 @@
 package com.korchid.msg;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -127,6 +129,9 @@ public class SelectParentActivity extends AppCompatActivity {
 
             RoundedImageView circularImageView = new RoundedImageView(getApplicationContext());
             circularImageView.setImageResource(imageId[position]);
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[position]);
+//            bitmap = circularImageView.getCroppedBitmap(bitmap, 300);
+//            circularImageView.setImageBitmap(bitmap);
             layout.addView(circularImageView);
 
             //ImageView imageView = new ImageView(getApplicationContext());
@@ -152,9 +157,6 @@ public class SelectParentActivity extends AppCompatActivity {
 
                 //Direct call
                 //Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum[idx]));
-                startActivity(intent);
-
-
                 startActivity(intent);
             }
         });

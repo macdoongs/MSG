@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:allowBackup="true"
@@ -43,7 +44,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".SplashActivity" />
-        <activity android:name=".SelectParent" />
         <activity
             android:name=".ChattingActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
@@ -56,7 +56,8 @@
         <activity android:name=".DBTest" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SelectParentActivity" />
-        <activity android:name=".AuthPhoneActivity"></activity>
+        <activity android:name=".AuthPhoneActivity" />
+        <activity android:name=".SMSDisplayActivity"></activity>
     </application>
 
 </manifest>

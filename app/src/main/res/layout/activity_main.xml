@@ -11,6 +11,12 @@
     tools:context="com.korchid.msg.MainActivity">
 
     <Button
+        android:text="temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/temp" />
+
+    <Button
         android:text="Invite"
         android:layout_width="101dp"
         android:layout_height="wrap_content"

@@ -33,36 +33,44 @@ public class AuthPhoneActivity extends AppCompatActivity {
                 password = et_password.getText().toString();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
-                builder.setTitle("Warning");
 
-
-                if(phoneNumber == et_phoneNumber.getHint() || password == et_password.getHint()){
-                    if(phoneNumber == et_phoneNumber.getHint()){
-                        builder.setMessage("Check your phone number.");
-                    }
-
-                    if(password == et_password.getHint()){
-                        builder.setMessage("Check your password.");
-                    }
+                if(phoneNumber.equals("")){
+                    builder.setTitle("Warning");
+                    builder.setMessage("Check your phone number.");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                }else if(password.equals("")) {
+                    builder.setTitle("Warning");
+                    builder.setMessage("Check your password.");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
                 }else{
-                    builder.setPositiveButton("JOIN", new DialogInterface.OnClickListener() {
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Do you want to join?");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
                             finish();
                         }
                     });
+                    builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
                 }
 
-                builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
                 AlertDialog alertDialog = builder.create();
-
                 alertDialog.show();
 
             }

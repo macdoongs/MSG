@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 
 // http://stackoverflow.com/questions/16208365/how-to-create-a-circular-imageview-in-android/16208548#16208548
 public class RoundedImageView extends ImageView {
+    String TAG = "radius";
+
     public RoundedImageView(Context context) {
         super(context);
     }
@@ -57,6 +60,8 @@ public class RoundedImageView extends ImageView {
 
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
         Bitmap sbmp;
+
+        Log.d("TAG", "radius : " + radius);
 
         if (bmp.getWidth() != radius || bmp.getHeight() != radius) {
             float smallest = Math.min(bmp.getWidth(), bmp.getHeight());
