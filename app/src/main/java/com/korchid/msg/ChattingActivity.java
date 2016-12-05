@@ -80,7 +80,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
         slidingPanel = (LinearLayout) findViewById(R.id.slidingPanel);
         expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
-        profileImage = (ImageView) findViewById(R.id.imageView);
+        profileImage = (ImageView) findViewById(R.id.parentProfile);
 
 
         Intent intent = getIntent();

@@ -55,7 +55,8 @@
         <activity android:name=".ChattingSubActivity" />
         <activity android:name=".DBTest" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".SelectParentActivity"></activity>
+        <activity android:name=".SelectParentActivity" />
+        <activity android:name=".AuthPhoneActivity"></activity>
     </application>
 
 </manifest>

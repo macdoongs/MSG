@@ -10,23 +10,23 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite">
+        android:background="@color/colorWhite"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:background="@drawable/layout_border"
-            android:weightSum="1"
-            android:layout_weight="0.2">
+            android:background="@drawable/layout_border">
 
             <Button
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:id="@+id/back"
-                android:layout_weight="0.2"
-                android:background="?attr/actionModeCloseDrawable"
-                android:layout_width="30dp" />
+                android:background="@drawable/back"
+                android:layout_width="40dp" />
 
             <TextView
                 android:text="Plane setting"
@@ -35,7 +35,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView6"
-                android:layout_weight="0.2"
                 android:layout_width="wrap_content" />
 
         </LinearLayout>
@@ -43,8 +42,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_weight="0.2"
-            android:weightSum="1"
             android:layout_height="350dp">
 
             <TextView
@@ -55,15 +52,59 @@
 
             <Switch
                 android:text="Enable plane"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/enablePlane" />
+                android:id="@+id/planeSwitch"
+                android:layout_width="150dp" />
 
             <TextView
-                android:text="TextView"
+                android:text="Take off"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView8" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner" />
+
+            <TextView
+                android:text="Plane message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <Button
+                    android:text="polite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/politeButton"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:text="impolite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/impoliteButton"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:text="in person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inPersonButton"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+                android:id="@+id/imageButton" />
 
         </LinearLayout>
 

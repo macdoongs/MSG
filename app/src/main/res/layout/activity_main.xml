@@ -8,13 +8,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.korchid.msg.MainActivity"
-    android:background="@drawable/background2">
+    tools:context="com.korchid.msg.MainActivity">
+
+    <Button
+        android:text="Invite"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="13dp"
+        android:background="@color/colorPrimary" />
+    <Button
+        android:text="Next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/joinButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:id="@+id/userName"
@@ -56,7 +84,8 @@
                 android:text="KaKao Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/button6" />
+                android:id="@+id/button6"
+                android:background="@color/colorPrimary" />
         </LinearLayout>
 
         <TextView
@@ -70,22 +99,5 @@
             android:layout_alignParentStart="true" />
 
     </LinearLayout>
-
-    <Button
-        android:text="Invite"
-        android:layout_width="101dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/button2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="13dp" />
-    <Button
-        android:text="Next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     TextView userName;
     Button button;
     Button button2;
+    Button btn_join;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+        btn_join = (Button) findViewById(R.id.joinButton);
+        btn_join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AuthPhoneActivity.class));
+            }
+        });
     }
 
     public void mOnClick(View view){

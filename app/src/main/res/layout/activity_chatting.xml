@@ -34,12 +34,12 @@
                 android:background="@drawable/layout_border" />
 
             <Button
-                android:layout_width="54dp"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:id="@+id/setting"
                 android:background="@drawable/mainsetting"
-                android:layout_weight="0.2"/>
+                android:layout_weight="0.2"
+                android:layout_width="54dp" />
 
         </LinearLayout>
 
