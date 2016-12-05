@@ -11,9 +11,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +27,13 @@
             android:name=".service.MqttService"
             android:process=":MqttSubProcess" />
 
+        <receiver android:name=".SMSReceiver">
+            <intent-filter>
+
+                <!-- 문자를 받아올 수 있게 intent-filter 추가 -->
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -40,6 +49,9 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".MessageSettingActivity" />
         <activity android:name=".SettingActivity" />
+        <activity android:name=".InviteActivity" />
+        <activity android:name=".SMSAuth" />
+        <activity android:name=".ReserveActivity"></activity>
     </application>
 
 </manifest>

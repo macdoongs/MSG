@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     TextView userName;
     Button button;
+    Button button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 startActivity(new Intent(getApplicationContext(), SelectParent.class));
             }
         });
+
+        // Invite Button
+        button2 = (Button) findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener (){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), InviteActivity.class));
+            }
+        });
+
     }
 
     public void mOnClick(View view){
