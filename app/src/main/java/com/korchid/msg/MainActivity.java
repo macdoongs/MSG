@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         button.setOnClickListener(new View.OnClickListener (){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), SelectParent.class));
+                startActivity(new Intent(getApplicationContext(), SelectParentActivity.class));
             }
         });
 

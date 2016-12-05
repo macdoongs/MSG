@@ -61,7 +61,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     LinearLayout slidingPanel;
     GridLayout expandedMenu;
     ListView messageView;
-
+    ImageView imageView;
 
     private EditText publishEditView;
     private Button publishButton;
@@ -100,7 +100,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         setting = (Button)findViewById(R.id.setting);
         menu = (Button)findViewById(R.id.menu);
         plus = (Button)findViewById(R.id.plus);
-
+        imageView = (ImageView)findViewById(R.id.imageView3);
 
         messageView = (ListView)findViewById(R.id.messageView);
 
@@ -170,8 +170,6 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
 
-                // /Intent intent = new Intent(getApplicationContext(), ChattingSubActivity.class);
-                //startActivity(intent);
 
                 if(expandedState){
                     expandedMenu.bringToFront();
@@ -185,6 +183,15 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
             }
         });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 

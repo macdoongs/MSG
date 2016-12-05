@@ -1,13 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_reserve"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.korchid.msg.ReserveActivity">
+    android:background="@drawable/background2">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/layout_border"
+            android:weightSum="1"
+            android:layout_weight="0.2">
+
+            <Button
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:id="@+id/back"
+                android:layout_weight="0.2"
+                android:background="?attr/actionModeCloseDrawable"
+                android:layout_width="30dp" />
+
+            <TextView
+                android:text="Plane setting"
+                android:textSize="30sp"
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView6"
+                android:layout_weight="0.2"
+                android:layout_width="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.2"
+            android:weightSum="1"
+            android:layout_height="350dp">
+
+            <TextView
+                android:text="Please select plane setting. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView7" />
+
+            <Switch
+                android:text="Enable plane"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/enablePlane" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView8" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

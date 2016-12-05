@@ -13,9 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class SelectParent extends AppCompatActivity {
+public class SelectParentActivity extends AppCompatActivity {
+
     ViewPager pager;
     SeekBar seekBar;
     Button button, button2, button3, button4;
@@ -34,7 +34,7 @@ public class SelectParent extends AppCompatActivity {
 
         pager = (ViewPager) findViewById(R.id.pager);
 
-        MyAdapter adapter = new MyAdapter();
+        SelectParentActivity.MyAdapter adapter = new SelectParentActivity.MyAdapter();
         pager.setAdapter(adapter);
 
         //imageView = (ImageView) findViewById(R.id.imageView);

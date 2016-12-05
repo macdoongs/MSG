@@ -242,8 +242,8 @@ public class MqttService extends Service implements IMqttCallback
     {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         myServiceHandler handler = new myServiceHandler();
-        thread = new ServiceThread(handler);
-        thread.start();
+        //thread = new ServiceThread(handler);
+        //thread.start();
 
 
    // 	LOG.debug("onStartCommand: intent="+intent+", flags="+flags+", startId="+startId);
