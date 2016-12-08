@@ -63,8 +63,17 @@ public class AuthPhoneActivity extends AppCompatActivity {
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
-                            finish();
+                            //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
+
+                            // DB check
+
+
+                            Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
+                            intent.putExtra("phoneNumber", phoneNumber);
+                            intent.putExtra("password", password);
+                            startActivity(intent);
+
+
                         }
                     });
                     builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
