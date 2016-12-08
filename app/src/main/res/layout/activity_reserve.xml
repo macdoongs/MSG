@@ -24,7 +24,7 @@
             <Button
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
-                android:id="@+id/back"
+                android:id="@+id/btn_back"
                 android:background="@drawable/back"
                 android:layout_width="40dp" />
 
@@ -53,7 +53,7 @@
             <Switch
                 android:text="Enable plane"
                 android:layout_height="wrap_content"
-                android:id="@+id/planeSwitch"
+                android:id="@+id/sw_enable"
                 android:layout_width="150dp" />
 
             <TextView
@@ -78,7 +78,7 @@
                 <NumberPicker
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/weekPicker"
+                    android:id="@+id/np_week"
                     android:layout_weight="1" />
 
                 <TextView
@@ -92,7 +92,7 @@
                 <NumberPicker
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/numberPicker"
+                    android:id="@+id/np_number"
                     android:layout_weight="1" />
             </LinearLayout>
 
@@ -111,21 +111,21 @@
                     android:text="polite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/politeButton"
+                    android:id="@+id/btn_polite"
                     android:layout_weight="1" />
 
                 <Button
                     android:text="impolite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/impoliteButton"
+                    android:id="@+id/btn_impolite"
                     android:layout_weight="1" />
 
                 <Button
                     android:text="in person"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/inPersonButton"
+                    android:id="@+id/btn_inPerson"
                     android:layout_weight="1" />
             </LinearLayout>
 

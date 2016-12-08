@@ -64,6 +64,7 @@ import java.util.concurrent.Executors;
 
 public class MqttService extends Service implements IMqttCallback
 {
+    private static final String TAG = "MqttServiceDelegate";
 //	private static final Logger LOG = Logger.getLogger(MqttService.class);
 	
     /************************************************************************/
@@ -95,8 +96,6 @@ public class MqttService extends Service implements IMqttCallback
     // constants used by status bar notifications
     public static final int MQTT_NOTIFICATION_ONGOING = 1;  
     public static final int MQTT_NOTIFICATION_UPDATE  = 2;
-
-    private  static  final String TAG = "Topic";
 
     Notification notification;
     NotificationManager notificationManager;
@@ -213,10 +212,10 @@ public class MqttService extends Service implements IMqttCallback
         //   the Intent that starts the Service to pass on configuration values
         //SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
         brokerHostName = "52.78.68.226";
-        topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
-        //topics.add(new MqttTopic("/oneM2M/req/" + MQTT_MSG_RECEIVED_TOPIC + "/:mobius-yt/xml"));
+        //topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
+        topics.add(new MqttTopic("/oneM2M/req/" + MQTT_MSG_RECEIVED_TOPIC + "/:mobius-yt/xml"));
         for(int i=0; i<topics.size(); i++){
-            Log.d(TAG, "MqttService Topic : "+ i + " " + topics.get(i).toString());
+            Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).toString());
         }
 
 

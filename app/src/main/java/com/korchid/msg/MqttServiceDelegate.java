@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MqttServiceDelegate
 {
-	private static final String TAG = "Topic";
+	private static final String TAG = "MqttServiceDelegate";
 
 	public interface MessageHandler{
 		public void handleMessage(String topic, byte[] payload);

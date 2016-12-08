@@ -22,7 +22,7 @@
             <Button
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
-                android:id="@+id/back"
+                android:id="@+id/btn_back"
                 android:background="@drawable/back"
                 android:layout_width="40dp" />
 
@@ -32,7 +32,7 @@
                 android:textAlignment="center"
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView6"
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content" />
 
         </LinearLayout>
@@ -59,7 +59,7 @@
                 android:layout_marginLeft="20dp"
                 android:inputType="phone"
                 android:ems="10"
-                android:id="@+id/phoneNumber"
+                android:id="@+id/et_phoneNumber"
                 android:hint="010-0000-0000" />
 
             <TextView
@@ -77,13 +77,13 @@
                 android:layout_marginLeft="20dp"
                 android:inputType="textPassword"
                 android:ems="10"
-                android:id="@+id/password"
+                android:id="@+id/et_password"
                 android:hint="*******" />
 
             <Button
                 android:text="Register"
                 android:layout_height="wrap_content"
-                android:id="@+id/registerButton"
+                android:id="@+id/btn_register"
                 android:layout_width="250dp"
                 android:background="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"/>

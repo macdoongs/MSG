@@ -28,6 +28,9 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
     private Uri mImageCaptureUri;
     private ImageView iv_userPhoto;
+
+    Button btn_back;
+
     private int viewId;
     private String absolutePath;
 
@@ -190,6 +193,8 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
                     .setNeutralButton("Choose album", albumListener)
                     .setNegativeButton("Cancel", cancelListener)
                     .show();
+        }else if(viewId == R.id.back){
+            finish();
         }
 
     }

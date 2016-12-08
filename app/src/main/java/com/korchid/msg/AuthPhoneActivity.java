@@ -17,6 +17,7 @@ import android.widget.Toast;
 public class AuthPhoneActivity extends AppCompatActivity {
     EditText et_phoneNumber;
     EditText et_password;
+    Button btn_back;
     Button btn_register;
 
     String phoneNumber = "";
@@ -27,9 +28,18 @@ public class AuthPhoneActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone);
 
-        et_phoneNumber = (EditText) findViewById(R.id.phoneNumber);
-        et_password = (EditText) findViewById(R.id.password);
-        btn_register = (Button) findViewById(R.id.registerButton);
+        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
+        et_password = (EditText) findViewById(R.id.et_password);
+        btn_back = (Button) findViewById(R.id.btn_back);
+
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btn_register = (Button) findViewById(R.id.btn_register);
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +69,7 @@ public class AuthPhoneActivity extends AppCompatActivity {
                     });
                 }else{
                     builder.setTitle("Confirm");
-                    builder.setMessage("Do you want to join?");
+                    builder.setMessage("Send auth sms message.");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

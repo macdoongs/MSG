@@ -24,7 +24,7 @@
                 android:layout_width="46dp"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
-                android:id="@+id/menu"
+                android:id="@+id/btn_menu"
                 android:layout_weight="0.2"
                 android:background="@drawable/slidingmenu" />
 
@@ -36,7 +36,7 @@
             <Button
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
-                android:id="@+id/setting"
+                android:id="@+id/btn_setting"
                 android:background="@drawable/mainsetting"
                 android:layout_weight="0.2"
                 android:layout_width="54dp" />
@@ -52,7 +52,7 @@
             android:layout_height="350dp">
 
             <ListView
-                android:id="@+id/messageView"
+                android:id="@+id/lv_message"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:transcriptMode="alwaysScroll"
@@ -70,7 +70,7 @@
             android:layout_weight="0.2">
 
             <Button
-                android:id="@+id/plus"
+                android:id="@+id/btn_plus"
                 android:layout_margin="4dp"
                 android:background="@drawable/plus"
                 android:layout_weight="0.1"
@@ -78,7 +78,7 @@
                 android:layout_width="46dp" />
 
             <EditText
-                android:id="@+id/publishEditView"
+                android:id="@+id/et_message"
                 android:layout_width="280dp"
                 android:layout_height="match_parent"
                 android:inputType="text"
@@ -89,7 +89,7 @@
             </EditText>
 
             <Button
-                android:id="@+id/publishButton"
+                android:id="@+id/btn_send"
                 android:layout_width="66dp"
                 android:layout_margin="4dp"
                 android:layout_height="match_parent"
@@ -130,7 +130,7 @@
         <ImageView
             android:layout_height="80dp"
             app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/imageView3"
+            android:id="@+id/iv_profile"
             android:layout_width="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"/>
@@ -138,7 +138,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/listView2">
+            android:id="@+id/lv_menu">
 
         </ListView>
     </LinearLayout>

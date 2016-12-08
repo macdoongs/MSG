@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -38,11 +39,24 @@ import com.korchid.msg.service.MqttService.ConnectionStatus;
  */
 
 public class ChattingActivity extends AppCompatActivity implements MessageHandler, StatusHandler {
-    private Button setting;
-    private Button menu;
-    private Button plus;
+    private static final String TAG = "ChattingActivity";
+
+    private Button btn_setting;
+    private Button btn_menu;
+    private Button btn_plus;
+    private Button btn_send;
+
+    LinearLayout slidingPanel;
+    GridLayout expandedMenu;
+    ListView lv_message;
+    ImageView iv_profile;
+
+    private EditText et_message;
 
     private Handler handler = new Handler();
+
+    private MessageReceiver msgReceiver;
+    private StatusReceiver statusReceiver;
 
     String nickname;
     String count;
@@ -50,22 +64,13 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     String message1;
     byte[] pic;
 
-    private MessageReceiver msgReceiver;
-    private StatusReceiver statusReceiver;
+
 
     Boolean slidingState = false;
     Boolean expandedState = false;
     Animation aleft;
     Animation bleft;
 
-    LinearLayout slidingPanel;
-    GridLayout expandedMenu;
-    ListView messageView;
-    ImageView imageView;
-
-    private EditText publishEditView;
-    private Button publishButton;
-    private ImageView profileImage;
     private ArrayList<Chatting> m_arr;
     private ChattingAdapter adapter;
     private static String chatMessage = new String();
@@ -80,7 +85,6 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
         slidingPanel = (LinearLayout) findViewById(R.id.slidingPanel);
         expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
-        profileImage = (ImageView) findViewById(R.id.parentProfile);
 
 
         Intent intent = getIntent();
@@ -94,32 +98,34 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
+        Log.d(TAG, "Topic : " + title);
+
         //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
 
 
-        setting = (Button)findViewById(R.id.setting);
-        menu = (Button)findViewById(R.id.menu);
-        plus = (Button)findViewById(R.id.plus);
-        imageView = (ImageView)findViewById(R.id.imageView3);
+        btn_setting = (Button)findViewById(R.id.btn_setting);
+        btn_menu = (Button)findViewById(R.id.btn_menu);
+        btn_plus = (Button)findViewById(R.id.btn_plus);
+        iv_profile = (ImageView)findViewById(R.id.iv_profile);
 
-        messageView = (ListView)findViewById(R.id.messageView);
+        lv_message = (ListView)findViewById(R.id.lv_message);
 
-        publishEditView = (EditText)findViewById(R.id.publishEditView);
-        publishButton = (Button)findViewById(R.id.publishButton);
+        et_message = (EditText)findViewById(R.id.et_message);
+        btn_send = (Button)findViewById(R.id.btn_send);
 
         adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
-        messageView.setAdapter(adapter);
+        lv_message.setAdapter(adapter);
 
 
 
-        publishButton.setOnClickListener(new View.OnClickListener() {
+        btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String message = "";
 
                 message1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><m2m:rqp xmlns:m2m=\"http://www.onem2m.org/xml/protocols\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><op>1</op><to>/mobius-yt/"+title+"/chatting</to><fr>S0.2.481.1.20160721051547725</fr><rqi>rqi201607211554337900rzY</rqi><ty>4</ty><pc><cin><rn></rn><con>";
 
-                String message2 = nickname+": "+publishEditView.getText().toString();
+                String message2 = nickname+": "+ et_message.getText().toString();
                 String message3 = "</con></cin></pc></m2m:rqp>";
 
                 message = message1 + message2 + message3;
@@ -133,7 +139,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
                         message.getBytes()
                 );
 
-                publishEditView.setText("");
+                et_message.setText("");
             }
         });
 
@@ -145,7 +151,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         MqttServiceDelegate.startService(this);
 
 
-        setting.setOnClickListener(new View.OnClickListener() {
+        btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "Click setting", Toast.LENGTH_LONG).show();
@@ -154,7 +160,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             }
         });
 
-        menu.setOnClickListener(new View.OnClickListener() {
+        btn_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "Sliding menu", Toast.LENGTH_LONG).show();
@@ -165,7 +171,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             }
         });
 
-        plus.setOnClickListener(new View.OnClickListener(){
+        btn_plus.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
@@ -184,7 +190,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             }
         });
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        iv_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
@@ -396,7 +402,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             }
 
             chatMessage="";
-            messageView.setSelection(adapter.getCount()-1);
+            lv_message.setSelection(adapter.getCount()-1);
         }
 
 

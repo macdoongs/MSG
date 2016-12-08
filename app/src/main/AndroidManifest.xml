@@ -24,18 +24,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <service
             android:name=".service.MqttService"
             android:process=":MqttSubProcess" />
-
-        <receiver android:name=".SMSReceiver">
-            <intent-filter>
-
-                <!-- 문자를 받아올 수 있게 intent-filter 추가 -->
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
-
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -51,14 +43,12 @@
         <activity android:name=".MessageSettingActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".InviteActivity" />
-        <activity android:name=".SMSAuth" />
         <activity android:name=".ReserveActivity" />
         <activity android:name=".ChattingSubActivity" />
         <activity android:name=".DBTest" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SelectParentActivity" />
         <activity android:name=".AuthPhoneActivity" />
-        <activity android:name=".SMSDisplayActivity" />
         <activity android:name=".AuthPhoneWaitActivity"></activity>
     </application>
 

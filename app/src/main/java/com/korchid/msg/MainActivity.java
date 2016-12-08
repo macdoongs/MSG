@@ -28,9 +28,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    TextView userName;
-    Button button;
-    Button button2;
+    Button btn_next;
+    Button btn_invite;
     Button btn_join;
     Button btn_temp;
 
@@ -42,30 +41,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        userName = (TextView) findViewById(R.id.userName);
 
         // Loading screen
         startActivity(new Intent(this,SplashActivity.class));
 
-        //Next button
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener (){
+        btn_next = (Button) findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(new View.OnClickListener (){
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), SelectParentActivity.class));
             }
         });
 
-        // Invite Button
-        button2 = (Button) findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener (){
+        btn_invite = (Button) findViewById(R.id.btn_invite);
+        btn_invite.setOnClickListener(new View.OnClickListener (){
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), InviteActivity.class));
             }
         });
 
-        btn_join = (Button) findViewById(R.id.joinButton);
+        btn_join = (Button) findViewById(R.id.btn_join);
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,18 +69,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        btn_temp = (Button) findViewById(R.id.temp);
+        btn_temp = (Button) findViewById(R.id.btn_temp);
         btn_temp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SMSAuth.class));
+
             }
         });
     }
 
     public void mOnClick(View view){
             switch (view.getId()){
-                case R.id.btn_con:
+                case R.id.btn_google:
                 Toast.makeText(this, "접속합니다", Toast.LENGTH_SHORT).show();
 
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -125,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     if (currentPerson.hasDisplayName()) {
                         Log.d(TAG,"디스플레이 이름 : "+ currentPerson.getDisplayName());
                         Log.d(TAG, "디스플레이 아이디는 : " + currentPerson.getId());
-                        userName.setText(currentPerson.getDisplayName());
                     }
 
                 }
