@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         btn_temp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ReserveActivity.class));
             }
         });
     }

@@ -109,7 +109,7 @@ public class MqttServiceDelegate
 		
 	    @Override
 	    public void onReceive(Context context, Intent intent)
-	    {  
+	    {
 	        Bundle notificationData = intent.getExtras();
 	        String topic = notificationData.getString(MqttService.MQTT_MSG_RECEIVED_TOPIC);
 			Log.d(TAG, "Delegate Topic : " + MqttService.MQTT_MSG_RECEIVED_TOPIC);

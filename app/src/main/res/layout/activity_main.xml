@@ -55,14 +55,16 @@
                 android:text="KaKao Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_kakao" />
+                android:id="@+id/btn_kakao" /><![CDATA[
 
-            <Button
-                android:text="temp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_temp" />
             -->
+
+            ]]>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
 
             <Button
                 android:layout_width="match_parent"
@@ -93,6 +95,18 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"/>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_temp"
+                android:background="@color/colorPrimary" />
 
             <Space
                 android:layout_width="wrap_content"

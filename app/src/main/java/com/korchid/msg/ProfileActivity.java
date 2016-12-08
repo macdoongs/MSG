@@ -27,7 +27,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     private static final int CROP_IMAGE = 2;
 
     private Uri mImageCaptureUri;
-    private ImageView iv_userPhoto;
+    private ImageView iv_profile;
 
     Button btn_back;
 
@@ -41,12 +41,12 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        iv_userPhoto = (ImageView) findViewById(R.id.userImage);
-        Button uploadImage = (Button) findViewById(R.id.uploadImage);
+        iv_profile = (ImageView) findViewById(R.id.iv_profile);
+        Button btn_upload = (Button) findViewById(R.id.btn_upload);
 
         //iv_userPhoto.setImageBitmap(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name);
 
-        uploadImage.setOnClickListener(this);
+        btn_upload.setOnClickListener(this);
 
     }
 
@@ -76,7 +76,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode != RESULT_OK){
-            Toast.makeText(ProfileActivity.this, "RESULT ERROR : " + resultCode, Toast.LENGTH_LONG).show();
+            //Toast.makeText(ProfileActivity.this, "RESULT ERROR : " + resultCode, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -84,15 +84,15 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
             case PICK_FROM_ALBUM:
             {
                 mImageCaptureUri = data.getData();
-                Toast.makeText(ProfileActivity.this, mImageCaptureUri.getPath().toString(), Toast.LENGTH_LONG).show();
-                iv_userPhoto.setImageURI(data.getData());
+                //Toast.makeText(ProfileActivity.this, mImageCaptureUri.getPath().toString(), Toast.LENGTH_LONG).show();
+                //iv_profile.setImageURI(mImageCaptureUri);
                 //Log.e("Album", mImageCaptureUri.getPath().toString());
             }
             case PICK_FROM_CAMERA:
             {
                 // Resize image
                 // call crop application
-                Intent intent = new Intent();
+                Intent intent = new Intent("com.android.camera.action.CROP");
                 intent.setDataAndType(mImageCaptureUri, "image/*");
 
                 // Store cropping image 200*200
@@ -103,7 +103,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
                 intent.putExtra("scale", true);
                 intent.putExtra("returnData", true);
                 //iv_userPhoto.setImageURI(mImageCaptureUri);
-                //startActivityForResult(intent, CROP_IMAGE); // Move CROP_IMAGE case
+                startActivityForResult(intent, CROP_IMAGE); // Move CROP_IMAGE case
                 break;
             }
             case CROP_IMAGE:
@@ -123,9 +123,9 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
                 if(extras != null){
                     Bitmap photo = extras.getParcelable("data");
-                    iv_userPhoto.setImageBitmap(photo);
+                    iv_profile.setImageBitmap(photo);
 
-                    //storeCropImage(photo, filePath);
+                    storeCropImage(photo, filePath);
                     absolutePath = filePath;
                     break;
                 }
@@ -144,7 +144,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     public void onClick(View v){
         viewId = v.getId();
 
-        if(viewId == R.id.registerImage){
+        if(viewId == R.id.btn_register){
             // Use Environmental variable 'SharedPreference'
             SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
 
@@ -165,7 +165,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
             //ChattingSubActivity.this.finish();
             Toast.makeText(this, "Complete join", Toast.LENGTH_LONG).show();
 
-        }else if(viewId == R.id.uploadImage){
+        }else if(viewId == R.id.btn_upload){
             DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -193,7 +193,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
                     .setNeutralButton("Choose album", albumListener)
                     .setNegativeButton("Cancel", cancelListener)
                     .show();
-        }else if(viewId == R.id.back){
+        }else if(viewId == R.id.btn_back){
             finish();
         }
 

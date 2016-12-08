@@ -212,8 +212,8 @@ public class MqttService extends Service implements IMqttCallback
         //   the Intent that starts the Service to pass on configuration values
         //SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
         brokerHostName = "52.78.68.226";
-        //topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
-        topics.add(new MqttTopic("/oneM2M/req/" + MQTT_MSG_RECEIVED_TOPIC + "/:mobius-yt/xml"));
+        topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
+        //topics.add(new MqttTopic("/oneM2M/req/" + MQTT_MSG_RECEIVED_TOPIC + "/:mobius-yt/xml"));
         for(int i=0; i<topics.size(); i++){
             Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).toString());
         }

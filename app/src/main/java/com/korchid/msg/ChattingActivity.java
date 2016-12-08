@@ -2,7 +2,11 @@ package com.korchid.msg;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -411,6 +416,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     //lv.setDivider(null); 구분선을 없에고 싶으면 null 값을 set합니다.
 
     //lv.setDividerHeight(5); 구분선의 굵기를 좀 더 크게 하고싶으면 숫자로 높이 지정
+
 
 
     public void listUpdate(){
