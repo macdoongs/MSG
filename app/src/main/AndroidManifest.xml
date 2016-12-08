@@ -57,7 +57,8 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SelectParentActivity" />
         <activity android:name=".AuthPhoneActivity" />
-        <activity android:name=".SMSDisplayActivity"></activity>
+        <activity android:name=".SMSDisplayActivity" />
+        <activity android:name=".AuthPhoneWaitActivity"></activity>
     </application>
 
 </manifest>

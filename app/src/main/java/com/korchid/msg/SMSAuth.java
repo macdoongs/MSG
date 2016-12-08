@@ -28,7 +28,7 @@ public class SMSAuth extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_smsauth);
+        setContentView(R.layout.activity_sms_auth);
 
         titleButton = (Button) findViewById(R.id.button);
         messageTextView = (TextView)findViewById(R.id.textView);
