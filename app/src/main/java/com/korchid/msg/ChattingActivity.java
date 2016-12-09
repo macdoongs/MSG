@@ -152,8 +152,10 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         bindStatusReceiver();
         bindMessageReceiver();
 
+        //MqttServiceDelegate.topic = title;
+
         //Start service if not started
-        MqttServiceDelegate.startService(this);
+        MqttServiceDelegate.startService(this, title);
 
 
         btn_setting.setOnClickListener(new View.OnClickListener() {
@@ -355,6 +357,16 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
     private String getCurrentTimestamp(){
         return new Timestamp(new Date().getTime()).toString();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //MqttServiceDelegate.topic = title;
+
+        //Start service if not started
+        MqttServiceDelegate.startService(this, title);
     }
 
     @Override

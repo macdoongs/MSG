@@ -64,7 +64,7 @@ import java.util.concurrent.Executors;
 
 public class MqttService extends Service implements IMqttCallback
 {
-    private static final String TAG = "MqttServiceDelegate";
+    private static final String TAG = "MqttService";
 //	private static final Logger LOG = Logger.getLogger(MqttService.class);
 	
     /************************************************************************/
@@ -96,6 +96,8 @@ public class MqttService extends Service implements IMqttCallback
     // constants used by status bar notifications
     public static final int MQTT_NOTIFICATION_ONGOING = 1;  
     public static final int MQTT_NOTIFICATION_UPDATE  = 2;
+
+    public static String mqttTopic = "";
 
     Notification notification;
     NotificationManager notificationManager;
@@ -194,6 +196,7 @@ public class MqttService extends Service implements IMqttCallback
     @Override
     public void onCreate() 
     {
+        Log.d(TAG, "MqttService : onCreate");
         super.onCreate();
         
         initLog();
@@ -212,10 +215,12 @@ public class MqttService extends Service implements IMqttCallback
         //   the Intent that starts the Service to pass on configuration values
         //SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
         brokerHostName = "52.78.68.226";
-        topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
-        //topics.add(new MqttTopic("/oneM2M/req/" + MQTT_MSG_RECEIVED_TOPIC + "/:mobius-yt/xml"));
+
+        //topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
+        topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
+        Log.d(TAG, "onCreate: " + mqttTopic + " / " + topics.size());
         for(int i=0; i<topics.size(); i++){
-            Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).toString());
+            Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
         }
 
 
@@ -228,6 +233,7 @@ public class MqttService extends Service implements IMqttCallback
     @Override
     public void onStart(final Intent intent, final int startId)
     {
+        Log.d(TAG, "MqttService : onStart");
         // This is the old onStart method that will be called on the pre-2.0
         // platform.  On 2.0 or later we override onStartCommand() so this
         // method will not be called.
@@ -239,11 +245,19 @@ public class MqttService extends Service implements IMqttCallback
     @Override
     public int onStartCommand(final Intent intent, int flags, final int startId)
     {
+        Log.d(TAG, "MqttService : onStartCommand");
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         myServiceHandler handler = new myServiceHandler();
         //thread = new ServiceThread(handler);
         //thread.start();
 
+        mqttTopic = intent.getExtras().getString("topic");
+
+        topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
+        Log.d(TAG, "onStartCommand: " + mqttTopic + " / " + topics.size());
+        for(int i=0; i<topics.size(); i++){
+            Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
+        }
 
    // 	LOG.debug("onStartCommand: intent="+intent+", flags="+flags+", startId="+startId);
     	doStart(intent, startId);
@@ -257,6 +271,7 @@ public class MqttService extends Service implements IMqttCallback
     class myServiceHandler extends Handler {
         @Override
         public void handleMessage(android.os.Message msg) {
+            Log.d(TAG, "MqttService : myServiceHandler : handleMessage");
             Intent intent = new Intent(MqttService.this, ChattingActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(MqttService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -677,6 +692,7 @@ public class MqttService extends Service implements IMqttCallback
         {
       //  	LOG.debug("messageArrived: topic="+topic.getName()+", message="+new String(message.getPayload()));
 			broadcastReceivedMessage(topic.getName(), message.getPayload());
+            Log.d(TAG, "messageArrived: topic="+topic.getName()+", message="+ new String(message.getPayload()));
 		} 
         catch (MqttException e) 
 		{

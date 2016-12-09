@@ -15,6 +15,7 @@ import java.util.List;
 public class MqttServiceDelegate
 {
 	private static final String TAG = "MqttServiceDelegate";
+	//public static String topic = "";
 
 	public interface MessageHandler{
 		public void handleMessage(String topic, byte[] payload);
@@ -24,18 +25,22 @@ public class MqttServiceDelegate
 		public void handleStatus(ConnectionStatus status, String reason);
 	}
 	
-	public static void startService(Context context){
+	public static void startService(Context context, String topic){
+		Log.d(TAG, "MqttServiceDelegate : startService");
 		Intent svc = new Intent(context, MqttService.class);
+		svc.putExtra(MqttService.mqttTopic, topic);
 		context.startService(svc); 
 	}
 	
 	public static void stopService(Context context){
+		Log.d(TAG, "MqttServiceDelegate : stopService");
 		Intent svc = new Intent(context, MqttService.class);
 		context.stopService(svc); 
 	}
 	
 	public static void publish(Context context, String topic, byte[] payload)
 	{
+		Log.d(TAG, "MqttServiceDelegate : publish");
 		Intent actionIntent = new Intent(context, MqttService.class);
         actionIntent.setAction(MqttService.MQTT_PUBLISH_MSG_INTENT);
         actionIntent.putExtra(MqttService.MQTT_PUBLISH_MSG_TOPIC, topic);
@@ -70,6 +75,7 @@ public class MqttServiceDelegate
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
+			Log.d(TAG, "StatusReceiver : onReceive");
 			Bundle notificationData = intent.getExtras();
 			ConnectionStatus statusCode = 
 					ConnectionStatus.class.getEnumConstants()[notificationData.getInt(
@@ -110,6 +116,7 @@ public class MqttServiceDelegate
 	    @Override
 	    public void onReceive(Context context, Intent intent)
 	    {
+			Log.d(TAG, "MessageReceiver : onReceive");
 	        Bundle notificationData = intent.getExtras();
 	        String topic = notificationData.getString(MqttService.MQTT_MSG_RECEIVED_TOPIC);
 			Log.d(TAG, "Delegate Topic : " + MqttService.MQTT_MSG_RECEIVED_TOPIC);
