@@ -20,7 +20,7 @@ import android.widget.ImageView;
 
 // http://stackoverflow.com/questions/16208365/how-to-create-a-circular-imageview-in-android/16208548#16208548
 public class RoundedImageView extends ImageView {
-    String TAG = "radius";
+    private static final String TAG = "RoundedImageView";
 
     public RoundedImageView(Context context) {
         super(context);
@@ -36,6 +36,7 @@ public class RoundedImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        Log.d(TAG, "onDraw");
 
         Drawable drawable = getDrawable();
 
@@ -49,19 +50,36 @@ public class RoundedImageView extends ImageView {
         Bitmap b = ((BitmapDrawable) drawable).getBitmap();
         Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
 
+
+        /*
+        // Original code
         int w = getWidth();
         @SuppressWarnings("unused")
         int h = getHeight();
 
         Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
+        */
+
+        // http://blog.daum.net/kwh4865/13153849
+        // resize
+        Bitmap resize = Bitmap.createScaledBitmap(bitmap, 600, 600, true);
+
+        int w = resize.getWidth();
+        @SuppressWarnings("unused")
+        int h = resize.getHeight();
+
+        Bitmap roundBitmap = getCroppedBitmap(resize, w);
+
+
         canvas.drawBitmap(roundBitmap, 0, 0, null);
 
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+        Log.d(TAG, "getCroppedBitmap");
         Bitmap sbmp;
 
-        Log.d("TAG", "radius : " + radius);
+        Log.d(TAG, "radius : " + radius);
 
         if (bmp.getWidth() != radius || bmp.getHeight() != radius) {
             float smallest = Math.min(bmp.getWidth(), bmp.getHeight());

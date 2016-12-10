@@ -84,6 +84,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
+        Log.d(TAG, "onCreate");
 
         aleft = AnimationUtils.loadAnimation(this, R.anim.aleft);
         bleft = AnimationUtils.loadAnimation(this, R.anim.bleft);
@@ -210,6 +211,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed");
         if(slidingState == true){
             slidingPanel.bringToFront();
             slidingPanel.startAnimation(bleft);
@@ -315,7 +317,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     @Override
     protected void onDestroy()
     {
-        //LOG.debug("onDestroy");
+        Log.d(TAG, "onDestroy");
 
         MqttServiceDelegate.stopService(this);
 
@@ -326,6 +328,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     }
 
     private void bindMessageReceiver(){
+        Log.d(TAG, "bindMessageReceiver");
         msgReceiver = new MessageReceiver();
         msgReceiver.registerHandler(this);
         registerReceiver(msgReceiver,
@@ -333,6 +336,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     }
 
     private void unbindMessageReceiver(){
+        Log.d(TAG, "unbindMessageReceiver");
         if(msgReceiver != null){
             msgReceiver.unregisterHandler(this);
             unregisterReceiver(msgReceiver);
@@ -341,6 +345,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     }
 
     private void bindStatusReceiver(){
+        Log.d(TAG, "bindStatusReceiver");
         statusReceiver = new StatusReceiver();
         statusReceiver.registerHandler(this);
         registerReceiver(statusReceiver,
@@ -348,6 +353,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     }
 
     private void unbindStatusReceiver(){
+        Log.d(TAG, "unbindStatusReceiver");
         if(statusReceiver != null){
             statusReceiver.unregisterHandler(this);
             unregisterReceiver(statusReceiver);
@@ -363,6 +369,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     protected void onResume() {
         super.onResume();
 
+        Log.d(TAG, "onResume");
         //MqttServiceDelegate.topic = title;
 
         //Start service if not started
@@ -371,6 +378,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
     @Override
     public void handleMessage(String topic, byte[] payload) {
+        Log.d(TAG, "handleMessage");
         String message = new String(payload);
         String name = "";
 
@@ -380,7 +388,17 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         int end;
         changingString = message;
 
+        String roomTopic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
+
+
+        Log.d(TAG, topic);
+        Log.d(TAG, message);
+
         String splitedString[] = changingString.split("</con>");
+
+        if(!topic.equals(roomTopic)){
+            return;
+        }
 
         int i = -1;
         while(true){
@@ -408,7 +426,11 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
                 }
             }
-            catch(Exception e){break;}
+            catch(Exception e){
+                Log.e(TAG, e.getMessage());
+
+                break;
+            }
 
         }
 
@@ -441,7 +463,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
     @Override
     public void handleStatus(ConnectionStatus status, String reason) {
-        //	LOG.debug("handleStatus: status="+status+", reason="+reason);
+        Log.d(TAG, "handleStatus: status = " + status + ", reason = " + reason);
     }
 
 }

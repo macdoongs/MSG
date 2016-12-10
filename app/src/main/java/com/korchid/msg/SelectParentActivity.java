@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.annotation.ColorRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,10 +20,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class SelectParentActivity extends AppCompatActivity {
+    private static final String TAG = "SelectParentActivity";
 
     ViewPager pager;
     SeekBar seekBar;
-    Button button, button2, button3, button4;
+    Button btn_call, btn_chat, btn_chat_setting;
     ImageView imageView;
 
     // Temp Data Array
@@ -31,6 +35,8 @@ public class SelectParentActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_parent);
 
@@ -43,11 +49,11 @@ public class SelectParentActivity extends AppCompatActivity {
 
         //imageView.setImageResource(imageId[0]);
 
-        button2 = (Button) findViewById(R.id.button2);
-        button3 = (Button) findViewById(R.id.button3);
-        button4 = (Button) findViewById(R.id.button4);
+        btn_call = (Button) findViewById(R.id.btn_call);
+        btn_chat = (Button) findViewById(R.id.btn_chat);
+        btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
 
-        buttonListener(button2, button3, button4, 0);
+        buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
 
         // SeekBar setting
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -82,7 +88,7 @@ public class SelectParentActivity extends AppCompatActivity {
                 seekBar.setProgress(position);
 
                 //imageView.setImageResource(imageId[position]);
-                buttonListener(button2, button3, button4, position);
+                buttonListener(btn_call, btn_chat, btn_chat_setting, position);
             }
 
             @Override
@@ -117,10 +123,12 @@ public class SelectParentActivity extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            Log.d(TAG, "MyAdapter : instantiateItem");
+
             LinearLayout layout = new LinearLayout(getApplicationContext());
             layout.setOrientation(LinearLayout.VERTICAL);
-
-
+            //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            //layout.setLayoutParams(params);
 
             TextView textview = new TextView(getApplicationContext());
             textview.setText(parent[position]);
@@ -129,10 +137,38 @@ public class SelectParentActivity extends AppCompatActivity {
 
             RoundedImageView circularImageView = new RoundedImageView(getApplicationContext());
             circularImageView.setImageResource(imageId[position]);
+
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//            params.weight = 1.0f;
+//            params.gravity = Gravity.CENTER_HORIZONTAL;
+//
+//
+//            circularImageView.setLayoutParams(params);
+
+
+
 //            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[position]);
 //            bitmap = circularImageView.getCroppedBitmap(bitmap, 300);
 //            circularImageView.setImageBitmap(bitmap);
             layout.addView(circularImageView);
+
+            LinearLayout linearLayout = new LinearLayout(getApplicationContext());
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            //LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            //linearLayout.setLayoutParams(params1);
+
+            Button b1 = new Button(getApplicationContext());
+            b1.setText("Button1");
+            Button b2 = new Button(getApplicationContext());
+            b2.setText("Button2");
+            Button b3 = new Button(getApplicationContext());
+            b3.setText("Button3");
+
+            linearLayout.addView(b1);
+            linearLayout.addView(b2);
+            linearLayout.addView(b3);
+
+            layout.addView(linearLayout);
 
             //ImageView imageView = new ImageView(getApplicationContext());
             //imageView.setImageResource(imageId[position]);
