@@ -104,6 +104,17 @@
             android:layout_alignParentEnd="true"
             android:background="@color/colorPrimary"/>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <Button
+            android:text="Kakao Link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_kakaoLink"
+            android:background="@color/colorPrimary" />
+
     </LinearLayout>
 
 </RelativeLayout>

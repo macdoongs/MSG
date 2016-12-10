@@ -12,20 +12,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.kakao.kakaolink.AppActionBuilder;
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+
 import java.util.ArrayList;
 
 public class InviteActivity extends AppCompatActivity {
+    private static final String TAG = "InviteActivity";
+
     Button btn_inviteParent;
     Button btn_inviteChild;
     Button btn_send;
     Button btn_contactList;
+    Button btn_kakaoLink;
+
     TextView tv_role;
     EditText et_phoneNumber;
+
+    KakaoLink kakaoLink;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
+
 
         btn_contactList = (Button) findViewById(R.id.btn_contactList);
         btn_contactList.setOnClickListener(new View.OnClickListener() {
@@ -51,8 +62,7 @@ public class InviteActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO invitation message send
-
+                // TODO Send SMS message
             }
         });
 
@@ -61,6 +71,15 @@ public class InviteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 tv_role.setText("Invite Child.");
+            }
+        });
+
+        btn_kakaoLink = (Button) findViewById(R.id.btn_kakaoLink);
+        btn_kakaoLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+                startActivity(intent);
             }
         });
 
