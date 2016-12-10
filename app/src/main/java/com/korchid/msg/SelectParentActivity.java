@@ -30,7 +30,7 @@ public class SelectParentActivity extends AppCompatActivity {
     // Temp Data Array
     String[] parent = {"Father", "Mother", "StepMother"};
     String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
-    String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
+    String[] topic = {"Sajouiot05", "Sajouiot02", "Sajouiot06"};
     int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
 
     @Override

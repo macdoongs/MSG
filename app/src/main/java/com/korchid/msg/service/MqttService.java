@@ -151,6 +151,7 @@ public class MqttService extends Service implements IMqttCallback
     private String                 username			 = "guest";
     private char[]					password			 = "guest".toCharArray();
 
+
     //  how often should the app ping the server to keep the connection alive?
     //
     //   too frequently - and you waste battery life
@@ -251,13 +252,14 @@ public class MqttService extends Service implements IMqttCallback
         //thread = new ServiceThread(handler);
         //thread.start();
 
-        mqttTopic = intent.getExtras().getString(MQTT_MSG_RECEIVED_TOPIC);
+        //mqttTopic = intent.getExtras().getString(MQTT_MSG_RECEIVED_TOPIC);
+        mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
 
-//        topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
-//        Log.d(TAG, "onStartCommand: " + mqttTopic + " / " + topics.size());
-//        for(int i=0; i<topics.size(); i++){
-//            Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
-//        }
+        topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
+        Log.d(TAG, "onStartCommand: " + mqttTopic );
+        for(int i=0; i<topics.size(); i++){
+            Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
+        }
 
 
     	doStart(intent, startId);
