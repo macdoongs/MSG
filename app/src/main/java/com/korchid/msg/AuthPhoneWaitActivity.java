@@ -60,6 +60,9 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
         btn_auth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO check
+                GlobalApplication.getGlobalApplicationContext().setUserId(phoneNumber);
+                GlobalApplication.getGlobalApplicationContext().setUserPassword(password);
 
                 finish();
             }

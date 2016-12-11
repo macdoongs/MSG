@@ -94,10 +94,6 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
 
         Intent intent = getIntent();
-//        pic = data.getByteArrayExtra("pic");
-//        nickname = data.getStringExtra("NICK");
-//        title = data.getStringExtra("title");
-//        count = data.getStringExtra("EXPLAIN");
         pic = null;
         count = "";
         nickname = "Me";
@@ -113,6 +109,8 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         btn_menu = (Button)findViewById(R.id.btn_menu);
         btn_plus = (Button)findViewById(R.id.btn_plus);
         iv_profile = (ImageView)findViewById(R.id.iv_profile);
+
+        iv_profile.setImageURI(GlobalApplication.getGlobalApplicationContext().getProfileImage());
 
         lv_message = (ListView)findViewById(R.id.lv_message);
 
@@ -247,73 +245,6 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         }
     }
 
-
-//    class RetrieveRequest extends Thread {
-//
-//        //private final Logger LOG = Logger.getLogger(RetrieveRequest.class.getName());
-//
-//        private IReceived receiver;
-//
-//
-//        private String ae_name = "Sajouiot03"; //change to your ae name
-//        private String container_name = "arduino"; //change to your sensing data container name
-//
-//        public RetrieveRequest(String aeName, String containerName){
-//            this.ae_name = aeName;
-//            this.container_name = containerName;
-//        }
-//
-//        public RetrieveRequest(){
-//
-//        }
-//
-//        public void setReceiver(IReceived hanlder){
-//            this.receiver = hanlder;
-//        }
-//
-//        @Override
-//        public void run() {
-//            try{
-//
-//                StringBuilder sb = new StringBuilder();
-//                sb.append(MobiusConfig.MOBIUS_ROOT_URL).append("/")
-//                        .append(ae_name).append("/")
-//                        .append(container_name).append("/")
-//                        .append("latest");
-//
-//                URL mUrl = new URL(sb.toString());
-//
-//                HttpURLConnection conn = (HttpURLConnection)mUrl.openConnection();
-//                conn.setRequestMethod("GET");
-//                conn.setDoInput(true);
-//                conn.setDoOutput(false);
-//
-//                conn.setRequestProperty("Accept", "application/xml");
-//                conn.setRequestProperty("X-M2M-RI", "12345");
-//                conn.setRequestProperty("X-M2M-Origin", "SOrigin");
-//                conn.setRequestProperty("nmtype", "long");
-//
-//                conn.connect();
-//
-//                String strResp = "";
-//
-//                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                String strLine;
-//                while((strLine = in.readLine()) != null) {
-//                    strResp += strLine;
-//                }
-//
-//                if(receiver != null){
-//                    receiver.getResponseBody(strResp);
-//                }
-//                conn.disconnect();
-//
-//            }catch(Exception exp){
-//                //LOG.log(Level.WARNING, exp.getMessage());
-//            }
-//        }
-//    }
-
     @Override
     protected void onDestroy()
     {
@@ -444,22 +375,13 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             lv_message.setSelection(adapter.getCount()-1);
         }
 
-
-
     }
-    //lv.setDivider(null); 구분선을 없에고 싶으면 null 값을 set합니다.
-
-    //lv.setDividerHeight(5); 구분선의 굵기를 좀 더 크게 하고싶으면 숫자로 높이 지정
-
-
 
     public void listUpdate(){
 
         adapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
 
     }
-
-
 
     @Override
     public void handleStatus(ConnectionStatus status, String reason) {

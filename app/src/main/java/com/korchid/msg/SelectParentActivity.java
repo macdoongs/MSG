@@ -126,9 +126,10 @@ public class SelectParentActivity extends AppCompatActivity {
             Log.d(TAG, "MyAdapter : instantiateItem");
 
             LinearLayout layout = new LinearLayout(getApplicationContext());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.CENTER;
             layout.setOrientation(LinearLayout.VERTICAL);
-            //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            //layout.setLayoutParams(params);
+            layout.setLayoutParams(params);
 
             TextView textview = new TextView(getApplicationContext());
             textview.setText(parent[position]);
@@ -137,6 +138,13 @@ public class SelectParentActivity extends AppCompatActivity {
 
             RoundedImageView circularImageView = new RoundedImageView(getApplicationContext());
             circularImageView.setImageResource(imageId[position]);
+            //circularImageView.setScaleType(ImageView.ScaleType.CENTER);
+
+            LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) layout.getLayoutParams();
+
+            circularImageView.setLayoutParams(params1);
+
+
 
 //            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 //            params.weight = 1.0f;

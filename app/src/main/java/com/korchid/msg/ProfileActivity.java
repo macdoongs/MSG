@@ -132,6 +132,8 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
                 File file = new File(mImageCaptureUri.getPath());
 
+                GlobalApplication.getGlobalApplicationContext().setProfileImage(mImageCaptureUri);
+
                 if(file.exists()){
                     file.delete();
                 }

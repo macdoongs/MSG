@@ -71,10 +71,31 @@
 
             <TextView
                 android:text="Add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/textView11"
-                android:layout_weight="1" />
+                android:layout_width="80dp" />
+
+            <EditText
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/et_nickname"
+                android:hint="parent"
+                android:gravity="right"
+                android:layout_width="wrap_content" />
+
+            <Space
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space android:layout_height="match_parent"
+                android:layout_width="80dp" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -82,7 +103,6 @@
                 android:inputType="phone"
                 android:ems="10"
                 android:id="@+id/et_phoneNumber"
-                android:layout_weight="1"
                 android:hint="010-0000-0000"
                 android:gravity="right"/>
 
@@ -91,8 +111,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_send"
-                android:layout_weight="1" />
+                android:background="@color/colorPrimary" />
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
         <Button
             android:text="Contact List"

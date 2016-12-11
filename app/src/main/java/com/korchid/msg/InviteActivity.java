@@ -1,11 +1,13 @@
 package com.korchid.msg;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.database.Cursor;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +30,7 @@ public class InviteActivity extends AppCompatActivity {
     Button btn_kakaoLink;
 
     TextView tv_role;
+    EditText et_nickname;
     EditText et_phoneNumber;
 
     KakaoLink kakaoLink;
@@ -62,7 +65,20 @@ public class InviteActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Send SMS message
+                String nickname = et_nickname.getText().toString();
+                String phoneNumber = et_phoneNumber.getText().toString();
+                String message = "Invite MSG.  http://www.korchid.com/dropbox-release";
+
+                // SMS Compose
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumber));
+                intent.putExtra("sms_body", message);
+                startActivity(intent);
+
+                /*
+                // SMS Auto-sender
+                SmsManager smsManager =     SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                */
             }
         });
 
@@ -85,6 +101,7 @@ public class InviteActivity extends AppCompatActivity {
 
 
         tv_role = (TextView) findViewById(R.id.et_role);
+        et_nickname = (EditText) findViewById(R.id.et_nickname);
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
 
@@ -94,7 +111,7 @@ public class InviteActivity extends AppCompatActivity {
         ArrayList<Contact> contactList = contactUtil.getContactList();
 
         for(int i=0; i<contactList.size(); i++){
-            Log.e("CONTACT", contactList.get(i).getName());
+            Log.d("CONTACT", contactList.get(i).getName());
         }
 
 
@@ -110,9 +127,8 @@ public class InviteActivity extends AppCompatActivity {
                             ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
             cursor.moveToFirst();
 
-            et_phoneNumber.setText(cursor.getString(1));
-            //cursor.getString(0);        //이름 얻어오기
-            //cursor.getString(1);     //번호 얻어오기
+            et_nickname.setText(cursor.getString(0));   // contact - name
+            et_phoneNumber.setText(cursor.getString(1));    // contact - phone number
             cursor.close();
         }
         super.onActivityResult(requestCode, resultCode, data);
