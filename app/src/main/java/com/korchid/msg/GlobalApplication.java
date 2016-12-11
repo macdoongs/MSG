@@ -22,6 +22,8 @@ public class GlobalApplication extends Application {
     private ImageLoader imageLoader;
     private String userId;
     private String userPassword;
+    private int weekNum;
+    private int times;
     private Uri profileImage;
     private String[] parentId;
 
@@ -79,6 +81,22 @@ public class GlobalApplication extends Application {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public int getWeekNum() {
+        return weekNum;
+    }
+
+    public void setWeekNum(int weekNum) {
+        this.weekNum = weekNum;
+    }
+
+    public int getTimes() {
+        return times;
+    }
+
+    public void setTimes(int times) {
+        this.times = times;
     }
 
     public String[] getParentId() {
