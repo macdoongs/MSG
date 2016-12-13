@@ -17,7 +17,7 @@ public class MessageSettingActivity extends AppCompatActivity {
     String nickname;
     String title;
 
-    private ArrayList<MessageSetting> settingArrayList;
+    private ArrayList settingArrayList;
     private SettingAdapter settingAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MessageSettingActivity extends AppCompatActivity {
     private void setList(){
         Log.d(TAG, "setList");
 
-        settingArrayList = new ArrayList<MessageSetting>();
+        settingArrayList = new ArrayList();
 
         ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
 

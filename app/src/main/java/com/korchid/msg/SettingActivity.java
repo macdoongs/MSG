@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class SettingActivity extends AppCompatActivity {
     private static final String TAG = "SettingActivity";
 
-    private ArrayList<Setting> settingArrayList;
+    private ArrayList settingArrayList;
     private SettingAdapter settingAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +23,12 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        Intent data = getIntent();
-
         setList();
     }
 
     private void setList(){
         Log.d(TAG, "setList");
-        settingArrayList = new ArrayList<Setting>();
+        settingArrayList = new ArrayList ();
 
         ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
 
