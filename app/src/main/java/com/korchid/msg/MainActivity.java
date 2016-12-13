@@ -3,6 +3,7 @@ package com.korchid.msg;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.korchid.msg.service.ServiceThread;
 
 /**
  * Created by mac0314 on 2016-11-28.
@@ -28,9 +30,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
+
+
     Button btn_next;
     Button btn_invite;
     Button btn_join;
+    Button btn_reserve;
     Button btn_temp;
 
     @Override
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        final ServiceThread serviceThread = new ServiceThread(new Handler());
+        serviceThread.start();
 
         // Loading screen
         startActivity(new Intent(this,SplashActivity.class));
@@ -69,11 +76,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+        btn_reserve = (Button) findViewById(R.id.btn_reserve);
+        btn_reserve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ReserveActivity.class));
+            }
+        });
+
         btn_temp = (Button) findViewById(R.id.btn_temp);
         btn_temp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ReserveActivity.class));
+                startActivity(new Intent(getApplicationContext(), DBTest.class));
             }
         });
     }

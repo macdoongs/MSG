@@ -4,12 +4,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by mac0314 on 2016-12-03.
  */
 
 public class DBHelper extends SQLiteOpenHelper {
+    private static final String TAG = "DBHelper";
 
     // DBhelper constructor - DB name, version information
     // http://blog.naver.com/PostView.nhn?blogId=hee072794&logNo=220619425456
@@ -19,57 +21,132 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(TAG, "onCreate");
         // 새로운 테이블 생성
-        /* 이름은 MONEYBOOK이고, 자동으로 값이 증가하는 _id 정수형 기본키 컬럼과
-        item 문자열 컬럼, price 정수형 컬럼, create_at 문자열 컬럼으로 구성된 테이블을 생성. */
-        db.execSQL("CREATE TABLE MONEYBOOK (_id INTEGER PRIMARY KEY AUTOINCREMENT, item TEXT, price INTEGER, create_at TEXT);");
+        try{
+            db.execSQL("CREATE TABLE USER (_userId INT NOT NULL AUTO_INCREMENT, PhoneNumber VARCHAR(30), Password VARCHAR(20), PRIMARY KEY (_userId));");
+            db.execSQL("CREATE TABLE MAPPING (_mappingId INT NOT NULL AUTO_INCREMENT, _parentId INT NOT NULL, _childId INT NOT NULL, Topic VARCHAR(30), PRIMARY KEY (_mappingId));");
+            db.execSQL("CREATE TABLE USER_INFO (_infoId INT NOT NULL AUTO_INCREMENT, _userId INT NOT NULL, Profile VARCHAR(30), Birthday VARCHAR(20), Sex VARCHAR(10), PRIMARY KEY (_infoId), FOREIGN KEY (_userId) REFERENCES USER(_userId) ON DELETE CASCADE ON UPDATE CASCADE);");
+            db.execSQL("CREATE TABLE SEND_MESSAGE (_messageId INT NOT NULL AUTO_INCREMENT, _mappingId INT, _senderId INT, Time VARCHAR(30), Content LONGTEXT, PRIMARY KEY (_messageId), FOREIGN KEY (_mappingId) REFERENCES MAPPING(_mappingId) ON DELETE CASCADE ON UPDATE CASCADE);");
+            db.execSQL("CREATE TABLE RESERVED_MESSAGE (_reservationId INT NOT NULL AUTO_INCREMENT, _mappingId INT, Time VARCHAR(30), Content LONGTEXT, PRIMARY KEY(_reservationId), FOREIGN KEY (_mappingId) REFERENCES MAPPING(_mappingId) ON DELETE CASCADE ON UPDATE CASCADE);");
+            db.execSQL("CREATE TABLE ERROR (_errorId INT NOT NULL AUTO_INCREMENT, _userId INT, Log LONGTEXT, PRIMARY KEY(_errorId), FOREIGN KEY (_userId) REFERENCES USER(_userId) ON UPDATE CASCADE);");
+
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
+    /*
     public void insert(String create_at, String item, int price) {
         // 읽고 쓰기가 가능하게 DB 열기
         SQLiteDatabase db = getWritableDatabase();
         // DB에 입력한 값으로 행 추가
+
         db.execSQL("INSERT INTO MONEYBOOK VALUES(null, '" + item + "', " + price + ", '" + create_at + "');");
+
+        db.close();
+    }
+    */
+
+    public void insertUser(String PhoneNumber, String Password) {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+        try {
+            db.execSQL("INSERT INTO USER VALUES(null, '" + PhoneNumber + "', '" + Password + "');");
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+
+
+        db.close();
+    }
+
+    public void insertMapping(int _parentId, int _childId, String Topic) {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+
+        db.execSQL("INSERT INTO MAPPING VALUES(null, " + _parentId + ", " + _childId + ", '" + Topic + "');");
+
+        db.close();
+    }
+
+    public void insertUserInfo(int _userId, String Profile, String Birthday, String Sex) {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+
+        db.execSQL("INSERT INTO USER_INFO VALUES(null, " + _userId + ", '" + Profile + "', '" + Birthday + "', '" + Sex + "');");
+
+        db.close();
+    }
+
+    public void insertSendMessage(int _mappingId, int _senderId, String Time, String Content) {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+        db.execSQL("INSERT INTO SEND_MESSAGE VALUES(null, " + _mappingId + ", " + _senderId + ", '" + Time + "', '" + Content + "');");
+
+        db.close();
+    }
+
+    public void insertReservedMessage(int _mappingId, String Time, String Content) {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+        db.execSQL("INSERT INTO SEND_MESSAGE VALUES(null, " + _mappingId + ", '" + Time + "', '" + Content + "');");
+
         db.close();
     }
 
     public void update(String item, int price) {
         SQLiteDatabase db = getWritableDatabase();
         // 입력한 항목과 일치하는 행의 가격 정보 수정
+        /*
         db.execSQL("UPDATE MONEYBOOK SET price=" + price + " WHERE item='" + item + "';");
+        */
         db.close();
     }
 
     public void delete(String item) {
         SQLiteDatabase db = getWritableDatabase();
         // 입력한 항목과 일치하는 행 삭제
+        /*
         db.execSQL("DELETE FROM MONEYBOOK WHERE item='" + item + "';");
+        */
         db.close();
     }
 
-    public String getResult() {
+    public String getUser() {
         // 읽기가 가능하게 DB 열기
         SQLiteDatabase db = getReadableDatabase();
         String result = "";
 
-        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
-        Cursor cursor = db.rawQuery("SELECT * FROM MONEYBOOK", null);
-        while (cursor.moveToNext()) {
-            result += cursor.getString(0)
-                    + " : "
-                    + cursor.getString(1)
-                    + " | "
-                    + cursor.getInt(2)
-                    + "원 "
-                    + cursor.getString(3)
-                    + "\n";
+        try {
+            // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+            Cursor cursor = db.rawQuery("SELECT * FROM USER", null);
+
+            while (cursor.moveToNext()) {
+                result += "" + cursor.getInt(0)
+                        + " / "
+                        + cursor.getString(1)
+                        + " / "
+                        + cursor.getString(2)
+                        + "\n";
+            }
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
         }
+        Log.d(TAG, result);
 
         return result;
     }
+
+
+
 }

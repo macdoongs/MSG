@@ -1,6 +1,10 @@
 package com.korchid.msg.service;
 
 import android.os.Handler;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by mac0314 on 2016-12-05.
@@ -8,6 +12,7 @@ import android.os.Handler;
 
 // http://twinw.tistory.com/50
 public class ServiceThread extends Thread {
+    private static final String TAG = "ServiceThread";
     Handler handler;
     boolean isRun = true;
 
@@ -24,10 +29,21 @@ public class ServiceThread extends Thread {
     public void run(){
         //반복적으로 수행할 작업을 한다.
         while(isRun){
-            handler.sendEmptyMessage(0);//쓰레드에 있는 핸들러에게 메세지를 보냄
+
+
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            // 출력될 포맷 설정
+            String to = date.toString();
+
+            //TODO
+
+            Log.d(TAG, to);
             try{
                 Thread.sleep(10000); //10초씩 쉰다.
-            }catch (Exception e) {}
+            }catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 

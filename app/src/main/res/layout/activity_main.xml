@@ -114,6 +114,18 @@
                 android:layout_weight="1" />
 
             <Button
+                android:text="reserve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_reserve"
+                android:background="@color/colorPrimary" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
                 android:text="Next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

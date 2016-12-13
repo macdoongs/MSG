@@ -20,12 +20,15 @@ import com.android.volley.toolbox.Volley;
 public class GlobalApplication extends Application {
     private static volatile GlobalApplication instance = null;
     private ImageLoader imageLoader;
+
     private String userId;
     private String userPassword;
     private int weekNum;
     private int times;
     private Uri profileImage;
     private String[] parentId;
+
+    public DBHelper dbHelper;
 
     /**
      * 이미지 로더, 이미지 캐시, 요청 큐를 초기화한다.
@@ -37,6 +40,8 @@ public class GlobalApplication extends Application {
         instance = this;
 
         //KakaoSDK.init(new KakaoSDKAdapter());
+
+        dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -65,6 +70,10 @@ public class GlobalApplication extends Application {
         if(instance == null)
             throw new IllegalStateException("this application does not inherit com.kakao.GlobalApplication");
         return instance;
+    }
+
+    public DBHelper getDBHelper() {
+        return dbHelper;
     }
 
     public String getUserId() {

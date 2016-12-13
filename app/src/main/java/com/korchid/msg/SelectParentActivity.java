@@ -3,6 +3,7 @@ package com.korchid.msg;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.ColorRes;
 import android.support.v4.view.PagerAdapter;
@@ -100,7 +101,32 @@ public class SelectParentActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume");
         super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart");
+        super.onRestart();
     }
 
     // Pager Adapter
@@ -113,11 +139,13 @@ public class SelectParentActivity extends AppCompatActivity {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
+            Log.d(TAG, "MyAdapter : isViewFromObject");
             return view.equals(object);
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            Log.d(TAG, "MyAdapter : destroyItem");
             container.removeView((View) object);
         }
 
@@ -125,9 +153,21 @@ public class SelectParentActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             Log.d(TAG, "MyAdapter : instantiateItem");
 
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+
+            thread.start();
+
+
             LinearLayout layout = new LinearLayout(getApplicationContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER;
+            layout.setBackgroundColor(Color.CYAN);
+
             layout.setOrientation(LinearLayout.VERTICAL);
             layout.setLayoutParams(params);
 
@@ -186,6 +226,7 @@ public class SelectParentActivity extends AppCompatActivity {
             //layout.addView(imageView);
 
             container.addView(layout);
+            container.setBackgroundColor(Color.RED);
 
             return layout;
         }

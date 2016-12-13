@@ -17,7 +17,7 @@ public class DBTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbtest);
 
-        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
+        final DBHelper dbHelper = GlobalApplication.getGlobalApplicationContext().getDBHelper();
 
         // 테이블에 있는 모든 데이터 출력
         final TextView tv_result = (TextView) findViewById(R.id.result);
@@ -25,6 +25,7 @@ public class DBTest extends AppCompatActivity {
         final EditText et_date = (EditText) findViewById(R.id.date);
         final EditText et_item = (EditText) findViewById(R.id.item);
         final EditText et_price = (EditText) findViewById(R.id.price);
+
 
         // 날짜는 현재 날짜로 고정
         // 현재 시간 구하기
@@ -43,42 +44,17 @@ public class DBTest extends AppCompatActivity {
                 String item = et_item.getText().toString();
                 int price = Integer.parseInt(et_price.getText().toString());
 
-                dbHelper.insert(date, item, price);
-                tv_result.setText(dbHelper.getResult());
+                dbHelper.insertUser(date, item);
+                tv_result.setText(dbHelper.getUser());
             }
         });
 
-        // DB에 있는 데이터 수정
-        Button update = (Button) findViewById(R.id.update);
-        update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String item = et_item.getText().toString();
-                int price = Integer.parseInt(et_price.getText().toString());
-
-                dbHelper.update(item, price);
-                tv_result.setText(dbHelper.getResult());
-            }
-        });
-
-        // DB에 있는 데이터 삭제
-        Button delete = (Button) findViewById(R.id.delete);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String item = et_item.getText().toString();
-
-                dbHelper.delete(item);
-                tv_result.setText(dbHelper.getResult());
-            }
-        });
-
-        // DB에 있는 데이터 조회
         Button select = (Button) findViewById(R.id.select);
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_result.setText(dbHelper.getResult());
+                String data = dbHelper.getUser();
+                tv_result.setText(data);
             }
         });
     }

@@ -57,15 +57,15 @@ public class MessageSettingAdapter extends BaseAdapter {
 
         }
 
-        ImageView imView = (ImageView)convertView.findViewById(R.id.vi_image);
+        ImageView iv_image = (ImageView)convertView.findViewById(R.id.iv_image);
 
-        TextView title = (TextView)convertView.findViewById(R.id.vi_title);
+        TextView title = (TextView)convertView.findViewById(R.id.tv_title);
 
         LinearLayout layout_view =  (LinearLayout)convertView.findViewById(R.id.vi_view);
 
         int resId=  m_activity.getResources().getIdentifier(settingArray.get(position).picture, "drawable", m_activity.getPackageName());
 
-        imView.setBackgroundResource(resId);
+        iv_image.setBackgroundResource(resId);
 
         title.setText(settingArray.get(position).menu);
 
@@ -85,16 +85,16 @@ public class MessageSettingAdapter extends BaseAdapter {
 
     //설명 4:
 
-    public void GoIntent(int a){
-        if(settingArray.get(a).id==0){
+    public void GoIntent(int idx){
+        if(settingArray.get(idx).id==0){
 
-        }else if(settingArray.get(a).id==1){
+        }else if(settingArray.get(idx).id==1){
 
-        }else if(settingArray.get(a).id==2){
+        }else if(settingArray.get(idx).id==2){
 
-        }else if(settingArray.get(a).id==3){
+        }else if(settingArray.get(idx).id==3){
 
-        }else if(settingArray.get(a).id==4){
+        }else if(settingArray.get(idx).id==4){
         }
 
     }
