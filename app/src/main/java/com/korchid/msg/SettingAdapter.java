@@ -27,8 +27,8 @@ public class SettingAdapter extends BaseAdapter {
     private ArrayList<MessageSetting> messageSettingArrayList;
     private ArrayList arrayList;
 
-    Setting setting;
-    MessageSetting messageSetting;
+    private Setting setting;
+    private MessageSetting messageSetting;
 
     private LayoutInflater mInflater;
     private Activity mActivity;

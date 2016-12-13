@@ -1,5 +1,6 @@
 package com.korchid.msg;
 
+import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -42,11 +43,9 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth_phone_wait);
 
         final String phoneNumber = getIntent().getExtras().getString("phoneNumber");
-        final String password = getIntent().getExtras().getString("password");
         smsMessage = "";
 
         Log.d(TAG, "phoneNumber : " + phoneNumber);
-        Log.d(TAG, "password : " + password);
 
         btn_back = (Button) findViewById(R.id.btn_back);
 
@@ -61,37 +60,10 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
         btn_auth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO check
-                GlobalApplication.getGlobalApplicationContext().setUserId(phoneNumber);
-                GlobalApplication.getGlobalApplicationContext().setUserPassword(password);
 
-                // http://mommoo.tistory.com/38
-                // Use Environmental variable 'SharedPreference'
-                SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putString("USER_LOGIN", "LOGIN");
-                editor.putString("USER_PHONE", phoneNumber);
-                editor.putString("USER_PASSWORD", password);
-                editor.commit(); // Apply file
-
-                /*
-                // Delete preference value
-                // 1. Remove "key" data
-                editor.remove("key");
-
-                // 2. Remove xml data
-                editor.clear();
-                */
-
-                // if sharedPreferences.getString value is 0, assign 2th parameter
-                Log.d(TAG, "SharedPreference");
-                Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
-                Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-                Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
-
-                finish();
+                Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
+                intent.putExtra("phoneNumber", phoneNumber);
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -110,7 +82,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
                 String response = null;
 
                 try {
-                    url = new URL("https://www.korchid.com/sms-sender/" + phoneNumber + "/" + password + "/" + token);
+                    url = new URL("https://www.korchid.com/sms-sender/" + phoneNumber + "/" + token);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
 
@@ -145,6 +117,25 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
         if( smsReceiver != null ) {
             unregisterReceiver(smsReceiver);
             smsReceiver = null;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode){
+            case RESULT_OK:{
+                Intent intent = new Intent();
+                //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            }
+            default:{
+
+                break;
+            }
         }
     }
 

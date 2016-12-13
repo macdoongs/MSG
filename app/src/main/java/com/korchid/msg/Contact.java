@@ -5,9 +5,9 @@ package com.korchid.msg;
  */
 
 public class Contact {
-    Long id;
-    String name;
-    String phoneNumber;
+    private Long id;
+    private String name;
+    private String phoneNumber;
 
     public String getName() {
         return name;

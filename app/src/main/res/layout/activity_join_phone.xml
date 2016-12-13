@@ -62,14 +62,45 @@
                 android:id="@+id/et_phoneNumber"
                 android:hint="010-0000-0000" />
 
-            <Space
+            <TextView
+                android:text="Password"
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:id="@+id/textView8"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/et_password"
+                android:hint="*******" />
+
+            <TextView
+                android:text="Confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/et_passwordConfirm"
+                android:hint="*******" />
 
             <Button
-                android:text="Send SMS"
+                android:text="Register"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_sendSMS"
+                android:id="@+id/btn_register"
                 android:layout_width="250dp"
                 android:background="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"/>

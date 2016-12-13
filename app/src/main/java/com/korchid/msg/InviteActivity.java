@@ -23,17 +23,17 @@ import java.util.ArrayList;
 public class InviteActivity extends AppCompatActivity {
     private static final String TAG = "InviteActivity";
 
-    Button btn_inviteParent;
-    Button btn_inviteChild;
-    Button btn_send;
-    Button btn_contactList;
-    Button btn_kakaoLink;
+    private Button btn_inviteParent;
+    private Button btn_inviteChild;
+    private Button btn_send;
+    private Button btn_contactList;
+    private Button btn_kakaoLink;
 
-    TextView tv_role;
-    EditText et_nickname;
-    EditText et_phoneNumber;
+    private TextView tv_role;
+    private EditText et_nickname;
+    private EditText et_phoneNumber;
 
-    KakaoLink kakaoLink;
+    private KakaoLink kakaoLink;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

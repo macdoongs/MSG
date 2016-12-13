@@ -23,16 +23,16 @@ import android.widget.TextView;
 public class SelectParentActivity extends AppCompatActivity {
     private static final String TAG = "SelectParentActivity";
 
-    ViewPager pager;
-    SeekBar seekBar;
-    Button btn_call, btn_chat, btn_chat_setting;
-    ImageView imageView;
+    private ViewPager pager;
+    private SeekBar seekBar;
+    private Button btn_call, btn_chat, btn_chat_setting;
+    private ImageView imageView;
 
     // Temp Data Array
-    String[] parent = {"Father", "Mother", "StepMother"};
-    String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
-    String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
-    int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
+    private String[] parent = {"Father", "Mother", "StepMother"};
+    private String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
+    private String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
+    private int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

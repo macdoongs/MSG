@@ -15,10 +15,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class AuthPhoneActivity extends AppCompatActivity {
-    EditText et_phoneNumber;
-    EditText et_password;
-    Button btn_back;
-    Button btn_register;
+    private EditText et_phoneNumber;
+    private EditText et_password;
+    private Button btn_back;
+    private Button btn_register;
 
     String phoneNumber = "";
     String password = "";
@@ -29,7 +29,6 @@ public class AuthPhoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth_phone);
 
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
-        et_password = (EditText) findViewById(R.id.et_password);
         btn_back = (Button) findViewById(R.id.btn_back);
 
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -39,28 +38,18 @@ public class AuthPhoneActivity extends AppCompatActivity {
             }
         });
 
-        btn_register = (Button) findViewById(R.id.btn_register);
+        btn_register = (Button) findViewById(R.id.btn_sendSMS);
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 phoneNumber = et_phoneNumber.getText().toString();
-                password = et_password.getText().toString();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
 
                 if(phoneNumber.equals("")){
                     builder.setTitle("Warning");
                     builder.setMessage("Check your phone number.");
-                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                }else if(password.equals("")) {
-                    builder.setTitle("Warning");
-                    builder.setMessage("Check your password.");
                     builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -80,10 +69,8 @@ public class AuthPhoneActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
                             intent.putExtra("phoneNumber", phoneNumber);
-                            intent.putExtra("password", password);
-                            startActivity(intent);
 
-
+                            startActivityForResult(intent, 0);
                         }
                     });
                     builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -99,6 +86,25 @@ public class AuthPhoneActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode){
+            case RESULT_OK:{
+                Intent intent = new Intent();
+                //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            }
+            default:{
+
+                break;
+            }
+        }
     }
 
     public class ServiceReceiver extends BroadcastReceiver {

@@ -30,7 +30,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     private Uri mImageCaptureUri;
     private ImageView iv_profile;
 
-    Button btn_back;
+    private Button btn_back;
 
     private int viewId;
     private String absolutePath;

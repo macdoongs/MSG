@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 public class MessageSettingActivity extends AppCompatActivity {
     private static final String TAG = "MessageSettingActivity";
-    String nickname;
-    String title;
+    private String nickname;
+    private String title;
 
     private ArrayList settingArrayList;
     private SettingAdapter settingAdapter;

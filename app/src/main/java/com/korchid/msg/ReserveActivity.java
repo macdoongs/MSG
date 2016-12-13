@@ -15,16 +15,16 @@ public class ReserveActivity extends AppCompatActivity {
     private static final String TAG = "ReserveActivity";
     public static final int TOTAL_WEEK = 7;
 
-    Switch sw_enable;
+    private Switch sw_enable;
 
-    NumberPicker np_week;
-    NumberPicker np_number;
+    private NumberPicker np_week;
+    private NumberPicker np_number;
 
-    Button btn_back;
-    Button btn_polite;
-    Button btn_impolite;
-    Button btn_inPerson;
-    Button btn_reserve;
+    private Button btn_back;
+    private Button btn_polite;
+    private Button btn_impolite;
+    private Button btn_inPerson;
+    private Button btn_reserve;
 
     private int viewId;
     private int weekNum;

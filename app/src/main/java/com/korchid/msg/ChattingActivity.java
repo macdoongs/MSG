@@ -54,10 +54,10 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private Button btn_temp;
 
 
-    LinearLayout slidingPanel;
-    GridLayout expandedMenu;
-    ListView lv_message;
-    ImageView iv_profile;
+    private LinearLayout slidingPanel;
+    private GridLayout expandedMenu;
+    private ListView lv_message;
+    private ImageView iv_profile;
 
     private EditText et_message;
 
@@ -66,18 +66,18 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private MessageReceiver msgReceiver;
     private StatusReceiver statusReceiver;
 
-    String nickname;
-    String count;
-    String title;
-    String message1;
+    private String nickname;
+    private String count;
+    private String title;
+    private String message1;
     byte[] pic;
 
 
 
-    Boolean slidingState = false;
-    Boolean expandedState = false;
-    Animation aleft;
-    Animation bleft;
+    private Boolean slidingState = false;
+    private Boolean expandedState = false;
+    private Animation aleft;
+    private Animation bleft;
 
     private ArrayList<Chatting> m_arr;
     private ChattingAdapter adapter;

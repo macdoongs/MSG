@@ -25,20 +25,23 @@ import com.korchid.msg.service.ServiceThread;
  * Created by mac0314 on 2016-11-28.
  */
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity {//implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
-    Button btn_next;
-    Button btn_invite;
-    Button btn_join;
-    Button btn_reserve;
-    Button btn_temp;
+    private Button btn_join;
+    private Button btn_login;
 
-    Boolean loginState;
+    private Button btn_next;
+    private Button btn_invite;
+
+    private Button btn_reserve;
+    private Button btn_temp;
+
+    private String loginState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +75,44 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
         btn_join = (Button) findViewById(R.id.btn_join);
-        btn_join.setOnClickListener(new View.OnClickListener() {
+
+        // Use Environmental variable 'SharedPreference'
+        SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+
+        btn_login = (Button) findViewById(R.id.btn_login);
+        btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AuthPhoneActivity.class));
+                Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
+
+                if(btn_login.getText().toString().equals("Login")){
+                    startActivityForResult(intent, 0);
+                }else{
+                    startActivityForResult(intent, 1);
+                }
+
             }
         });
+
+        loginState = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
+        if(loginState.equals("LOGIN")){
+            btn_join.setVisibility(View.GONE);
+            btn_login.setText("Logout");
+        }else{
+            btn_join.setVisibility(View.VISIBLE);
+            btn_join.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // http://developljy.tistory.com/16
+                    startActivityForResult(new Intent(getApplicationContext(), AuthPhoneActivity.class), 0);
+                }
+            });
+        }
+
 
         btn_reserve = (Button) findViewById(R.id.btn_reserve);
         btn_reserve.setOnClickListener(new View.OnClickListener() {
@@ -95,22 +130,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        // Use Environmental variable 'SharedPreference'
-        SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
 
-        loginState = sharedPreferences.getBoolean("USER_LOGIN", false);
-        if(loginState){
-
-        }else{
-
-        }
         // if sharedPreferences.getString value is 0, assign 2th parameter
         Log.d(TAG, "SharedPreference");
-        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getBoolean("USER_LOGIN", false));
+        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
         Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
         Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "000000"));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode){
+            case RESULT_OK:{
+                if(requestCode == 0){
+                    btn_join.setVisibility(View.GONE);
+                    btn_login.setText("Logout");
+                }else if(requestCode == 1){
+                    btn_join.setVisibility(View.VISIBLE);
+                    btn_login.setText("Login");
+                }
+
+                break;
+            }
+            default:{
+
+                break;
+            }
+        }
+    }
+    /*
     public void mOnClick(View view){
             switch (view.getId()){
                 case R.id.btn_google:
@@ -146,9 +196,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                         Log.d(TAG, "이미지 경로는 : " + currentPerson.getImage().getUrl());
 
-                           /* Glide.with(MainActivity.this)
+                            Glide.with(MainActivity.this)
                                     .load(currentPerson.getImage().getUrl())
-                                    .into(userphoto);*/
+                                    .into(userphoto);
 
                     }
                     if (currentPerson.hasDisplayName()) {
@@ -183,6 +233,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     Toast.makeText(getApplicationContext(), "이미 로그인 중", Toast.LENGTH_SHORT).show();
                 }
             }
+    */
+
 
     /* Terminate application - alert dialog
     @Override
