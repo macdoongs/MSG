@@ -12,12 +12,14 @@ import android.util.Log;
 
 // Loading screen
 public class SplashActivity extends Activity {
+    private static final String TAG = "SplashActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Log.d("Loading", "SplashActivity Ok");
         Handler handler = new Handler();
         // Duration : 2 second
         handler.postDelayed(new Runnable() {

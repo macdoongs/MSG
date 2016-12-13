@@ -2,6 +2,7 @@ package com.korchid.msg.service;
 
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +15,9 @@ import java.util.Date;
 public class ServiceThread extends Thread {
     private static final String TAG = "ServiceThread";
     Handler handler;
-    boolean isRun = true;
+    private boolean isRun = true;
+    private boolean isMatch = false;
+    public static String timer = "";
 
     public ServiceThread(Handler handler){
         this.handler = handler;
@@ -28,15 +31,41 @@ public class ServiceThread extends Thread {
 
     public void run(){
         //반복적으로 수행할 작업을 한다.
+
+        Log.d(TAG, timer);
+
         while(isRun){
 
-
+            // http://kanzler.tistory.com/50
+            // http://sumi3360.blogspot.kr/2014/01/android.html
+            // Current time
             long now = System.currentTimeMillis();
             Date date = new Date(now);
+            Date nextDate;
+
+           // nextDate.setDate(date.getDate()+1);
+
+            SimpleDateFormat dateFormat = new  SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault());
+            String strDate = dateFormat.format(date);
+            try {
+                Date date1 = dateFormat.parse("2016-12-13 14:25");
+                if(!isMatch){
+                    if(strDate.equals(timer)){
+                        Log.d(TAG, "Complete match!");
+                        isMatch = true;
+                    }else{
+                        Log.d(TAG, "No match, " + strDate);
+                    }
+                }
+
+            }catch (Exception e){
+                Log.e(TAG, e.getMessage());
+            }
+
             // 출력될 포맷 설정
             String to = date.toString();
 
-            //TODO
+            String tempDate = "2014-01-29 13:30";
 
             Log.d(TAG, to);
             try{

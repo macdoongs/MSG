@@ -3,6 +3,7 @@ package com.korchid.msg;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.util.LruCache;
 
 import com.android.volley.RequestQueue;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 // 로그인 기반 샘플앱에서 사용한다.
 // kakao-open-android-sdk-sample
 public class GlobalApplication extends Application {
+    private static final String TAG = "GlobalApplication";
     private static volatile GlobalApplication instance = null;
     private ImageLoader imageLoader;
 
@@ -28,7 +30,11 @@ public class GlobalApplication extends Application {
     private Uri profileImage;
     private String[] parentId;
 
-    public DBHelper dbHelper;
+    /**
+     * see NotePad tutorial for an example implementation of DataDbAdapter
+     */
+    private static DBHelper dbHelper;
+
 
     /**
      * 이미지 로더, 이미지 캐시, 요청 큐를 초기화한다.
@@ -36,10 +42,12 @@ public class GlobalApplication extends Application {
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "onCreate");
         super.onCreate();
         instance = this;
 
         //KakaoSDK.init(new KakaoSDKAdapter());
+
 
         dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
 
@@ -67,6 +75,8 @@ public class GlobalApplication extends Application {
      * @return singleton 애플리케이션 객체
      */
     public static GlobalApplication getGlobalApplicationContext() {
+        Log.d(TAG, "getGlobalApplicationContext");
+
         if(instance == null)
             throw new IllegalStateException("this application does not inherit com.kakao.GlobalApplication");
         return instance;
@@ -137,6 +147,7 @@ public class GlobalApplication extends Application {
      */
     @Override
     public void onTerminate() {
+        Log.d(TAG, "onTerminate");
         super.onTerminate();
         instance = null;
     }

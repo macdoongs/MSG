@@ -17,6 +17,7 @@ import java.util.ArrayList;
  */
 
 public class MessageSettingAdapter extends BaseAdapter {
+    private static final String TAG = "MessageSettingAdapter";
 
     private LayoutInflater mInflater;
 

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class ProfileActivity  extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = "ProfileActivity";
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_IMAGE = 2;
@@ -38,6 +39,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
@@ -53,6 +55,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     // Take pictures function
     // http://jeongchul.tistory.com/287
     public void takePictureAction(){
+        Log.d(TAG, "takePictureAction");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // Temp path
@@ -64,6 +67,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     }
 
     public  void takeAlbumAction(){
+        Log.d(TAG, "takeAlbumAction");
         // Call Album
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
@@ -73,6 +77,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d(TAG, "onActivityResult / request code : " + requestCode + ", result code : " + resultCode);
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode != RESULT_OK){
@@ -83,6 +88,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         switch (requestCode){
             case PICK_FROM_ALBUM:
             {
+                Log.d(TAG, "PICK_FROM_ALBUM case");
                 mImageCaptureUri = data.getData();
                 //Toast.makeText(ProfileActivity.this, mImageCaptureUri.getPath().toString(), Toast.LENGTH_LONG).show();
                 //iv_profile.setImageURI(mImageCaptureUri);
@@ -90,6 +96,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
             }
             case PICK_FROM_CAMERA:
             {
+                Log.d(TAG, "PICK_FROM_CAMERA case");
                 // Resize image
                 // call crop application
                 Intent intent = new Intent("com.android.camera.action.CROP");
@@ -108,6 +115,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
             }
             case CROP_IMAGE:
             {
+                Log.d(TAG, "CROP_IMAGE case");
                 // Receive image cropped
                 // Additional work and delete temp file
                 if(resultCode != RESULT_OK){
@@ -205,6 +213,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
     // Save Bitmap image
     private void storeCropImage(Bitmap bitmap, String filePath){
+        Log.d(TAG, "storeCropImage");
         // Create MSG directory and save image
         String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MSG";
         File directoryMSG = new File(dirPath);
@@ -228,6 +237,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
             outputStream.close();
 
         }catch (Exception e){
+            Log.e(TAG, "storeCropImage Error : " + e.getMessage());
             e.printStackTrace();
         }
 

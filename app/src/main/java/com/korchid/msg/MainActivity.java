@@ -3,6 +3,7 @@ package com.korchid.msg;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
-
     Button btn_next;
     Button btn_invite;
     Button btn_join;
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         final ServiceThread serviceThread = new ServiceThread(new Handler());
+        serviceThread.timer = "2016-12-13 14:55";
         serviceThread.start();
 
         // Loading screen
@@ -91,6 +92,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 startActivity(new Intent(getApplicationContext(), DBTest.class));
             }
         });
+
+        // Use Environmental variable 'SharedPreference'
+        SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
+
+        // if sharedPreferences.getString value is 0, assign 2th parameter
+        Log.d(TAG, "SharedPreference");
+        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
+        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
+        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
     }
 
     public void mOnClick(View view){

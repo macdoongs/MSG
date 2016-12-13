@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -50,6 +51,8 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private Button btn_menu;
     private Button btn_plus;
     private Button btn_send;
+    private Button btn_temp;
+
 
     LinearLayout slidingPanel;
     GridLayout expandedMenu;
@@ -110,7 +113,17 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         btn_plus = (Button)findViewById(R.id.btn_plus);
         iv_profile = (ImageView)findViewById(R.id.iv_profile);
 
-        iv_profile.setImageURI(GlobalApplication.getGlobalApplicationContext().getProfileImage());
+        try {
+            Uri uri = GlobalApplication.getGlobalApplicationContext().getProfileImage();
+
+            Log.d(TAG, "Uri : " + uri);
+            if(uri != null){
+                iv_profile.setImageURI(GlobalApplication.getGlobalApplicationContext().getProfileImage());
+            }
+
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
 
         lv_message = (ListView)findViewById(R.id.lv_message);
 
@@ -120,7 +133,34 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
         lv_message.setAdapter(adapter);
 
+        btn_temp = (Button) findViewById(R.id.btn_temp);
+        btn_temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = "";
 
+                //이미지를 불려온다
+                byte[] data = getImageByte(BitmapFactory.decodeResource(getResources(), R.drawable.logo));
+
+                message1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><m2m:rqp xmlns:m2m=\"http://www.onem2m.org/xml/protocols\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><op>1</op><to>/mobius-yt/"+title+"/chatting</to><fr>S0.2.481.1.20160721051547725</fr><rqi>rqi201607211554337900rzY</rqi><ty>4</ty><pc><cin><rn></rn><con>";
+
+                String message2 = nickname+": "+ data.toString();
+                Log.d(TAG, "Message : " + message2);
+                String message3 = "</con></cin></pc></m2m:rqp>";
+
+                message = message1 + message2 + message3;
+
+                String topic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
+
+                MqttServiceDelegate.publish(
+                        ChattingActivity.this,
+                        topic,
+                        //publishEditView.getText().toString().getBytes()
+                        message.getBytes()
+                );
+
+            }
+        });
 
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +245,14 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
         });
 
 
+    }
+
+    //비트맵의 byte배열을 얻는다
+    public byte[] getImageByte(Bitmap bitmap) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+        return out.toByteArray();
     }
 
     @Override

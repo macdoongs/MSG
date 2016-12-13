@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,6 +64,22 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
                 // TODO check
                 GlobalApplication.getGlobalApplicationContext().setUserId(phoneNumber);
                 GlobalApplication.getGlobalApplicationContext().setUserPassword(password);
+
+                // Use Environmental variable 'SharedPreference'
+                SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString("USER_LOGIN", "LOGIN");
+                editor.putString("USER_PHONE", phoneNumber);
+                editor.putString("USER_PASSWORD", password);
+                editor.commit(); // 파일에 최종 반영함
+
+                // if sharedPreferences.getString value is 0, assign 2th parameter
+                Log.d(TAG, "SharedPreference");
+                Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
+                Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
+                Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
 
                 finish();
             }

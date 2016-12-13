@@ -3,6 +3,7 @@ package com.korchid.msg;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -12,12 +13,14 @@ import java.util.ArrayList;
  */
 
 public class SettingActivity extends AppCompatActivity {
+    private static final String TAG = "SettingActivity";
     String nickname;
     String title;
     private ArrayList<Setting> m_arry;
 
     private SettingAdapter adapter;
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
@@ -28,7 +31,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void setList(){
-
+        Log.d(TAG, "setList");
         m_arry = new ArrayList<Setting>();
 
         ListView listV = (ListView)findViewById(R.id.listView2);
@@ -52,6 +55,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void listUpdate(){
+        Log.d(TAG, "listUpdate");
         adapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
     }
 }
