@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     Button btn_reserve;
     Button btn_temp;
 
+    Boolean loginState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,11 +98,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // Use Environmental variable 'SharedPreference'
         SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
 
+        loginState = sharedPreferences.getBoolean("USER_LOGIN", false);
+        if(loginState){
+
+        }else{
+
+        }
         // if sharedPreferences.getString value is 0, assign 2th parameter
         Log.d(TAG, "SharedPreference");
-        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
+        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getBoolean("USER_LOGIN", false));
         Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
+        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "000000"));
     }
 
     public void mOnClick(View view){

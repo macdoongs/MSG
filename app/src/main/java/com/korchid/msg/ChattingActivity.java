@@ -132,7 +132,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
         adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
         lv_message.setAdapter(adapter);
-
+/*
         btn_temp = (Button) findViewById(R.id.btn_temp);
         btn_temp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +161,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
 
             }
         });
-
+*/
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

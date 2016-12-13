@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/vi_view"
+    android:id="@+id/ll_container"
     android:layout_width="match_parent"
     android:layout_height="90dp"
     android:orientation="vertical" >
@@ -19,12 +19,11 @@
             android:layout_height="70dp"
             android:layout_weight="1"
             android:gravity="left"
-            android:orientation="vertical"
-            android:background="@drawable/setting">
+            android:orientation="vertical">
 
 
             <ImageView
-                android:id="@+id/vi_image"
+                android:id="@+id/iv_title"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@drawable/mainsetting" />
@@ -41,11 +40,11 @@
 
 
             <TextView
-                android:id="@+id/vi_title"
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="4"
-                android:text="Room 1"
+                android:text="Title"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold"

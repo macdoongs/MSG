@@ -33,7 +33,7 @@ public class GlobalApplication extends Application {
     /**
      * see NotePad tutorial for an example implementation of DataDbAdapter
      */
-    private static DBHelper dbHelper;
+    public static DBHelper dbHelper;
 
 
     /**
@@ -48,8 +48,8 @@ public class GlobalApplication extends Application {
 
         //KakaoSDK.init(new KakaoSDKAdapter());
 
-
         dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
+        dbHelper.getWritableDatabase();
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -148,6 +148,7 @@ public class GlobalApplication extends Application {
     @Override
     public void onTerminate() {
         Log.d(TAG, "onTerminate");
+        dbHelper.close();
         super.onTerminate();
         instance = null;
     }

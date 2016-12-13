@@ -2,7 +2,7 @@ package com.korchid.msg;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +18,27 @@ import java.util.ArrayList;
  */
 
 public class SettingAdapter extends BaseAdapter {
+    private static final String TAG = "SettingAdapter";
 
-    private LayoutInflater mInflater;
-
-    private Activity m_activity;
+    public enum Type {SETTING, MESSAGE_SETTING}
 
     private ArrayList<Setting> settingArray;
+    private ArrayList<MessageSetting> messageSettingArrayList;
 
-    public SettingAdapter(Activity act, ArrayList<Setting> arr_item) {
-        this.m_activity = act;
-        this.settingArray = arr_item;
+    private LayoutInflater mInflater;
+    private Activity mActivity;
 
-        mInflater = (LayoutInflater)m_activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private Type type;
+
+    public SettingAdapter(Activity activity, ArrayList<Setting> settingArray) {
+        this.mActivity = activity;
+
+        this.settingArray = settingArray;
+
+
+        mInflater = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
 
     @Override
     public int getCount() {
@@ -50,31 +58,28 @@ public class SettingAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         if(convertView == null){
-            int res = 0;
+            int resource = R.layout.setting_menu;
 
-            res = R.layout.setting_menu;
-
-            convertView = mInflater.inflate(res, parent, false);
-
+            convertView = mInflater.inflate(resource, parent, false);
         }
 
-        ImageView imView = (ImageView)convertView.findViewById(R.id.vi_image);
+        ImageView iv_title = (ImageView)convertView.findViewById(R.id.iv_title);
 
-        TextView title = (TextView)convertView.findViewById(R.id.vi_title);
+        TextView tv_title = (TextView)convertView.findViewById(R.id.tv_title);
 
-        LinearLayout layout_view =  (LinearLayout)convertView.findViewById(R.id.vi_view);
+        LinearLayout layout_view =  (LinearLayout)convertView.findViewById(R.id.ll_container);
 
-        int resId=  m_activity.getResources().getIdentifier(settingArray.get(position).picture, "drawable", m_activity.getPackageName());
+        int resourceId=  mActivity.getResources().getIdentifier(settingArray.get(position).getPicture(), "drawable", mActivity.getPackageName());
 
-        imView.setBackgroundResource(resId);
+        iv_title.setBackgroundResource(resourceId);
 
-        title.setText(settingArray.get(position).menu);
+        tv_title.setText(settingArray.get(position).getTitle());
 
 
         layout_view.setOnClickListener(new View.OnClickListener(){
-
+            @Override
             public void onClick(View v){
-                GoIntent(position);
+                goIntent(position);
             }
         });
 
@@ -82,22 +87,8 @@ public class SettingAdapter extends BaseAdapter {
 
     }
 
-
-
-    //설명 4:
-
-    public void GoIntent(int a){
-        if(settingArray.get(a).id==0){
-
-        }else if(settingArray.get(a).id==1){
-
-        }else if(settingArray.get(a).id==2){
-
-        }else if(settingArray.get(a).id==3){
-
-        }else if(settingArray.get(a).id==4){
-            m_activity.finish();
-        }
+    public void goIntent(int idx){
+        Log.d(TAG, settingArray.get(idx).getTitle());
 
     }
 

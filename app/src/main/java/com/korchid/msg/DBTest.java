@@ -2,6 +2,7 @@ package com.korchid.msg;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,13 +12,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DBTest extends AppCompatActivity {
+    private static final String TAG = "DBTest";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbtest);
 
+
         final DBHelper dbHelper = GlobalApplication.getGlobalApplicationContext().getDBHelper();
+
+
 
         // 테이블에 있는 모든 데이터 출력
         final TextView tv_result = (TextView) findViewById(R.id.result);

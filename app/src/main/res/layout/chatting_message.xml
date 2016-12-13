@@ -14,7 +14,7 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/vi_view2"
+            android:id="@+id/gl_container"
             android:columnCount="2"
             android:rowCount="2"
             android:layout_marginLeft="5dp"
@@ -22,7 +22,7 @@
             >
 
             <TextView
-                android:id="@+id/text_id2"
+                android:id="@+id/tv_yourName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -41,10 +41,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@mipmap/ic_launcher"
-                android:id="@+id/parentProfile" />
+                android:id="@+id/iv_yourProfile" />
 
             <TextView
-                android:id="@+id/text_chat2"
+                android:id="@+id/tv_yourMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -54,9 +54,9 @@
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_alignBottom="@+id/vi_view"
-                android:layout_toRightOf="@+id/vi_view2"
-                android:layout_toEndOf="@+id/vi_view2" />
+                android:layout_alignBottom="@+id/ll_container"
+                android:layout_toRightOf="@+id/gl_container"
+                android:layout_toEndOf="@+id/gl_container" />
 
         </GridLayout>
 
@@ -70,7 +70,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/vi_view"
+            android:id="@+id/ll_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -83,7 +83,7 @@
 
 
             <TextView
-                android:id="@+id/text_id"
+                android:id="@+id/tv_myName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -96,7 +96,7 @@
                 />
 
             <TextView
-                android:id="@+id/text_chat"
+                android:id="@+id/tv_myMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"

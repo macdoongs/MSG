@@ -65,6 +65,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
                 GlobalApplication.getGlobalApplicationContext().setUserId(phoneNumber);
                 GlobalApplication.getGlobalApplicationContext().setUserPassword(password);
 
+                // http://mommoo.tistory.com/38
                 // Use Environmental variable 'SharedPreference'
                 SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
 
@@ -73,7 +74,16 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
                 editor.putString("USER_LOGIN", "LOGIN");
                 editor.putString("USER_PHONE", phoneNumber);
                 editor.putString("USER_PASSWORD", password);
-                editor.commit(); // 파일에 최종 반영함
+                editor.commit(); // Apply file
+
+                /*
+                // Delete preference value
+                // 1. Remove "key" data
+                editor.remove("key");
+
+                // 2. Remove xml data
+                editor.clear();
+                */
 
                 // if sharedPreferences.getString value is 0, assign 2th parameter
                 Log.d(TAG, "SharedPreference");

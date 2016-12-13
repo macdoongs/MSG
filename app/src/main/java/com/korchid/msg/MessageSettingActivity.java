@@ -17,8 +17,8 @@ public class MessageSettingActivity extends AppCompatActivity {
     String nickname;
     String title;
 
-    private ArrayList<Setting> m_arry;
-    private MessageSettingAdapter adapter;
+    private ArrayList<MessageSetting> settingArrayList;
+    private SettingAdapter settingAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -26,38 +26,33 @@ public class MessageSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         Intent data = getIntent();
-        nickname = "aa";
-        title = "aa";
+
         setList();
     }
 
     private void setList(){
         Log.d(TAG, "setList");
 
-        m_arry = new ArrayList<Setting>();
+        settingArrayList = new ArrayList<MessageSetting>();
 
-        ListView listV = (ListView)findViewById(R.id.listView2);
+        ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
 
-        m_arry.add(new Setting("잘지내시죠?","@drawable/image", nickname, 0, title));
+        settingArrayList.add(new MessageSetting(0, "@drawable/plane", MessageSetting.Type.POLITE, "잘지내시죠?"));
 
-        m_arry.add(new Setting("별일 없으신가요?","@drawable/image", nickname, 2, title));
+        settingArrayList.add(new MessageSetting(1, "@drawable/plane", MessageSetting.Type.POLITE, "별일 없으신가요?"));
 
-        m_arry.add(new Setting("건강은 어떠세요?","@drawable/image", nickname, 3, title));
+        settingArrayList.add(new MessageSetting(2, "@drawable/plane", MessageSetting.Type.POLITE, "건강은 어떠세요?"));
 
-        m_arry.add(new Setting("식사하셨어요?","@drawable/image", nickname, 4, title));
+        settingArrayList.add(new MessageSetting(3, "@drawable/plane", MessageSetting.Type.POLITE, "식사하셨어요?"));
 
-        adapter = new MessageSettingAdapter(MessageSettingActivity.this, m_arry);
+        settingAdapter = new SettingAdapter(MessageSettingActivity.this,  settingArrayList);
 
-        listV.setAdapter(adapter);
-
-        //lv.setDivider(null); 구분선을 없에고 싶으면 null 값을 set합니다.
-
-        //lv.setDividerHeight(5); 구분선의 굵기를 좀 더 크게 하고싶으면 숫자로 높이 지정
+        lv_setting.setAdapter(settingAdapter);
 
     }
 
     public void listUpdate(){
         Log.d(TAG, "listUpdate");
-        adapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
+        settingAdapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
     }
 }

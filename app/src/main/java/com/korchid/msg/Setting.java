@@ -5,17 +5,37 @@ package com.korchid.msg;
  */
 
 public class Setting {
-    public String menu;
-    public String picture;
-    public String nick;
-    public int id;
-    public String title;
+    private int id;
+    private String picture;
+    private String title;
 
-    public Setting (String m, String p, String n, int i, String t){
-        menu = m;
-        picture = p;
-        nick = n;
-        id = i;
-        title = t;
+    public Setting (int id, String picture, String title){
+        this.id = id;
+        this.picture = picture;
+        this.title = title;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -14,48 +14,41 @@ import java.util.ArrayList;
 
 public class SettingActivity extends AppCompatActivity {
     private static final String TAG = "SettingActivity";
-    String nickname;
-    String title;
-    private ArrayList<Setting> m_arry;
 
-    private SettingAdapter adapter;
+    private ArrayList<Setting> settingArrayList;
+    private SettingAdapter settingAdapter;
+
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
         Intent data = getIntent();
-        nickname = data.getStringExtra("nickname");
-        title = data.getStringExtra("title");
+
         setList();
     }
 
     private void setList(){
         Log.d(TAG, "setList");
-        m_arry = new ArrayList<Setting>();
+        settingArrayList = new ArrayList<Setting>();
 
-        ListView listV = (ListView)findViewById(R.id.listView2);
+        ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
 
-        m_arry.add(new Setting("메시지 설정","@drawable/image", nickname, 0, title));
+        settingArrayList.add(new Setting(0, "@drawable/mainsetting", "메시지 설정"));
 
-        m_arry.add(new Setting("사용자 추가","@drawable/image", nickname, 2, title));
+        settingArrayList.add(new Setting(1, "@drawable/mainsetting", "사용자 추가"));
 
-        m_arry.add(new Setting("환경 설정","@drawable/image", nickname, 3, title));
+        settingArrayList.add(new Setting(2, "@drawable/mainsetting", "환경 설정"));
 
-        m_arry.add(new Setting("돌아가기","@drawable/image", nickname, 4, title));
+        settingArrayList.add(new Setting(3, "@drawable/mainsetting", "돌아가기"));
 
-        adapter = new SettingAdapter(SettingActivity.this, m_arry);
+        settingAdapter = new SettingAdapter(SettingActivity.this, settingArrayList);
 
-        listV.setAdapter(adapter);
-
-        //lv.setDivider(null); 구분선을 없에고 싶으면 null 값을 set합니다.
-
-        //lv.setDividerHeight(5); 구분선의 굵기를 좀 더 크게 하고싶으면 숫자로 높이 지정
-
+        lv_setting.setAdapter(settingAdapter);
     }
 
     public void listUpdate(){
         Log.d(TAG, "listUpdate");
-        adapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
+        settingAdapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
     }
 }

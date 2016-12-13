@@ -2,6 +2,7 @@ package com.korchid.msg;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +18,20 @@ import java.util.ArrayList;
  */
 
 public class ChattingAdapter extends BaseAdapter {
+        private static final String TAG = "ChattingAdapter";
 
         private LayoutInflater mInflater;
 
         private Activity MessagingActivity;
 
-        private ArrayList<Chatting> messageArray;
+        private ArrayList<Chatting> chattingArrayList;
 
         private String name = "";
         private String message = "";
 
-        public ChattingAdapter (Activity act, ArrayList<Chatting> mArr) {
-            this.MessagingActivity = act;
-            this.messageArray = mArr;
+        public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList) {
+            this.MessagingActivity = activity;
+            this.chattingArrayList = chattingArrayList;
 
             mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
@@ -38,12 +40,12 @@ public class ChattingAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return messageArray.size();
+            return chattingArrayList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return messageArray.get(position);
+            return chattingArrayList.get(position);
         }
 
         public long getItemId(int position){
@@ -54,40 +56,40 @@ public class ChattingAdapter extends BaseAdapter {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            Log.d(TAG, "getView");
 
-            String[] ReturnList = messageArray.get(position).message.split(":");
+            String[] ReturnList = chattingArrayList.get(position).message.split(":");
             name = ReturnList[0];
             message = ReturnList[1];
 
 
             if(convertView == null){
 
-                int res = 0;
+                int resource = R.layout.chatting_message;
 
-                res = R.layout.chatting_message;
-
-                convertView = mInflater.inflate(res, parent, false);
+                convertView = mInflater.inflate(resource, parent, false);
             }
 
 
-            LinearLayout layout_view = (LinearLayout) convertView.findViewById(R.id.vi_view);
-            GridLayout layout_view2 = (GridLayout) convertView.findViewById(R.id.vi_view2);
-            //LinearLayout layout_view2 = (LinearLayout) convertView.findViewById(R.id.vi_view2);
+            LinearLayout ll_container = (LinearLayout) convertView.findViewById(R.id.ll_container);
+            GridLayout gl_container = (GridLayout) convertView.findViewById(R.id.gl_container);
 
-            if(name.equals(messageArray.get(position).user)){
-                TextView id = (TextView) convertView.findViewById(R.id.text_id);
-                TextView chat = (TextView) convertView.findViewById(R.id.text_chat);
-                layout_view.setVisibility(View.VISIBLE);
-                layout_view2.setVisibility(View.INVISIBLE);
-                id.setText(name);
-                chat.setText(message);
+            if(name.equals(chattingArrayList.get(position).user)){
+                // Application user oneself
+                TextView tv_myName = (TextView) convertView.findViewById(R.id.tv_myName);
+                TextView tv_myMessage = (TextView) convertView.findViewById(R.id.tv_myMessage);
+                ll_container.setVisibility(View.VISIBLE);
+                gl_container.setVisibility(View.INVISIBLE);
+                tv_myName.setText(name);
+                tv_myMessage.setText(message);
             }else{
-                TextView id2 = (TextView) convertView.findViewById(R.id.text_id2);
-                TextView chat2 = (TextView) convertView.findViewById(R.id.text_chat2);
-                layout_view.setVisibility(View.INVISIBLE);
-                layout_view2.setVisibility(View.VISIBLE);
-                id2.setText(name);
-                chat2.setText(message);
+                // Counterpart
+                TextView tv_yourName = (TextView) convertView.findViewById(R.id.tv_yourName);
+                TextView tv_yourMessage = (TextView) convertView.findViewById(R.id.tv_yourMessage);
+                ll_container.setVisibility(View.INVISIBLE);
+                gl_container.setVisibility(View.VISIBLE);
+                tv_yourName.setText(name);
+                tv_yourMessage.setText(message);
             }
 
             /*  버튼에 이벤트처리를 하기위해선 setTag를 이용해서 사용할 수 있습니다.
