@@ -100,7 +100,9 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
 
                 } catch (IOException e) {
                     // Error
+                    Log.e(TAG, "IOException : " + e.getMessage());
                 } catch (Exception e) {
+                    Log.e(TAG, "Exception : " + e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -138,6 +140,8 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     public class SMSReceiver  extends BroadcastReceiver {
         /**

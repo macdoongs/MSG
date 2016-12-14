@@ -20,30 +20,48 @@ public class MessageSettingActivity extends AppCompatActivity {
     private ArrayList settingArrayList;
     private SettingAdapter settingAdapter;
 
+    private MessageSetting.Type type;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        Intent data = getIntent();
+        Intent intent = getIntent();
+        // Enum data - intent
+        type = (MessageSetting.Type) intent.getSerializableExtra("Type");
+        Log.d(TAG, "Type : " + type);
 
-        setList();
+        setList(type);
     }
 
-    private void setList(){
+    private void setList(MessageSetting.Type type){
         Log.d(TAG, "setList");
 
         settingArrayList = new ArrayList();
 
         ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
+        if(type == MessageSetting.Type.POLITE){
+            settingArrayList.add(new MessageSetting(0, "@drawable/plane", type, "엄마 뭐하세요?"));
 
-        settingArrayList.add(new MessageSetting(0, "@drawable/plane", MessageSetting.Type.POLITE, "잘지내시죠?"));
+            settingArrayList.add(new MessageSetting(1, "@drawable/plane", type, "엄마 어디 아픈데 없죠?"));
 
-        settingArrayList.add(new MessageSetting(1, "@drawable/plane", MessageSetting.Type.POLITE, "별일 없으신가요?"));
+            settingArrayList.add(new MessageSetting(2, "@drawable/plane", type, "엄마 뭐 필요한거 있어요?"));
 
-        settingArrayList.add(new MessageSetting(2, "@drawable/plane", MessageSetting.Type.POLITE, "건강은 어떠세요?"));
+            settingArrayList.add(new MessageSetting(3, "@drawable/plane", type, "엄마 요새 바쁘세요?"));
+        }else if(type == MessageSetting.Type.IMPOLITE){
+            settingArrayList.add(new MessageSetting(0, "@drawable/plane", type, "엄마 뭐해?"));
 
-        settingArrayList.add(new MessageSetting(3, "@drawable/plane", MessageSetting.Type.POLITE, "식사하셨어요?"));
+            settingArrayList.add(new MessageSetting(1, "@drawable/plane", type, "엄마 어디 아픈데 없지?"));
+
+            settingArrayList.add(new MessageSetting(2, "@drawable/plane", type, "엄마 뭐 필요한거 있어?"));
+
+            settingArrayList.add(new MessageSetting(3, "@drawable/plane", type, "엄마 요새 바빠?"));
+        }else if(type == MessageSetting.Type.IN_PERSON){
+
+        }
+
 
         settingAdapter = new SettingAdapter(MessageSettingActivity.this,  settingArrayList);
 

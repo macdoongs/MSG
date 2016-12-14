@@ -62,6 +62,9 @@ import java.util.concurrent.Executors;
  *    6 Nov 2012  
  */
 
+// https://github.com/dirkmoors/MqttService
+// http://dalelane.co.uk/blog/?p=1599
+
 public class MqttService extends Service implements IMqttCallback
 {
     private static final String TAG = "MqttService";

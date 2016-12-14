@@ -39,13 +39,18 @@ public class SettingAdapter extends BaseAdapter {
         this.mActivity = activity;
         this.arrayList = settingArray;
 
-        Object object = settingArray.get(0);
+        try{
+            Object object = settingArray.get(0);
 
-        if(object instanceof Setting){
-            type = Type.SETTING;
-        }else if(object instanceof MessageSetting){
-            type = Type.MESSAGE_SETTING;
+            if(object instanceof Setting){
+                type = Type.SETTING;
+            }else if(object instanceof MessageSetting){
+                type = Type.MESSAGE_SETTING;
+            }
+        }catch (Exception e){
+            Log.e(TAG, "Error : " + e.getMessage());
         }
+
 
         mInflater = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -69,7 +74,7 @@ public class SettingAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
+        Log.d(TAG, "getView");
         if(convertView == null){
             int resource = R.layout.setting_menu;
 

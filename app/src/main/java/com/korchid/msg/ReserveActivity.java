@@ -1,5 +1,7 @@
 package com.korchid.msg;
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -46,8 +48,35 @@ public class ReserveActivity extends AppCompatActivity {
         });
 
         btn_polite = (Button) findViewById(R.id.btn_polite);
+        btn_polite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                intent.putExtra("Type", MessageSetting.Type.POLITE);
+                startActivity(intent);
+            }
+        });
+
         btn_impolite = (Button) findViewById(R.id.btn_impolite);
+        btn_impolite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                intent.putExtra("Type", MessageSetting.Type.IMPOLITE);
+                startActivity(intent);
+            }
+        });
+
         btn_inPerson = (Button) findViewById(R.id.btn_inPerson);
+        btn_inPerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                intent.putExtra("Type", MessageSetting.Type.IN_PERSON);
+                startActivity(intent);
+            }
+        });
+
         btn_reserve = (Button) findViewById(R.id.btn_reserve);
         btn_reserve.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,6 +18,8 @@ public class SettingActivity extends AppCompatActivity {
     private ArrayList settingArrayList;
     private SettingAdapter settingAdapter;
 
+
+
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
