@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginPhoneActivity extends AppCompatActivity {
+public class LoginPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "LoginPhoneActivity";
 
     private Button btn_back;
@@ -20,6 +20,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
 
     private String phoneNumber;
     private String password;
+    private int viewId;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -63,17 +64,22 @@ public class LoginPhoneActivity extends AppCompatActivity {
         et_password = (EditText) findViewById(R.id.et_password);
 
         btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btn_back.setOnClickListener(this);
 
         btn_login = (Button) findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_login.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_back:{
+                finish();
+                break;
+            }
+            case R.id.btn_login:{
                 // TODO check
                 phoneNumber = et_phoneNumber.getText().toString();
                 password = et_password.getText().toString();
@@ -102,9 +108,11 @@ public class LoginPhoneActivity extends AppCompatActivity {
                         finish();
                     }
                 }
-
+                break;
             }
-        });
+            default:{
+                break;
+            }
+        }
     }
-
 }

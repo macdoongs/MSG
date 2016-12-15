@@ -26,9 +26,9 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AuthPhoneWaitActivity extends AppCompatActivity {
+public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "AuthPhoneWaitActivity";
-    Button btn_auth;
+    Button btn_confirm;
     Button btn_back;
     EditText et_authCode;
 
@@ -36,36 +36,27 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
     final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     SMSReceiver smsReceiver;
     String smsMessage;
+    String phoneNumber;
+    private int viewId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone_wait);
 
-        final String phoneNumber = getIntent().getExtras().getString("phoneNumber");
+        final String userId = getIntent().getExtras().getString("phoneNumber");
+        phoneNumber = userId;
+
         smsMessage = "";
 
         Log.d(TAG, "phoneNumber : " + phoneNumber);
 
         btn_back = (Button) findViewById(R.id.btn_back);
 
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btn_back.setOnClickListener(this);
 
-        btn_auth = (Button) findViewById(R.id.btn_confirm);
-        btn_auth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
-                intent.putExtra("phoneNumber", phoneNumber);
-                startActivityForResult(intent, 0);
-            }
-        });
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+        btn_confirm.setOnClickListener(this);
 
         et_authCode = (EditText) findViewById(R.id.et_authCode);
 
@@ -82,7 +73,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
                 String response = null;
 
                 try {
-                    url = new URL("https://www.korchid.com/sms-sender/" + phoneNumber + "/" + token);
+                    url = new URL("https://www.korchid.com/sms-sender/" + userId + "/" + token);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
 
@@ -119,6 +110,28 @@ public class AuthPhoneWaitActivity extends AppCompatActivity {
         if( smsReceiver != null ) {
             unregisterReceiver(smsReceiver);
             smsReceiver = null;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_back:{
+                finish();
+                break;
+            }
+            case R.id.btn_confirm:{
+                Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
+                intent.putExtra("phoneNumber", phoneNumber);
+                startActivityForResult(intent, 0);
+                break;
+            }
+            default:{
+                break;
+            }
+
         }
     }
 

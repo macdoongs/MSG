@@ -7,15 +7,17 @@ package com.korchid.msg;
 public class MessageSetting extends Setting {
     private static final String TAG = "MessageSetting";
 
-    public enum Type {POLITE, IMPOLITE, IN_PERSON}
+    public enum Type {POLITE , IMPOLITE, IN_PERSON}
 
     private Type type;
+    private String time;
 
 
-    public MessageSetting(int id, String picture, Type type, String title) {
+    public MessageSetting(int id, String picture, Type type, String title, String time) {
         super(id, picture, title);
 
         this.type = type;
+        this.time = time;
     }
 
     public Type getType() {
@@ -24,6 +26,14 @@ public class MessageSetting extends Setting {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     @Override

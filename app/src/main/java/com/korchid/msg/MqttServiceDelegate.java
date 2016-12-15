@@ -145,6 +145,8 @@ public class MqttServiceDelegate
 			Log.d(TAG, "Delegate Topic : " + topic);
 			Log.d(TAG, "Delegate payload : " + payload.toString());
 
+
+
 	        
 	        for(MessageHandler messageHandler : messageHandlers){
 	        	messageHandler.handleMessage(topic, payload);

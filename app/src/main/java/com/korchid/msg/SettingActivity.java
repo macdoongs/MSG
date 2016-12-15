@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class SettingActivity extends AppCompatActivity {
     private static final String TAG = "SettingActivity";
 
-    private ArrayList settingArrayList;
+    ArrayList settingArrayList;
     private SettingAdapter settingAdapter;
 
 
@@ -30,7 +30,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private void setList(){
         Log.d(TAG, "setList");
-        settingArrayList = new ArrayList ();
+        settingArrayList = new ArrayList<> ();
 
         ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
 

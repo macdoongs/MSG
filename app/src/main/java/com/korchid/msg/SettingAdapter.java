@@ -43,8 +43,10 @@ public class SettingAdapter extends BaseAdapter {
             Object object = settingArray.get(0);
 
             if(object instanceof Setting){
+                Log.d(TAG, "Setting");
                 type = Type.SETTING;
             }else if(object instanceof MessageSetting){
+                Log.d(TAG, "MessageSetting");
                 type = Type.MESSAGE_SETTING;
             }
         }catch (Exception e){
@@ -128,7 +130,7 @@ public class SettingAdapter extends BaseAdapter {
             Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
         }else if(type == Type.MESSAGE_SETTING){
             messageSetting = (MessageSetting) arrayList.get(idx);
-            Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle());
+            Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle() + messageSetting.getTime());
         }
 
 

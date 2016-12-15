@@ -122,7 +122,7 @@ public class JoinPhoneActivity extends AppCompatActivity {
                             Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
 
                             Intent intent = new Intent();
-                            //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
+                            //intent.putExtra("result_msg", "Example");
                             setResult(RESULT_OK, intent);
                             finish();
                         }

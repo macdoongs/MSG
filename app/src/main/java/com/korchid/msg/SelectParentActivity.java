@@ -34,6 +34,10 @@ public class SelectParentActivity extends AppCompatActivity {
     private String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
     private int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
 
+
+    private int viewId;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");

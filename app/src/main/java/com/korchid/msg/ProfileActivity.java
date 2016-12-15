@@ -31,6 +31,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     private ImageView iv_profile;
 
     private Button btn_back;
+    private Button btn_upload;
 
     private int viewId;
     private String absolutePath;
@@ -44,12 +45,12 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_profile);
 
         iv_profile = (ImageView) findViewById(R.id.iv_profile);
-        Button btn_upload = (Button) findViewById(R.id.btn_upload);
-
-        //iv_userPhoto.setImageBitmap(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name);
-
+        btn_back = (Button) findViewById(R.id.btn_back);
+        btn_back.setOnClickListener(this);
+        btn_upload = (Button) findViewById(R.id.btn_upload);
         btn_upload.setOnClickListener(this);
 
+        //iv_userPhoto.setImageBitmap(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name);
     }
 
     // Take pictures function
@@ -154,59 +155,68 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     public void onClick(View v){
         viewId = v.getId();
 
-        if(viewId == R.id.btn_register){
-            // Use Environmental variable 'SharedPreference'
-            SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
+        switch (viewId){
+            case R.id.back:{
+                finish();
+                break;
+            }
+            case R.id.btn_register:{
+                // Use Environmental variable 'SharedPreference'
+                SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
 
-            // if sharedPreferences.getString value is 0, assign 2th parameter
-            String login = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
-            String facebookLogin = sharedPreferences.getString("FACEBOOK_LOGIN", "LOGOUT");
-            String userId = sharedPreferences.getString("USER_ID", "");
-            String userName = sharedPreferences.getString("USER_NAME", "");
-            String userPassword = sharedPreferences.getString("USER_PASSWORD", "");
-            String userPhone = sharedPreferences.getString("USER_PHONE", "");
-            String userEmail = sharedPreferences.getString("USER_EMAIL", "");
+                // if sharedPreferences.getString value is 0, assign 2th parameter
+                String login = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
+                String facebookLogin = sharedPreferences.getString("FACEBOOK_LOGIN", "LOGOUT");
+                String userId = sharedPreferences.getString("USER_ID", "");
+                String userName = sharedPreferences.getString("USER_NAME", "");
+                String userPassword = sharedPreferences.getString("USER_PASSWORD", "");
+                String userPhone = sharedPreferences.getString("USER_PHONE", "");
+                String userEmail = sharedPreferences.getString("USER_EMAIL", "");
 
-            //DB query
+                //DB query
 
 
-            //Intent intent = new Intent(ChattingSubActivity.this, LoginActivity.class);
-            //ChattingSubActivity.this.startActivity(intent);
-            //ChattingSubActivity.this.finish();
-            Toast.makeText(this, "Complete join", Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(ChattingSubActivity.this, LoginActivity.class);
+                //ChattingSubActivity.this.startActivity(intent);
+                //ChattingSubActivity.this.finish();
+                Toast.makeText(this, "Complete join", Toast.LENGTH_LONG).show();
 
-        }else if(viewId == R.id.btn_upload){
-            DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    takePictureAction();
-                }
-            };
+                break;
+            }
+            case R.id.btn_upload:{
+                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        takePictureAction();
+                    }
+                };
 
-            DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    takeAlbumAction();
-                }
-            };
+                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        takeAlbumAction();
+                    }
+                };
 
-            DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            };
+                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                };
 
-            new AlertDialog.Builder(this)
-                    .setTitle("Choose Image to upload")
-                    .setPositiveButton("Take pictures", cameraListener)
-                    .setNeutralButton("Choose album", albumListener)
-                    .setNegativeButton("Cancel", cancelListener)
-                    .show();
-        }else if(viewId == R.id.btn_back){
-            finish();
+                new AlertDialog.Builder(this)
+                        .setTitle("Choose Image to upload")
+                        .setPositiveButton("Take pictures", cameraListener)
+                        .setNeutralButton("Choose album", albumListener)
+                        .setNegativeButton("Cancel", cancelListener)
+                        .show();
+                break;
+            }
+            default:{
+                break;
+            }
         }
-
     }
 
 

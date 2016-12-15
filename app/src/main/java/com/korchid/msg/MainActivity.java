@@ -25,7 +25,7 @@ import com.korchid.msg.service.ServiceThread;
  * Created by mac0314 on 2016-11-28.
  */
 
-public class MainActivity extends AppCompatActivity {//implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{//implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
 
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {//implements GoogleApiClien
     private Button btn_temp;
 
     private String loginState;
+    private int viewId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +60,10 @@ public class MainActivity extends AppCompatActivity {//implements GoogleApiClien
         startActivity(new Intent(this,SplashActivity.class));
 
         btn_next = (Button) findViewById(R.id.btn_next);
-        btn_next.setOnClickListener(new View.OnClickListener (){
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), SelectParentActivity.class));
-            }
-        });
+        btn_next.setOnClickListener(this);
 
         btn_invite = (Button) findViewById(R.id.btn_invite);
-        btn_invite.setOnClickListener(new View.OnClickListener (){
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), InviteActivity.class));
-            }
-        });
+        btn_invite.setOnClickListener(this);
 
         btn_join = (Button) findViewById(R.id.btn_join);
 
@@ -84,19 +75,7 @@ public class MainActivity extends AppCompatActivity {//implements GoogleApiClien
         editor.commit();
 
         btn_login = (Button) findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
-
-                if(btn_login.getText().toString().equals("Login")){
-                    startActivityForResult(intent, 0);
-                }else{
-                    startActivityForResult(intent, 1);
-                }
-
-            }
-        });
+        btn_login.setOnClickListener(this);
 
         loginState = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
         if(loginState.equals("LOGIN")){
@@ -104,31 +83,15 @@ public class MainActivity extends AppCompatActivity {//implements GoogleApiClien
             btn_login.setText("Logout");
         }else{
             btn_join.setVisibility(View.VISIBLE);
-            btn_join.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // http://developljy.tistory.com/16
-                    startActivityForResult(new Intent(getApplicationContext(), AuthPhoneActivity.class), 0);
-                }
-            });
+            btn_join.setOnClickListener(this);
         }
 
 
         btn_reserve = (Button) findViewById(R.id.btn_reserve);
-        btn_reserve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ReserveActivity.class));
-            }
-        });
+        btn_reserve.setOnClickListener(this);
 
         btn_temp = (Button) findViewById(R.id.btn_temp);
-        btn_temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DBTest.class));
-            }
-        });
+        btn_temp.setOnClickListener(this);
 
 
         // if sharedPreferences.getString value is 0, assign 2th parameter
@@ -136,6 +99,49 @@ public class MainActivity extends AppCompatActivity {//implements GoogleApiClien
         Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
         Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
         Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "000000"));
+    }
+
+    @Override
+    public void onClick(View v) {
+        viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_next:{
+                startActivity(new Intent(getApplicationContext(), SelectParentActivity.class));
+                break;
+            }
+            case R.id.btn_invite:{
+                startActivity(new Intent(getApplicationContext(), InviteActivity.class));
+                break;
+            }
+            case R.id.btn_join:{
+                // http://developljy.tistory.com/16
+                startActivityForResult(new Intent(getApplicationContext(), AuthPhoneActivity.class), 0);
+                break;
+            }
+            case R.id.btn_login:{
+                Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
+
+                if(btn_login.getText().toString().equals("Login")){
+                    startActivityForResult(intent, 0);
+                }else{
+                    startActivityForResult(intent, 1);
+                }
+                break;
+            }
+            case R.id.btn_reserve:{
+                startActivity(new Intent(getApplicationContext(), ReserveActivity.class));
+                break;
+            }
+            case R.id.btn_temp:{
+                startActivity(new Intent(getApplicationContext(), DBTest.class));
+                break;
+            }
+            default:{
+                break;
+            }
+
+        }
     }
 
     @Override

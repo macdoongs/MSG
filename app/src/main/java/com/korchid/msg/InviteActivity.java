@@ -20,7 +20,7 @@ import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 
 import java.util.ArrayList;
 
-public class InviteActivity extends AppCompatActivity {
+public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "InviteActivity";
 
     private Button btn_inviteParent;
@@ -35,6 +35,8 @@ public class InviteActivity extends AppCompatActivity {
 
     private KakaoLink kakaoLink;
 
+    private int viewId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,62 +44,19 @@ public class InviteActivity extends AppCompatActivity {
 
 
         btn_contactList = (Button) findViewById(R.id.btn_contactList);
-        btn_contactList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-                startActivityForResult(intent, 0);
-            }
-
-
-        });
+        btn_contactList.setOnClickListener(this);
 
         btn_inviteParent = (Button) findViewById(R.id.btn_inviteParent);
-        btn_inviteParent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tv_role.setText("Invite Parent.");
-            }
-        });
+        btn_inviteParent.setOnClickListener(this);
 
         btn_send = (Button) findViewById(R.id.btn_send);
-        btn_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nickname = et_nickname.getText().toString();
-                String phoneNumber = et_phoneNumber.getText().toString();
-                String message = "Invite MSG.  http://www.korchid.com/dropbox-release";
-
-                // SMS Compose
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumber));
-                intent.putExtra("sms_body", message);
-                startActivity(intent);
-
-                /*
-                // SMS Auto-sender
-                SmsManager smsManager =     SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-                */
-            }
-        });
+        btn_send.setOnClickListener(this);
 
         btn_inviteChild = (Button) findViewById(R.id.btn_inviteChild);
-        btn_inviteChild.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tv_role.setText("Invite Child.");
-            }
-        });
+        btn_inviteChild.setOnClickListener(this);
 
         btn_kakaoLink = (Button) findViewById(R.id.btn_kakaoLink);
-        btn_kakaoLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
-                startActivity(intent);
-            }
-        });
+        btn_kakaoLink.setOnClickListener(this);
 
 
         tv_role = (TextView) findViewById(R.id.et_role);
@@ -114,8 +73,54 @@ public class InviteActivity extends AppCompatActivity {
             Log.d("CONTACT", contactList.get(i).getName());
         }
 
+    }
 
 
+    @Override
+    public void onClick(View v) {
+        viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_contactList:{
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(intent, 0);
+                break;
+            }
+            case R.id.btn_inviteParent:{
+                tv_role.setText("Invite Parent.");
+                break;
+            }
+            case R.id.btn_inviteChild:{
+                tv_role.setText("Invite Child.");
+                break;
+            }
+            case R.id.btn_send:{
+                String nickname = et_nickname.getText().toString();
+                String phoneNumber = et_phoneNumber.getText().toString();
+                String message = "Invite MSG.  http://www.korchid.com/dropbox-release";
+
+                // SMS Compose
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumber));
+                intent.putExtra("sms_body", message);
+                startActivity(intent);
+
+                /*
+                // SMS Auto-sender
+                SmsManager smsManager =     SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                */
+                break;
+            }
+            case R.id.btn_kakaoLink:{
+                Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+                startActivity(intent);
+                break;
+            }
+            default:{
+                break;
+            }
+        }
     }
 
     @Override

@@ -14,14 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AuthPhoneActivity extends AppCompatActivity {
+public class AuthPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText et_phoneNumber;
-    private EditText et_password;
     private Button btn_back;
     private Button btn_register;
 
-    String phoneNumber = "";
-    String password = "";
+    private String phoneNumber = "";
+    private int viewId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +28,25 @@ public class AuthPhoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth_phone);
 
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
-        btn_back = (Button) findViewById(R.id.btn_back);
 
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btn_back = (Button) findViewById(R.id.btn_back);
+        btn_back.setOnClickListener(this);
 
         btn_register = (Button) findViewById(R.id.btn_sendSMS);
 
-        btn_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_register.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_back:{
+                finish();
+                break;
+            }
+            case R.id.btn_register:{
                 phoneNumber = et_phoneNumber.getText().toString();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
@@ -85,7 +89,10 @@ public class AuthPhoneActivity extends AppCompatActivity {
                 alertDialog.show();
 
             }
-        });
+            default:{
+                break;
+            }
+        }
     }
 
     @Override

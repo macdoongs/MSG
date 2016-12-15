@@ -44,7 +44,7 @@ import com.korchid.msg.service.MqttService.ConnectionStatus;
  * Created by mac0314 on 2016-11-28.
  */
 
-public class ChattingActivity extends AppCompatActivity implements MessageHandler, StatusHandler {
+public class ChattingActivity extends AppCompatActivity implements View.OnClickListener, MessageHandler, StatusHandler {
     private static final String TAG = "ChattingActivity";
 
     private Button btn_setting;
@@ -70,6 +70,7 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
     private String count;
     private String title;
     private String message1;
+    private int viewId;
     byte[] pic;
 
 
@@ -162,9 +163,39 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
             }
         });
 */
-        btn_send.setOnClickListener(new View.OnClickListener() {
+
+
+        //Init Receivers
+        bindStatusReceiver();
+        bindMessageReceiver();
+
+        //MqttServiceDelegate.topic = title;
+
+        //Start service if not started
+        MqttServiceDelegate.startService(this, title);
+
+        btn_send.setOnClickListener(this);
+        btn_setting.setOnClickListener(this);
+        btn_menu.setOnClickListener(this);
+        btn_plus.setOnClickListener(this);
+
+        iv_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_send:{
                 String message = "";
 
                 message1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><m2m:rqp xmlns:m2m=\"http://www.onem2m.org/xml/protocols\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><op>1</op><to>/mobius-yt/"+title+"/chatting</to><fr>S0.2.481.1.20160721051547725</fr><rqi>rqi201607211554337900rzY</rqi><ty>4</ty><pc><cin><rn></rn><con>";
@@ -184,44 +215,24 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
                 );
 
                 et_message.setText("");
+                break;
             }
-        });
-
-        //Init Receivers
-        bindStatusReceiver();
-        bindMessageReceiver();
-
-        //MqttServiceDelegate.topic = title;
-
-        //Start service if not started
-        MqttServiceDelegate.startService(this, title);
-
-
-        btn_setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.btn_setting:{
                 //Toast.makeText(getApplicationContext(), "Click setting", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
                 startActivity(intent);
+                break;
             }
-        });
-
-        btn_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.btn_menu:{
                 //Toast.makeText(getApplicationContext(), "Sliding menu", Toast.LENGTH_LONG).show();
                 slidingPanel.bringToFront();
                 slidingPanel.setVisibility(View.VISIBLE);
                 slidingPanel.startAnimation(aleft);
                 slidingState = true;
+                break;
             }
-        });
-
-        btn_plus.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
+            case R.id.btn_plus:{
                 //Toast.makeText(getApplicationContext(), "Plus button", Toast.LENGTH_LONG).show();
-
 
                 if(expandedState){
                     expandedMenu.bringToFront();
@@ -232,18 +243,13 @@ public class ChattingActivity extends AppCompatActivity implements MessageHandle
                     expandedMenu.setVisibility(View.VISIBLE);
                     expandedState = true;
                 }
-
+                break;
             }
-        });
-
-        iv_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(intent);
+            default:{
+                break;
             }
-        });
 
+        }
 
     }
 
