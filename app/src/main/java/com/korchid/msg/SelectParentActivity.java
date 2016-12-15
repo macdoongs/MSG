@@ -26,6 +26,7 @@ public class SelectParentActivity extends AppCompatActivity {
     private ViewPager pager;
     private SeekBar seekBar;
     private Button btn_call, btn_chat, btn_chat_setting;
+    private Button btn_back;
     private ImageView imageView;
 
     // Temp Data Array
@@ -57,6 +58,14 @@ public class SelectParentActivity extends AppCompatActivity {
         btn_call = (Button) findViewById(R.id.btn_call);
         btn_chat = (Button) findViewById(R.id.btn_chat);
         btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
+        btn_back = (Button) findViewById(R.id.btn_back);
+
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
 
@@ -168,9 +177,18 @@ public class SelectParentActivity extends AppCompatActivity {
 
 
             LinearLayout layout = new LinearLayout(getApplicationContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(20,20,20,20);
             params.gravity = Gravity.CENTER;
-            layout.setBackgroundColor(Color.CYAN);
+            if(position == 0){
+                layout.setBackgroundColor(Color.CYAN);
+            }else if(position == 1){
+                layout.setBackgroundColor(Color.RED);
+            }else{
+                layout.setBackgroundColor(Color.BLACK);
+            }
+
+            layout.setGravity(Gravity.CENTER);
 
             layout.setOrientation(LinearLayout.VERTICAL);
             layout.setLayoutParams(params);
@@ -178,15 +196,18 @@ public class SelectParentActivity extends AppCompatActivity {
             TextView textview = new TextView(getApplicationContext());
             textview.setText(parent[position]);
             textview.setTextSize(40.0f);
+            //textview.setGravity(Gravity.CENTER);
             layout.addView(textview);
 
-            RoundedImageView circularImageView = new RoundedImageView(getApplicationContext());
+            RoundedImageView circularImageView = new RoundedImageView(getApplicationContext(), 500);
             circularImageView.setImageResource(imageId[position]);
+            circularImageView.setScaleType(ImageView.ScaleType.CENTER);
+
             //circularImageView.setScaleType(ImageView.ScaleType.CENTER);
 
-            LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) layout.getLayoutParams();
+            //LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) layout.getLayoutParams();
 
-            circularImageView.setLayoutParams(params1);
+            //circularImageView.setLayoutParams(params1);
 
 
 
@@ -203,7 +224,7 @@ public class SelectParentActivity extends AppCompatActivity {
 //            bitmap = circularImageView.getCroppedBitmap(bitmap, 300);
 //            circularImageView.setImageBitmap(bitmap);
             layout.addView(circularImageView);
-
+/*
             LinearLayout linearLayout = new LinearLayout(getApplicationContext());
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             //LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -221,7 +242,7 @@ public class SelectParentActivity extends AppCompatActivity {
             linearLayout.addView(b3);
 
             layout.addView(linearLayout);
-
+*/
             //ImageView imageView = new ImageView(getApplicationContext());
             //imageView.setImageResource(imageId[position]);
 

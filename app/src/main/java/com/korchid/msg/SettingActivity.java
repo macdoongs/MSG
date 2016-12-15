@@ -42,7 +42,7 @@ public class SettingActivity extends AppCompatActivity {
 
         settingArrayList.add(new Setting(3, "@drawable/mainsetting", "돌아가기"));
 
-        settingAdapter = new SettingAdapter(SettingActivity.this, settingArrayList);
+        settingAdapter = new SettingAdapter(SettingActivity.this, settingArrayList, SettingAdapter.Type.SETTING);
 
         lv_setting.setAdapter(settingAdapter);
     }

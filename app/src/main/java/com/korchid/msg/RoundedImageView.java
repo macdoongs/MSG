@@ -21,9 +21,12 @@ import android.widget.ImageView;
 // http://stackoverflow.com/questions/16208365/how-to-create-a-circular-imageview-in-android/16208548#16208548
 public class RoundedImageView extends ImageView {
     private static final String TAG = "RoundedImageView";
+    private int resizeRadius = 0;
 
-    public RoundedImageView(Context context) {
+    public RoundedImageView(Context context, int resizeRadius) {
         super(context);
+
+        this.resizeRadius = resizeRadius;
     }
 
     public RoundedImageView(Context context, AttributeSet attrs) {
@@ -62,7 +65,7 @@ public class RoundedImageView extends ImageView {
 
         // http://blog.daum.net/kwh4865/13153849
         // resize
-        Bitmap resize = Bitmap.createScaledBitmap(bitmap, 600, 600, true);
+        Bitmap resize = Bitmap.createScaledBitmap(bitmap, resizeRadius, resizeRadius, true);
 
         int w = resize.getWidth();
         @SuppressWarnings("unused")

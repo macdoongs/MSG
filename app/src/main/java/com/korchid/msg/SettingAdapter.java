@@ -2,6 +2,8 @@ package com.korchid.msg;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,7 @@ public class SettingAdapter extends BaseAdapter {
 
     private ArrayList<Setting> settingArray;
     private ArrayList<MessageSetting> messageSettingArrayList;
-    private ArrayList arrayList;
+    private ArrayList<Object> arrayList;
 
     private Setting setting;
     private MessageSetting messageSetting;
@@ -35,24 +37,10 @@ public class SettingAdapter extends BaseAdapter {
 
     private Type type;
 
-    public SettingAdapter(Activity activity, ArrayList<Object> settingArray) {
+    public SettingAdapter(Activity activity, ArrayList<Object> settingArray, Type type) {
         this.mActivity = activity;
         this.arrayList = settingArray;
-
-        try{
-            Object object = settingArray.get(0);
-
-            if(object instanceof Setting){
-                Log.d(TAG, "Setting");
-                type = Type.SETTING;
-            }else if(object instanceof MessageSetting){
-                Log.d(TAG, "MessageSetting");
-                type = Type.MESSAGE_SETTING;
-            }
-        }catch (Exception e){
-            Log.e(TAG, "Error : " + e.getMessage());
-        }
-
+        this.type = type;
 
         mInflater = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -101,17 +89,18 @@ public class SettingAdapter extends BaseAdapter {
 
         if(type == Type.SETTING){
             setting = (Setting) arrayList.get(position);
+            Log.d(TAG, "Setting : " + setting.getTitle());
             tv_title.setText(setting.getTitle());
             resourceId =  mActivity.getResources().getIdentifier( setting.getPicture(), "drawable", mActivity.getPackageName());
         }else if(type == Type.MESSAGE_SETTING){
             messageSetting = (MessageSetting) arrayList.get(position);
+            Log.d(TAG, "Message Setting : " + messageSetting.getTitle());
             tv_title.setText(messageSetting.getTitle());
             resourceId =  mActivity.getResources().getIdentifier( messageSetting.getPicture(), "drawable", mActivity.getPackageName());
         }
 
 
         iv_title.setBackgroundResource(resourceId);
-
 
         layout_view.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -125,6 +114,7 @@ public class SettingAdapter extends BaseAdapter {
     }
 
     public void goIntent(int idx){
+        Log.d(TAG, "goIntent");
         if(type == Type.SETTING){
             setting = (Setting) arrayList.get(idx);
             Log.d(TAG, "idx : " + idx + " " + setting.getTitle());

@@ -1,5 +1,6 @@
 package com.korchid.msg;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class MessageSettingActivity extends AppCompatActivity {
     private String nickname;
     private String title;
 
-   ArrayList settingArrayList;
+   ArrayList<Object> settingArrayList;
     private SettingAdapter settingAdapter;
 
     private MessageSetting.Type type;
@@ -182,6 +183,7 @@ public class MessageSettingActivity extends AppCompatActivity {
         num = 0;
 
         messageSettingHandler = new MessageSettingHandler();
+
 /*
         handler = new Handler(){
             public void handleMessage (Message message){
@@ -226,8 +228,7 @@ public class MessageSettingActivity extends AppCompatActivity {
         }
 
 
-
-        settingAdapter = new SettingAdapter(MessageSettingActivity.this,  settingArrayList);
+        settingAdapter = new SettingAdapter(MessageSettingActivity.this,  settingArrayList, SettingAdapter.Type.MESSAGE_SETTING);
 
         lv_setting.setAdapter(settingAdapter);
 
@@ -238,7 +239,7 @@ public class MessageSettingActivity extends AppCompatActivity {
 
         public MessageSettingHandler() {
             super();
-            messageSettingArrayList = new ArrayList();
+            settingArrayList = new ArrayList();
         }
 
         public void handleMessage (Message message){
@@ -252,18 +253,21 @@ public class MessageSettingActivity extends AppCompatActivity {
             String time = ReturnList[1];
             String title = ReturnList[2];
 
+
+            Log.d(TAG, "" + settingArrayList.size());
             switch (type){
                 case POLITE:{
                     if(typeNum.equals("0")){
                         Log.d(TAG, "Add typeNum 0");
-                        messageSettingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
+                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
+                        Log.d(TAG, "" + settingArrayList.size());
                     }
                     break;
                 }
                 case IMPOLITE:{
                     if(typeNum.equals("1")){
                         Log.d(TAG, "Add typeNum 1");
-                        messageSettingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
+                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
                     }
                     break;
                 }

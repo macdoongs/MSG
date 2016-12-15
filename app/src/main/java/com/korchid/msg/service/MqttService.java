@@ -9,16 +9,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings.Secure;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -47,6 +51,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static android.content.Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT;
 
 //import com.korchid.msg.logging.ConfigureLog4J;
 //import org.apache.log4j.Logger;
@@ -101,6 +107,7 @@ public class MqttService extends Service implements IMqttCallback
     public static final int MQTT_NOTIFICATION_UPDATE  = 5;
 
     public static String mqttTopic = "";
+    public static Boolean isEnableNotification = true;
 
     Notification notification;
     NotificationManager notificationManager;
@@ -191,7 +198,9 @@ public class MqttService extends Service implements IMqttCallback
     private PingSender pingSender;
     
     private ExecutorService executor;
-    
+
+    myServiceHandler handler;
+
     /************************************************************************/
     /*    METHODS - core Service lifecycle methods                          */
     /************************************************************************/
@@ -251,7 +260,7 @@ public class MqttService extends Service implements IMqttCallback
         Log.d(TAG, "onStartCommand : intent= "+ intent + ", flags = " + flags + ", startId = " + startId);
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        myServiceHandler handler = new myServiceHandler();
+        //myServiceHandler handler = new myServiceHandler();
         //thread = new ServiceThread(handler);
         //thread.start();
 
@@ -276,13 +285,16 @@ public class MqttService extends Service implements IMqttCallback
     class myServiceHandler extends Handler {
         @Override
         public void handleMessage(android.os.Message msg) {
-            Log.d(TAG, "MqttService : myServiceHandler : handleMessage");
+            Log.d(TAG, "myServiceHandler : handleMessage");
             Intent intent = new Intent(MqttService.this, ChattingActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(MqttService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            Bundle bundle = msg.getData();
+
+            String message = bundle.getString("payload", "Error");
 
             notification = new Notification.Builder(getApplicationContext())
-                    .setContentTitle("Content Title")
-                    .setContentText("Content Text")
+                    .setContentTitle("Notification")
+                    .setContentText(message)
                     .setTicker("알림!!!")
                     .setSmallIcon(R.drawable.logo)
                     .setContentIntent(pendingIntent)
@@ -507,20 +519,28 @@ public class MqttService extends Service implements IMqttCallback
     private void notifyUser(String alert, String title, String body)
     {
         Log.d(TAG, "notifyUser : alert = " + alert + ", title = " + title + ", body = " + body);
-        /*NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Notification notification = new Notification(R.drawable.ic_launcher, alert,
-                                                     System.currentTimeMillis());
-        notification.defaults |= Notification.DEFAULT_LIGHTS;
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;        
-        notification.ledARGB = Color.MAGENTA;
-        Intent notificationIntent = new Intent(this, MQTTNotifier.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, 
-                                                                notificationIntent, 
-                                                                PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setLatestEventInfo(this, title, body, contentIntent);
-        nm.notify(MQTT_NOTIFICATION_UPDATE, notification);   */
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(MqttService.this);
+        builder.setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle("알립니다")
+                .setContentText("왔다네~왔다네~ 내~가 왔다네~")
+                .setAutoCancel(true) // 알림바에서 자동 삭제
+                .setVibrate(new long[]{1000,2000,1000,3000,1000,4000});
+        // autoCancel : 한번 누르면 알림바에서 사라진다.
+        // vibrate : 쉬고, 울리고, 쉬고, 울리고... 밀리세컨
+        // 진동이 되려면 AndroidManifest.xml에 진동 권한을 줘야 한다.
+
+        // 알람 클릭시 MainActivity를 화면에 띄운다.
+        Intent intent = new Intent(getApplicationContext(),ChattingActivity.class);
+        intent.addFlags(FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext()
+                , 0
+                , intent
+                , PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.setContentIntent(pIntent);
+        manager.notify(1, builder.build());
     }
     
     
@@ -709,6 +729,16 @@ public class MqttService extends Service implements IMqttCallback
         {
 			broadcastReceivedMessage(topic.getName(), message.getPayload());
             Log.d(TAG, "messageArrived: topic = "+ topic.getName() + ", message = " + new String(message.getPayload()));
+            handler = new myServiceHandler();
+
+
+            Bundle bundle = new Bundle();
+            bundle.putString("payload", new String(message.getPayload()));
+
+            Message msg = new Message();
+            msg.setData(bundle);
+
+            handler.handleMessage(msg);
 		} 
         catch (MqttException e) 
 		{
