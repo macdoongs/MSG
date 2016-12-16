@@ -133,7 +133,9 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
         lv_message.setAdapter(adapter);
+
 /*
+        // TODO Send Image and message
         btn_temp = (Button) findViewById(R.id.btn_temp);
         btn_temp.setOnClickListener(new View.OnClickListener() {
             @Override

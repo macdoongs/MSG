@@ -101,42 +101,6 @@ public class MessageSettingActivity extends AppCompatActivity {
                         messageSettingHandler.sendMessage(message);
 
 
-
-//
-//
-//                        //Log.d(TAG, "typeNum : " + typeNum + ", time : " + time + ", title : " + title);
-//
-//
-//                        switch (type){
-//                            case POLITE:
-//                            {
-//                                Log.d(TAG, "POLITE");
-//                                if(typeNum.equals("0")){
-//
-//                                }
-//                                break;
-//
-//                            }
-//                            case IMPOLITE:
-//                            {
-//                                Log.d(TAG, "IMPOLITE");
-//                                if(typeNum.equals("1")){
-//
-//                                }
-//                                break;
-//                            }
-//                            case IN_PERSON:
-//                            {
-//
-//                            }
-//                            default:
-//                            {
-//                                break;
-//                            }
-//                        }
-//
-//                        i++;
-
                         //Log.d(TAG, line);
                     }
                     isr.close();
@@ -158,70 +122,10 @@ public class MessageSettingActivity extends AppCompatActivity {
         thread.start();
 
         ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
-/*
-        if(type == MessageSetting.Type.POLITE){
-            settingArrayList.add(new MessageSetting(0, "@drawable/plane", type, "엄마 뭐하세요?", "2016-12-15 04:10"));
-
-            settingArrayList.add(new MessageSetting(1, "@drawable/plane", type, "엄마 어디 아픈데 없죠?", "2016-12-15 04:10"));
-
-            settingArrayList.add(new MessageSetting(2, "@drawable/plane", type, "엄마 뭐 필요한거 있어요?", "2016-12-15 04:10"));
-
-            settingArrayList.add(new MessageSetting(3, "@drawable/plane", type, "엄마 요새 바쁘세요?", "2016-12-15 04:10"));
-        }else if(type == MessageSetting.Type.IMPOLITE){
-            settingArrayList.add(new MessageSetting(0, "@drawable/plane", type, "엄마 뭐해?", "2016-12-15 04:10"));
-
-            settingArrayList.add(new MessageSetting(1, "@drawable/plane", type, "엄마 어디 아픈데 없지?", "2016-12-15 04:10"));
-
-            settingArrayList.add(new MessageSetting(2, "@drawable/plane", type, "엄마 뭐 필요한거 있어?", "2016-12-15 04:10"));
-
-            settingArrayList.add(new MessageSetting(3, "@drawable/plane", type, "엄마 요새 바빠?", "2016-12-15 04:10"));
-        }else if(type == MessageSetting.Type.IN_PERSON){
-
-        }*/
-
 
         num = 0;
 
         messageSettingHandler = new MessageSettingHandler();
-
-/*
-        handler = new Handler(){
-            public void handleMessage (Message message){
-                Log.d(TAG, "handleMessage");
-
-                String line = message.getData().getString("line");
-                Log.d(TAG, line);
-
-                String[] ReturnList = line.split(",");
-                String typeNum = ReturnList[0];
-                String time = ReturnList[1];
-                String title = ReturnList[2];
-
-                switch (type){
-                    case POLITE:{
-                        if(typeNum.equals("0")){
-                            Log.d(TAG, "Add typeNum 0");
-                            settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
-                        }
-                        break;
-                    }
-                    case IMPOLITE:{
-                        if(typeNum.equals("1")){
-                            Log.d(TAG, "Add typeNum 1");
-                            settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
-                        }
-                        break;
-                    }
-                    case IN_PERSON:{
-                        break;
-                    }
-                }
-
-
-                num++;
-            }
-        };
-*/
 
         for(int i=0; i<settingArrayList.size(); i++){
             Log.d(TAG, "List " + i + "th : " + settingArrayList.get(i).toString());

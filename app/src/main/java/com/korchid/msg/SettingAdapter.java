@@ -115,14 +115,24 @@ public class SettingAdapter extends BaseAdapter {
 
     public void goIntent(int idx){
         Log.d(TAG, "goIntent");
-        if(type == Type.SETTING){
-            setting = (Setting) arrayList.get(idx);
-            Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
-        }else if(type == Type.MESSAGE_SETTING){
-            messageSetting = (MessageSetting) arrayList.get(idx);
-            Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle() + messageSetting.getTime());
-        }
+        switch (type){
+            case SETTING:{
+                setting = (Setting) arrayList.get(idx);
+                Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
 
+                break;
+            }
+            case MESSAGE_SETTING:{
+                messageSetting = (MessageSetting) arrayList.get(idx);
+                Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle() + messageSetting.getTime());
+
+                break;
+            }
+            default:{
+
+                break;
+            }
+        }
 
     }
 

@@ -11,7 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class JoinPhoneActivity extends AppCompatActivity {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class JoinPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "JoinPhoneActivity";
 
     private EditText et_phoneNumber;
@@ -23,6 +29,8 @@ public class JoinPhoneActivity extends AppCompatActivity {
     private String phoneNumber = "";
     private String password = "";
     private String passwordConfirm = "";
+
+    private int viewId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +45,24 @@ public class JoinPhoneActivity extends AppCompatActivity {
 
         et_password = (EditText) findViewById(R.id.et_password);
         et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
-        btn_back = (Button) findViewById(R.id.btn_back);
 
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btn_back = (Button) findViewById(R.id.btn_back);
+        btn_back.setOnClickListener(this);
 
         btn_register = (Button) findViewById(R.id.btn_register);
+        btn_register.setOnClickListener(this);
+    }
 
-        btn_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
+        viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_back:{
+                finish();
+                break;
+            }
+            case R.id.btn_register:{
                 phoneNumber = et_phoneNumber.getText().toString();
                 password = et_password.getText().toString();
                 passwordConfirm = et_passwordConfirm.getText().toString();
@@ -89,10 +101,49 @@ public class JoinPhoneActivity extends AppCompatActivity {
                     builder.setMessage("Send auth sms message.");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(final DialogInterface dialog, int which) {
                             //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
 
                             // DB check
+
+                            Thread thread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HttpURLConnection connection;
+
+                                    URL url = null;
+                                    String response = null;
+
+                                    try {
+                                        url = new URL("https://www.korchid.com/msg-signup/" + phoneNumber);
+                                        connection = (HttpURLConnection) url.openConnection();
+                                        connection.setRequestMethod("GET");
+
+                                        String line = "";
+
+                                        InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+                                        BufferedReader reader = new BufferedReader(isr);
+                                        StringBuilder sb = new StringBuilder();
+                                        while ((line = reader.readLine()) != null) {
+                                            sb.append(line + "\n");
+                                        }
+                                        isr.close();
+                                        reader.close();
+
+                                        Log.d(TAG, sb.toString());
+
+                                    } catch (IOException e) {
+                                        // Error
+                                        Log.e(TAG, "IOException : " + e.getMessage());
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "Exception : " + e.getMessage());
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            });
+
+                            thread.start();
 
 
                             // http://mommoo.tistory.com/38
@@ -137,8 +188,10 @@ public class JoinPhoneActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-
             }
-        });
+            default:{
+                break;
+            }
+        }
     }
 }

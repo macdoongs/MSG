@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.support.annotation.ColorRes;
 import android.support.v4.view.PagerAdapter;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.makeramen.roundedimageview.RoundedImageView;
 
 public class SelectParentActivity extends AppCompatActivity {
     private static final String TAG = "SelectParentActivity";
@@ -37,6 +40,8 @@ public class SelectParentActivity extends AppCompatActivity {
 
 
     private int viewId;
+    private int profileWidth;
+    private int profileHeight;
 
 
     @Override
@@ -199,9 +204,24 @@ public class SelectParentActivity extends AppCompatActivity {
             //textview.setGravity(Gravity.CENTER);
             layout.addView(textview);
 
-            RoundedImageView circularImageView = new RoundedImageView(getApplicationContext(), 500);
-            circularImageView.setImageResource(imageId[position]);
-            circularImageView.setScaleType(ImageView.ScaleType.CENTER);
+            RoundedImageView circularImageView = new RoundedImageView(getApplicationContext());
+
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[position]);
+
+            profileWidth = 700;
+            profileHeight = 700;
+
+            bitmap = resizeBitmap(bitmap, profileWidth, profileHeight);
+            bitmap = cropBitmap(bitmap, 300, 300);
+
+            circularImageView.setImageBitmap(bitmap);
+
+
+            circularImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            circularImageView.setCornerRadius((float)20);
+            circularImageView.setBorderWidth((float)2);
+            circularImageView.setBorderColor(Color.DKGRAY);
+            circularImageView.mutateBackground(true);
 
             //circularImageView.setScaleType(ImageView.ScaleType.CENTER);
 
@@ -220,11 +240,9 @@ public class SelectParentActivity extends AppCompatActivity {
 
 
 
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[position]);
-//            bitmap = circularImageView.getCroppedBitmap(bitmap, 300);
-//            circularImageView.setImageBitmap(bitmap);
+
             layout.addView(circularImageView);
-/*
+
             LinearLayout linearLayout = new LinearLayout(getApplicationContext());
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             //LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -242,13 +260,13 @@ public class SelectParentActivity extends AppCompatActivity {
             linearLayout.addView(b3);
 
             layout.addView(linearLayout);
-*/
-            //ImageView imageView = new ImageView(getApplicationContext());
-            //imageView.setImageResource(imageId[position]);
+
+            ImageView imageView = new ImageView(getApplicationContext());
+            imageView.setImageResource(imageId[position]);
 
 
-            //layout.addView(textview);
-            //layout.addView(imageView);
+//            layout.addView(textview);
+            layout.addView(imageView);
 
             container.addView(layout);
             container.setBackgroundColor(Color.RED);
@@ -291,4 +309,71 @@ public class SelectParentActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**     http://bbulog.tistory.com/25
+     *
+     * 이미지를 주어진 너비와 높이에 맞게 리사이즈 하는 코드.
+     * 원본 이미지를 크롭 하는게 아니라 리사이즈 하는 것이어서,
+     * 주어진 너비:높이 의 비율이 원본 bitmap 의 비율과 다르다면 변환 후의 너비:높이의 비율도 주어진 비율과는 다를 수 있다.
+     *
+     * 가로가 넓거나 세로가 긴 이미지를 정사각형이나 원형의 view 에 맞추려 할 때,
+     * 이 메쏘드를 호출한 후 반환된 bitmap 을 crop 하면 찌그러지지 않는 이미지를 얻을 수 있다.
+     *
+     * @param Bitmap bitmap 원본 비트맵
+     * @param int width 뷰의 가로 길이
+     * @param int height 뷰의 세로 길이
+     *
+     * @return Bitmap 리사이즈 된 bitmap
+     */
+    public Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {
+        if (bitmap.getWidth() != width || bitmap.getHeight() != height){
+            float ratio = 1.0f;
+
+            if (width > height) {
+                ratio = (float)width / (float)bitmap.getWidth();
+            } else {
+                ratio = (float)height / (float)bitmap.getHeight();
+            }
+
+            bitmap = Bitmap.createScaledBitmap(bitmap,
+                    (int)(((float)bitmap.getWidth()) * ratio), // Width
+                    (int)(((float)bitmap.getHeight()) * ratio), // Height
+                    true);
+        }
+
+        return bitmap;
+    }
+
+    /**
+     *
+     * 이미지를 주어진 사이즈에 맞추어 crop 하는 코드
+     * 원본의 가운데를 중심으로 crop 한다.
+     *
+     *
+     * @param Bitmap bitmap 원본 비트맵
+     * @param int width 뷰의 가로 길이
+     * @param int height 뷰의 세로 길이
+     *
+     * @return Bitmap crop 된 bitmap
+     */
+    public Bitmap cropBitmap(Bitmap bitmap, int width, int height) {
+        int originWidth = bitmap.getWidth();
+        int originHeight = bitmap.getHeight();
+
+        // 이미지를 crop 할 좌상단 좌표
+        int x = 0;
+        int y = 0;
+
+        if (originWidth > width) { // 이미지의 가로가 view 의 가로보다 크면..
+            x = (originWidth - width)/2;
+        }
+
+        if (originHeight > height) { // 이미지의 세로가 view 의 세로보다 크면..
+            y = (originHeight - height)/2;
+        }
+
+        Bitmap cropedBitmap = Bitmap.createBitmap(bitmap, x, y, width, height);
+        return cropedBitmap;
+    }
+
 }

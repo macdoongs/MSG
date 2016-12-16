@@ -13,6 +13,8 @@ buildscript {
 }
 
 allprojects {
+    group 'com.korchid'
+    version '1.0.0'
     repositories {
         jcenter()
         mavenCentral()
@@ -20,6 +22,8 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+
+ext {
+    compileSdkVersion = 25
+    buildToolsVersion = "25.0.1"
 }

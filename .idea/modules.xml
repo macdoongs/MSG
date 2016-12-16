@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MSG.iml" filepath="$PROJECT_DIR$/MSG.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.eclipse.paho.client.mqttv3/org.eclipse.paho.client.mqttv3.iml" filepath="$PROJECT_DIR$/org.eclipse.paho.client.mqttv3/org.eclipse.paho.client.mqttv3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/roundedimageview/roundedimageview.iml" filepath="$PROJECT_DIR$/roundedimageview/roundedimageview.iml" />
     </modules>
   </component>
 </project>
