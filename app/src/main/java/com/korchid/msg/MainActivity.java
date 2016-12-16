@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         serviceThread.timer = "2016-12-13 14:55";
         serviceThread.start();
 
+
+
         // Loading screen
         startActivity(new Intent(this,SplashActivity.class));
 

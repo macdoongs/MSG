@@ -92,13 +92,6 @@ public class ChattingAdapter extends BaseAdapter {
                 tv_yourMessage.setText(message);
             }
 
-            /*  버튼에 이벤트처리를 하기위해선 setTag를 이용해서 사용할 수 있습니다.
-
-               *   Button btn 가 있다면, btn.setTag(position)을 활용해서 각 버튼들
-
-               *   이벤트처리를 할 수 있습니다.
-
-            */
             return convertView;
 
         }

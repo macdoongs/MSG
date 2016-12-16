@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
@@ -16,15 +17,21 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "AuthPhoneWaitActivity";
@@ -72,6 +79,52 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                 URL url = null;
                 String response = null;
 
+                // http://hayageek.com/android-http-post-get/
+                // Post
+                try {
+                    url = new URL("https://www.korchid.com/sms-sender/");
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoInput(true);
+                    connection.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("phoneNumber", phoneNumber);
+                    params.put("token", token);
+
+                    OutputStream os = connection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(
+                            new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(getPostDataString(params));
+
+                    writer.flush();
+                    writer.close();
+                    os.close();
+
+                    String line = "";
+
+                    InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(isr);
+                    StringBuilder sb = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    isr.close();
+                    reader.close();
+
+                    Log.d(TAG, "post sb : " + sb.toString());
+
+                } catch (IOException e) {
+                    // Error
+                    Log.e(TAG, "IOException : " + e.getMessage());
+                } catch (Exception e) {
+                    Log.e(TAG, "Exception : " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+
+
+                /* Get
                 try {
                     url = new URL("https://www.korchid.com/sms-sender/" + userId + "/" + token);
                     connection = (HttpURLConnection) url.openConnection();
@@ -96,6 +149,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                     Log.e(TAG, "Exception : " + e.getMessage());
                     e.printStackTrace();
                 }
+                */
 
             }
         });
@@ -155,6 +209,23 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
     }
 
 
+    // http://stackoverflow.com/questions/9767952/how-to-add-parameters-to-httpurlconnection-using-post
+    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for(Map.Entry<String, String> entry : params.entrySet()){
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+
+        return result.toString();
+    }
 
     public class SMSReceiver  extends BroadcastReceiver {
         /**
