@@ -53,14 +53,29 @@
                 android:textStyle="bold"
                 android:layout_margin="10dp"/>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:inputType="phone"
-                android:ems="10"
-                android:id="@+id/et_phoneNumber"
-                android:hint="010-0000-0000" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:inputType="phone"
+                    android:ems="10"
+                    android:id="@+id/et_phoneNumber"
+                    android:hint="010-0000-0000"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:text="Check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_dupCheck"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary" />
+            </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"

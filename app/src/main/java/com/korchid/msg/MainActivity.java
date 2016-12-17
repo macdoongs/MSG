@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
 
+    enum REQUEST_CODE {LOGIN, LOGOUT}
+
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -56,7 +58,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         serviceThread.timer = "2016-12-13 14:55";
         serviceThread.start();
 
+        Log.d(TAG, "timer : " + serviceThread.timer);
 
+        serviceThread.timer = "2016-12-16 19:15";
+
+        Log.d(TAG, "timer : " + serviceThread.timer);
 
         // Loading screen
         startActivity(new Intent(this,SplashActivity.class));

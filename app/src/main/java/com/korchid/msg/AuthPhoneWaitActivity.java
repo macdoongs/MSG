@@ -39,7 +39,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
     Button btn_back;
     EditText et_authCode;
 
-    String token = "dNb4wEIZKv8:APA91bGwcxOlb-_kLZCbNzR6GVxTh9CW7Hb8mnTmo1iBp_Vfr0UEWe3ZsLL6vv02bMMLpi27hL6A57dCRJaFG5Cy4k-kc6QN8ecoT5Uf8V4jzT6J5qkBdZ8ZQoC4O-WgJt566NL-5AnE";
+    String sms_token = "dNb4wEIZKv8:APA91bGwcxOlb-_kLZCbNzR6GVxTh9CW7Hb8mnTmo1iBp_Vfr0UEWe3ZsLL6vv02bMMLpi27hL6A57dCRJaFG5Cy4k-kc6QN8ecoT5Uf8V4jzT6J5qkBdZ8ZQoC4O-WgJt566NL-5AnE";
     final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     SMSReceiver smsReceiver;
     String smsMessage;
@@ -71,90 +71,15 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         IntentFilter intentFilter = new IntentFilter(SMS_RECEIVED);
         registerReceiver(smsReceiver, intentFilter);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HttpURLConnection connection;
+        String url = "https://www.korchid.com/sms-sender/";
 
-                URL url = null;
-                String response = null;
-
-                // http://hayageek.com/android-http-post-get/
-                // Post
-                try {
-                    url = new URL("https://www.korchid.com/sms-sender/");
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setDoInput(true);
-                    connection.setRequestProperty("content-type", "application/x-www-form-urlencoded");
-
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("phoneNumber", phoneNumber);
-                    params.put("token", token);
-
-                    OutputStream os = connection.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(
-                            new OutputStreamWriter(os, "UTF-8"));
-                    writer.write(getPostDataString(params));
-
-                    writer.flush();
-                    writer.close();
-                    os.close();
-
-                    String line = "";
-
-                    InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-                    BufferedReader reader = new BufferedReader(isr);
-                    StringBuilder sb = new StringBuilder();
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    isr.close();
-                    reader.close();
-
-                    Log.d(TAG, "post sb : " + sb.toString());
-
-                } catch (IOException e) {
-                    // Error
-                    Log.e(TAG, "IOException : " + e.getMessage());
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception : " + e.getMessage());
-                    e.printStackTrace();
-                }
+        HashMap<String, String> params = new HashMap<>();
+        params.put("phoneNumber", phoneNumber);
+        params.put("token", sms_token);
 
 
-
-                /* Get
-                try {
-                    url = new URL("https://www.korchid.com/sms-sender/" + userId + "/" + token);
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-
-                    String line = "";
-
-                    InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-                    BufferedReader reader = new BufferedReader(isr);
-                    StringBuilder sb = new StringBuilder();
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    isr.close();
-                    reader.close();
-
-
-                } catch (IOException e) {
-                    // Error
-                    Log.e(TAG, "IOException : " + e.getMessage());
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception : " + e.getMessage());
-                    e.printStackTrace();
-                }
-                */
-
-            }
-        });
-
-        thread.start();
+        HttpPost httpPost = new HttpPost(url, params);
+        httpPost.start();
 
     }
 
@@ -208,24 +133,6 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-
-    // http://stackoverflow.com/questions/9767952/how-to-add-parameters-to-httpurlconnection-using-post
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
 
     public class SMSReceiver  extends BroadcastReceiver {
         /**

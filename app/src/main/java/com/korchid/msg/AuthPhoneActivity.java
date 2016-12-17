@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,12 +17,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class AuthPhoneActivity extends AppCompatActivity{
+    private static String TAG = "AuthPhoneActivity";
+    
     private EditText et_phoneNumber;
     private Button btn_back;
     private Button btn_register;
+    private Button btn_dupCheck;
 
     private String phoneNumber = "";
     private int viewId;
+    private boolean isDuplicate = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +43,15 @@ public class AuthPhoneActivity extends AppCompatActivity{
             }
         });
 
-        btn_register = (Button) findViewById(R.id.btn_sendSMS);
-
-        btn_register.setOnClickListener(new View.OnClickListener() {
+        btn_dupCheck = (Button) findViewById(R.id.btn_dupCheck);
+        btn_dupCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 phoneNumber = et_phoneNumber.getText().toString();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
-
                 if(phoneNumber.equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
+
                     builder.setTitle("Warning");
                     builder.setMessage("Check your phone number.");
                     builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
@@ -55,36 +60,84 @@ public class AuthPhoneActivity extends AppCompatActivity{
                             dialog.cancel();
                         }
                     });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }else{
-                    builder.setTitle("Confirm");
-                    builder.setMessage("Send auth sms message.");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    Handler httpHandler = new Handler(){
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
+                        public void handleMessage(Message msg) {
+                            String response = msg.getData().getString("response");
 
-                            // DB check
+                            //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
 
-
-                            Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
-                            intent.putExtra("phoneNumber", phoneNumber);
-
-                            startActivityForResult(intent, 0);
+                            if(response.equals("No")){
+                                isDuplicate = false;
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
+                                isDuplicate = true;
+                            }
                         }
-                    });
-                    builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
+                    };
+
+                    HttpGet httpGet = new HttpGet("https://www.korchid.com/msg-signup/" + phoneNumber, httpHandler);
+                    httpGet.start();
                 }
 
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
             }
         });
-    }
+
+        btn_register = (Button) findViewById(R.id.btn_sendSMS);
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isDuplicate){
+                    Toast.makeText(getApplicationContext(), "Please duplicate check", Toast.LENGTH_LONG).show();
+                }else {
+                    phoneNumber = et_phoneNumber.getText().toString();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
+
+                    if (phoneNumber.equals("")) {
+                        builder.setTitle("Warning");
+                        builder.setMessage("Check your phone number.");
+                        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                    } else {
+                        builder.setTitle("Confirm");
+                        builder.setMessage("Send auth sms message.");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
+
+                                // DB check
+
+
+                                Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
+                                intent.putExtra("phoneNumber", phoneNumber);
+
+                                startActivityForResult(intent, 0);
+                            }
+                        });
+                        builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                    }
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            }
+        });
+    }   // onCreate End
 
 
     @Override
@@ -104,7 +157,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                 break;
             }
         }
-    }
+    } // onActivityResult End
 
     public class ServiceReceiver extends BroadcastReceiver {
 
