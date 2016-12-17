@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class AuthPhoneActivity extends AppCompatActivity{
     private static String TAG = "AuthPhoneActivity";
-    
+
     private EditText et_phoneNumber;
     private Button btn_back;
     private Button btn_register;
@@ -69,9 +69,12 @@ public class AuthPhoneActivity extends AppCompatActivity{
                         public void handleMessage(Message msg) {
                             String response = msg.getData().getString("response");
 
+                            String[] line = response.split("\n");
+
                             //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
 
-                            if(response.equals("No")){
+                            if(line[0].equals("No")){
+                                Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
                                 isDuplicate = false;
                             }else{
                                 Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
@@ -91,6 +94,9 @@ public class AuthPhoneActivity extends AppCompatActivity{
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Develop mode
+                //isDuplicate = false;
+
                 if(isDuplicate){
                     Toast.makeText(getApplicationContext(), "Please duplicate check", Toast.LENGTH_LONG).show();
                 }else {

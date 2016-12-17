@@ -3,6 +3,8 @@ package com.korchid.msg;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,12 +12,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 public class JoinPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "JoinPhoneActivity";
@@ -102,75 +106,58 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialog, int which) {
-                            //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
 
-                            // DB check
+                            String url = "https://www.korchid.com/msg-signup/";
 
-                            Thread thread = new Thread(new Runnable() {
+                            HashMap<String, String> params = new HashMap<>();
+                            params.put("phoneNumber", phoneNumber);
+                            params.put("password", password);
+
+                            Handler httpHandler = new Handler(){
                                 @Override
-                                public void run() {
-                                    HttpURLConnection connection;
+                                public void handleMessage(Message msg) {
+                                    String response = msg.getData().getString("response");
 
-                                    URL url = null;
-                                    String response = null;
+                                    String[] line = response.split("\n");
 
-                                    try {
-                                        url = new URL("https://www.korchid.com/msg-signup/" + phoneNumber);
-                                        connection = (HttpURLConnection) url.openConnection();
-                                        connection.setRequestMethod("GET");
+                                    //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
 
-                                        String line = "";
+                                    if(line[0].equals("OK")){
+                                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
 
-                                        InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-                                        BufferedReader reader = new BufferedReader(isr);
-                                        StringBuilder sb = new StringBuilder();
-                                        while ((line = reader.readLine()) != null) {
-                                            sb.append(line + "\n");
-                                        }
-                                        isr.close();
-                                        reader.close();
+                                        // http://mommoo.tistory.com/38
+                                        // Use Environmental variable 'SharedPreference'
+                                        SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
 
-                                        Log.d(TAG, sb.toString());
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                                    } catch (IOException e) {
-                                        // Error
-                                        Log.e(TAG, "IOException : " + e.getMessage());
-                                    } catch (Exception e) {
-                                        Log.e(TAG, "Exception : " + e.getMessage());
-                                        e.printStackTrace();
+                                        editor.putString("USER_LOGIN", "LOGIN");
+                                        editor.putString("USER_PHONE", phoneNumber);
+                                        editor.putString("USER_PASSWORD", password);
+                                        editor.commit(); // Apply file
+
+                                        /*
+                                        // Delete preference value
+                                        // 1. Remove "key" data
+                                        editor.remove("key");
+
+                                        // 2. Remove xml data
+                                        editor.clear();
+                                        */
+
+                                        // if sharedPreferences.getString value is 0, assign 2th parameter
+                                        Log.d(TAG, "SharedPreference");
+                                        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
+                                        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
+                                        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
+                                    }else{
+                                        Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
                                     }
-
                                 }
-                            });
+                            };
 
-                            thread.start();
-
-
-                            // http://mommoo.tistory.com/38
-                            // Use Environmental variable 'SharedPreference'
-                            SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
-
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            editor.putString("USER_LOGIN", "LOGIN");
-                            editor.putString("USER_PHONE", phoneNumber);
-                            editor.putString("USER_PASSWORD", password);
-                            editor.commit(); // Apply file
-
-                            /*
-                            // Delete preference value
-                            // 1. Remove "key" data
-                            editor.remove("key");
-
-                            // 2. Remove xml data
-                            editor.clear();
-                            */
-
-                            // if sharedPreferences.getString value is 0, assign 2th parameter
-                            Log.d(TAG, "SharedPreference");
-                            Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
-                            Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-                            Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
+                            HttpPost httpPost = new HttpPost(url, params, httpHandler);
+                            httpPost.start();
 
                             Intent intent = new Intent();
                             //intent.putExtra("result_msg", "Example");

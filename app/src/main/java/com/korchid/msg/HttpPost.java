@@ -1,5 +1,8 @@
 package com.korchid.msg;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -25,10 +28,11 @@ public class HttpPost extends Thread {
     HttpURLConnection connection;
     HashMap<String, String> params;
     URL url = null;
+    Handler handler;
 
     String response = null;
 
-    public HttpPost (String stringUrl, HashMap<String, String> params){
+    public HttpPost (String stringUrl, HashMap<String, String> params, Handler handler){
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
@@ -36,6 +40,7 @@ public class HttpPost extends Thread {
         }
 
         this.params = params;
+        this.handler = handler;
     }
 
     @Override
@@ -71,6 +76,13 @@ public class HttpPost extends Thread {
             }
             isr.close();
             reader.close();
+
+            // From Thread to Activity
+            Message message = Message.obtain(handler);
+            Bundle data = new Bundle();
+            data.putString("response", sb.toString());
+            message.setData(data);
+            handler.sendMessage(message);
 
             Log.d(TAG, "post sb : " + sb.toString());
 

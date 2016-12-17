@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -78,7 +81,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         params.put("token", sms_token);
 
 
-        HttpPost httpPost = new HttpPost(url, params);
+        HttpPost httpPost = new HttpPost(url, params, new Handler());
         httpPost.start();
 
     }
@@ -102,9 +105,35 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                 break;
             }
             case R.id.btn_confirm:{
-                Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
-                intent.putExtra("phoneNumber", phoneNumber);
-                startActivityForResult(intent, 0);
+                String url = "https://www.korchid.com/sms-check";
+                String authCode = et_authCode.getText().toString();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("phoneNumber", phoneNumber);
+                params.put("authCode", authCode);
+
+                Handler httpHandler = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        String response = msg.getData().getString("response");
+
+                        Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
+
+                        String[] line = response.split("\n");
+
+                        if(line[0].equals("OK")){
+                            Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
+                            intent.putExtra("phoneNumber", phoneNumber);
+                            startActivityForResult(intent, 0);
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Check your Auth code" + response, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                };
+
+                HttpPost httpPost = new HttpPost(url, params, httpHandler);
+                httpPost.start();
+
                 break;
             }
             default:{
@@ -127,7 +156,6 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                 break;
             }
             default:{
-
                 break;
             }
         }
