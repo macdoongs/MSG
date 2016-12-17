@@ -52,7 +52,8 @@
         <activity
             android:name=".ProfileActivity" />
         <activity
-            android:name=".SelectParentActivity" />
+            android:name=".SelectParentActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <!-- android:configChanges="orientation|keyboardHidden" -->
         <activity
             android:name=".AuthPhoneActivity"/>

@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">혜윰</string>
+
     <string name="title_activity_splash">SplashActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="kakao_app_key">4d3ee1f3074ddd288456ecea2cc8a87c</string>
     <string name="kakao_scheme">kakao4d3ee1f3074ddd288456ecea2cc8a87c</string>
     <string name="kakaolink_host">kakaolink</string>
+
     <string name="dropbox_release_link">https://www.dropbox.com/sh/6km9zercq8c87yx/AAA73VJNraeRjrcNUheG9mj3a?dl=0</string>
 </resources>

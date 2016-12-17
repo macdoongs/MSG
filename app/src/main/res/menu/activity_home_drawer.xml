@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/messagesetting"
+            android:title="먼저 연락하기 설정" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/gallery"
+            android:title="사진첩" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/setting"
+            android:title="전체 기본 설정" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/message"
+            android:title="고객 센터" />
+        <item
+            android:id="@+id/nav_1"
+            android:icon="@drawable/message"
+            android:title="개인정보취급방침" />
+        <item
+            android:id="@+id/nav_2"
+            android:icon="@drawable/message"
+            android:title="약관" />
+    </group>
+
+    <item android:title="데이터">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="공유" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="데이터 백업" />
+        </menu>
+    </item>
+
+</menu>

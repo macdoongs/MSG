@@ -52,7 +52,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private Button btn_menu;
     private Button btn_plus;
     private Button btn_send;
-    private Button btn_temp;
 
 
     private LinearLayout slidingPanel;
@@ -98,7 +97,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         aleft = AnimationUtils.loadAnimation(this, R.anim.aleft);
         bleft = AnimationUtils.loadAnimation(this, R.anim.bleft);
 
-        slidingPanel = (LinearLayout) findViewById(R.id.slidingPanel);
         expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
 
 
@@ -114,8 +112,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
 
 
-        btn_setting = (Button)findViewById(R.id.btn_setting);
-        btn_menu = (Button)findViewById(R.id.btn_menu);
         btn_plus = (Button)findViewById(R.id.btn_plus);
         iv_profile = (ImageView)findViewById(R.id.iv_profile);
 
@@ -222,20 +218,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 );
 
                 et_message.setText("");
-                break;
-            }
-            case R.id.btn_setting:{
-                //Toast.makeText(getApplicationContext(), "Click setting", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.btn_menu:{
-                //Toast.makeText(getApplicationContext(), "Sliding menu", Toast.LENGTH_LONG).show();
-                slidingPanel.bringToFront();
-                slidingPanel.setVisibility(View.VISIBLE);
-                slidingPanel.startAnimation(aleft);
-                slidingState = true;
                 break;
             }
             case R.id.btn_plus:{
