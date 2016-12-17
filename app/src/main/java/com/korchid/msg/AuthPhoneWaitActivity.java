@@ -3,6 +3,7 @@ package com.korchid.msg;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
@@ -40,7 +42,7 @@ import java.util.Map;
 public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "AuthPhoneWaitActivity";
     Button btn_confirm;
-    Button btn_back;
+    Button btn_reSend;
     EditText et_authCode;
 
     String sms_token = "dNb4wEIZKv8:APA91bGwcxOlb-_kLZCbNzR6GVxTh9CW7Hb8mnTmo1iBp_Vfr0UEWe3ZsLL6vv02bMMLpi27hL6A57dCRJaFG5Cy4k-kc6QN8ecoT5Uf8V4jzT6J5qkBdZ8ZQoC4O-WgJt566NL-5AnE";
@@ -68,6 +70,9 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         btn_confirm = (Button) findViewById(R.id.btn_confirm);
         btn_confirm.setOnClickListener(this);
+
+        btn_reSend = (Button) findViewById(R.id.btn_reSend);
+        btn_reSend.setOnClickListener(this);
 
         et_authCode = (EditText) findViewById(R.id.et_authCode);
 
@@ -130,6 +135,38 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
                 HttpPost httpPost = new HttpPost(url, params, httpHandler);
                 httpPost.start();
+
+                break;
+            }
+            case R.id.btn_reSend:{
+                AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneWaitActivity.this);
+
+                builder.setTitle("Confirm");
+                builder.setMessage("Send auth sms message.");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String url = "https://www.korchid.com/sms-sender/";
+
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("phoneNumber", phoneNumber);
+                        params.put("token", sms_token);
+
+
+                        HttpPost httpPost = new HttpPost(url, params, new Handler());
+                        httpPost.start();
+                    }
+                });
+                builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
 
                 break;
             }
