@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Shader;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.ColorRes;
@@ -34,18 +35,24 @@ import android.widget.TextView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import static com.korchid.msg.R.id.nav_header_container;
+
 public class SelectParentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "SelectParentActivity";
 
     private ViewPager pager;
     private SeekBar seekBar;
     private Button btn_call, btn_chat, btn_chat_setting;
-    private ImageView imageView;
+    private ImageView iv_profile;
+    private TextView tv_myName;
+    private TextView tv_myPhoneNumber;
+
 
     // Temp Data Array
     private String[] parent = {"Father", "Mother", "StepMother"};
     private String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
     private String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
+    private String[] message = {"아빠 뭐해?", "엄마 뭐해?", "엄마 뭐해요?"};
     private int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
 
 
@@ -61,6 +68,31 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+/*
+        getLayoutInflater().inflate(R.layout.nav_header_main, null);
+
+        iv_profile = (ImageView) findViewById(R.id.iv_profile);
+        tv_myName = (TextView) findViewById(R.id.tv_name);
+        tv_myPhoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
+
+        tv_myName.setText(GlobalApplication.getGlobalApplicationContext().getUserId());
+        tv_myPhoneNumber.setText(GlobalApplication.getGlobalApplicationContext().getUserId());
+
+
+        try {
+            Uri uri = GlobalApplication.getGlobalApplicationContext().getProfileImage();
+
+            Log.d(TAG, "Uri : " + uri);
+            if(uri != null){
+                iv_profile.setImageURI(GlobalApplication.getGlobalApplicationContext().getProfileImage());
+            }
+
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+*/
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -75,6 +107,8 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
 
         pager = (ViewPager) findViewById(R.id.pager);
 
@@ -200,6 +234,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
             thread.start();
 
 
+
             LinearLayout layout = new LinearLayout(getApplicationContext());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(20,20,20,20);
@@ -219,11 +254,14 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
             layout.setOrientation(LinearLayout.VERTICAL);
             layout.setLayoutParams(params);
 
-            TextView textview = new TextView(getApplicationContext());
-            textview.setText(parent[position]);
-            textview.setTextSize(40.0f);
-            //textview.setGravity(Gravity.CENTER);
-            layout.addView(textview);
+
+            TextView namespace = new TextView(getApplicationContext());
+            namespace.setText(parent[position]);
+            namespace.setTextSize(40.0f);
+            //namespace.setGravity(Gravity.CENTER);
+            layout.addView(namespace);
+
+
 
             RoundedImageView circularImageView = new RoundedImageView(getApplicationContext());
 
@@ -259,23 +297,84 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 //
 //            circularImageView.setLayoutParams(params);
 
-
-
-
             layout.addView(circularImageView);
+
+            LinearLayout ll_messageBoxLayout = new LinearLayout(getApplicationContext());
+            params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(20,20,20,20);
+            params.gravity = Gravity.CENTER;
+            ll_messageBoxLayout.setBackgroundResource(R.color.colorPrimary);
+            ll_messageBoxLayout.setLayoutParams(params);
+            ll_messageBoxLayout.setOrientation(LinearLayout.VERTICAL);
+
+            // Round edge - message box
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(getResources().getColor(R.color.colorPrimary));
+            gd.setCornerRadius(10);
+            gd.setStroke(2, Color.WHITE);
+
+            ll_messageBoxLayout.setBackground(gd);
+
+
+            float textSize = 20.0f;
+            int textColor = Color.BLACK;
+            LinearLayout ll_timeLayout = new LinearLayout(getApplicationContext());
+
+            params.setMargins(20,20,20,20);
+            params.gravity = Gravity.CENTER;
+            ll_timeLayout.setLayoutParams(params);
+            ll_timeLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView tv_timeTitle = new TextView(getApplicationContext());
+            tv_timeTitle.setText("발송예정");
+            tv_timeTitle.setTextSize(textSize);
+            tv_timeTitle.setTextColor(textColor);
+            ll_timeLayout.addView(tv_timeTitle);
+
+
+            TextView tv_timeReserved = new TextView(getApplicationContext());
+            tv_timeReserved.setText("수요일 오후 9시경");
+            tv_timeReserved.setTextSize(textSize);
+            tv_timeReserved.setTextColor(textColor);
+            tv_timeReserved.setGravity(Gravity.RIGHT);
+            ll_timeLayout.addView(tv_timeReserved);
+
+
+            LinearLayout ll_messageLayout = new LinearLayout(getApplicationContext());
+            params.setMargins(20,20,20,20);
+            params.gravity = Gravity.CENTER;
+            ll_messageLayout.setLayoutParams(params);
+            ll_messageLayout.setBackgroundResource(R.color.colorWhite);
+            ll_messageLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView tv_messageReserved = new TextView(getApplicationContext());
+            tv_messageReserved.setText(message[position]);
+            tv_messageReserved.setTextSize(25.0f);
+            tv_messageReserved.setTextColor(Color.BLACK);
+            ll_messageLayout.addView(tv_messageReserved);
+
+            ll_messageBoxLayout.addView(ll_timeLayout);
+            ll_messageBoxLayout.addView(ll_messageLayout);
+
+            layout.addView(ll_messageBoxLayout);
+
 
             // Button Line
             LinearLayout linearLayout = new LinearLayout(getApplicationContext());
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
             //LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             //linearLayout.setLayoutParams(params1);
 
             btn_call = new Button(getApplicationContext());
             btn_call.setBackgroundResource(R.drawable.call);
+            btn_call.setPadding(0, 20, 20, 20);
             btn_chat = new Button(getApplicationContext());
             btn_chat.setBackgroundResource(R.drawable.message);
+            btn_chat.setPadding(50, 20, 50, 20);
             btn_chat_setting = new Button(getApplicationContext());
             btn_chat_setting.setBackgroundResource(R.drawable.messagesetting);
+            btn_chat_setting.setPadding(20, 20, 0, 20);
 
             buttonListener(btn_call, btn_chat, btn_chat_setting, position);
 
@@ -341,6 +440,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -349,7 +449,33 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        switch (id){
+            case R.id.nav_messageSetting:{
+                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_gallery:{
 
+                break;
+            }
+            case R.id.nav_setting:{
+                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_callCenter:{
+
+                break;
+            }
+            case R.id.nav_contract:{
+
+                break;
+            }
+            default:{
+                break;
+            }
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

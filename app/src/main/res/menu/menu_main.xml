@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_settings" android:title="@string/app_name"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/item1"
+    <item android:id="@+id/itemSetting"
+        android:title="설정"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/itemShare"
         android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
-        android:title="share"
+        android:title="공유"
         app:showAsAction="ifRoom|withText"
         />
-    <item android:id="@+id/item2"
+    <item android:id="@+id/itemLogo"
         android:icon="@drawable/logo2"
-        android:title="write"
+        android:title="@string/app_name"
         app:showAsAction="always"
         />
 </menu>

@@ -3,7 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_messageSetting"
             android:icon="@drawable/messagesetting"
             android:title="먼저 연락하기 설정" />
         <item
@@ -11,19 +11,19 @@
             android:icon="@drawable/gallery"
             android:title="사진첩" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_setting"
             android:icon="@drawable/setting"
             android:title="전체 기본 설정" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_callCenter"
             android:icon="@drawable/message"
             android:title="고객 센터" />
         <item
-            android:id="@+id/nav_1"
+            android:id="@+id/nav_personalInfo"
             android:icon="@drawable/message"
             android:title="개인정보취급방침" />
         <item
-            android:id="@+id/nav_2"
+            android:id="@+id/nav_contract"
             android:icon="@drawable/message"
             android:title="약관" />
     </group>

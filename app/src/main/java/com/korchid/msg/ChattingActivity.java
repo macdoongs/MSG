@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -54,10 +55,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private Button btn_send;
 
 
-    private LinearLayout slidingPanel;
     private GridLayout expandedMenu;
     private ListView lv_message;
-    private ImageView iv_profile;
 
     private EditText et_message;
 
@@ -74,8 +73,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     byte[] pic;
 
 
-
-    private Boolean slidingState = false;
     private Boolean expandedState = false;
     private Animation aleft;
     private Animation bleft;
@@ -113,19 +110,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
         btn_plus = (Button)findViewById(R.id.btn_plus);
-        iv_profile = (ImageView)findViewById(R.id.iv_profile);
 
-        try {
-            Uri uri = GlobalApplication.getGlobalApplicationContext().getProfileImage();
-
-            Log.d(TAG, "Uri : " + uri);
-            if(uri != null){
-                iv_profile.setImageURI(GlobalApplication.getGlobalApplicationContext().getProfileImage());
-            }
-
-        }catch (Exception e){
-            Log.e(TAG, e.getMessage());
-        }
 
         lv_message = (ListView)findViewById(R.id.lv_message);
 
@@ -178,18 +163,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         MqttServiceDelegate.startService(this, title);
 
         btn_send.setOnClickListener(this);
-        btn_setting.setOnClickListener(this);
-        btn_menu.setOnClickListener(this);
         btn_plus.setOnClickListener(this);
-
-        iv_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
     }
 
@@ -249,11 +223,26 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         int id = item.getItemId();
 
         switch (id){
-            case android.R.id.home:
+            case android.R.id.home: {
                 this.finish();
                 break;
-            default:
+            }
+            case R.id.itemLogo: {
+
                 break;
+            }
+            case R.id.itemShare:{
+
+                break;
+            }
+            case R.id.itemSetting: {
+                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                startActivity(intent);
+                break;
+            }
+            default: {
+                break;
+            }
         }
 
         return true;
@@ -268,16 +257,18 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+
+    @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        if(slidingState == true){
-            slidingPanel.bringToFront();
-            slidingPanel.startAnimation(bleft);
-            slidingPanel.setVisibility(View.GONE);
-            slidingState = false;
-        }else{
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     public class MobiusConfig{

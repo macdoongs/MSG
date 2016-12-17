@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(loginState.equals("LOGIN")){
             btn_join.setVisibility(View.GONE);
             btn_login.setText("Logout");
+            GlobalApplication.getGlobalApplicationContext().setUserId(sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
+            GlobalApplication.getGlobalApplicationContext().setUserPassword(sharedPreferences.getString("USER_PASSWORD", "000000"));
 
             intent.putExtra("duration",  SPLASH_LOGIN);
         }else{

@@ -51,7 +51,7 @@ public class MessageSettingActivity extends AppCompatActivity {
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
 
         Intent intent = getIntent();
         // Enum data - intent
