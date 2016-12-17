@@ -48,6 +48,7 @@ public class MessageSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        StatusBar statusBar = new StatusBar(this);
 
         Intent intent = getIntent();
         // Enum data - intent

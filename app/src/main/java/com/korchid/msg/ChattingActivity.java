@@ -88,6 +88,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
+        StatusBar statusBar = new StatusBar(this);
+
         Log.d(TAG, "onCreate");
 
         aleft = AnimationUtils.loadAnimation(this, R.anim.aleft);

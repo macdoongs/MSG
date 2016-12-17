@@ -6,15 +6,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Shader;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.Space;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,18 +55,23 @@ public class SelectParentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_parent);
 
+        StatusBar statusBar = new StatusBar(this);
+
         pager = (ViewPager) findViewById(R.id.pager);
 
         SelectParentActivity.MyAdapter adapter = new SelectParentActivity.MyAdapter();
         pager.setAdapter(adapter);
 
         //imageView = (ImageView) findViewById(R.id.imageView);
-
         //imageView.setImageResource(imageId[0]);
 
+        /*
+        // static button
         btn_call = (Button) findViewById(R.id.btn_call);
         btn_chat = (Button) findViewById(R.id.btn_chat);
         btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
+        buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
+        */
         btn_back = (Button) findViewById(R.id.btn_back);
 
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +81,7 @@ public class SelectParentActivity extends AppCompatActivity {
             }
         });
 
-        buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
+
 
         // SeekBar setting
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -107,7 +116,7 @@ public class SelectParentActivity extends AppCompatActivity {
                 seekBar.setProgress(position);
 
                 //imageView.setImageResource(imageId[position]);
-                buttonListener(btn_call, btn_chat, btn_chat_setting, position);
+                //buttonListener(btn_call, btn_chat, btn_chat_setting, position);
             }
 
             @Override
@@ -208,11 +217,11 @@ public class SelectParentActivity extends AppCompatActivity {
 
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[position]);
 
-            profileWidth = 700;
-            profileHeight = 700;
+            profileWidth = 600;
+            profileHeight = 600;
 
             bitmap = resizeBitmap(bitmap, profileWidth, profileHeight);
-            bitmap = cropBitmap(bitmap, 300, 300);
+            //bitmap = cropBitmap(bitmap, 300, 300);
 
             circularImageView.setImageBitmap(bitmap);
 
@@ -243,30 +252,27 @@ public class SelectParentActivity extends AppCompatActivity {
 
             layout.addView(circularImageView);
 
+            // Button Line
             LinearLayout linearLayout = new LinearLayout(getApplicationContext());
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             //LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             //linearLayout.setLayoutParams(params1);
 
-            Button b1 = new Button(getApplicationContext());
-            b1.setText("Button1");
-            Button b2 = new Button(getApplicationContext());
-            b2.setText("Button2");
-            Button b3 = new Button(getApplicationContext());
-            b3.setText("Button3");
+            btn_call = new Button(getApplicationContext());
+            btn_call.setBackgroundResource(R.drawable.call);
+            btn_chat = new Button(getApplicationContext());
+            btn_chat.setBackgroundResource(R.drawable.message);
+            btn_chat_setting = new Button(getApplicationContext());
+            btn_chat_setting.setBackgroundResource(R.drawable.messagesetting);
 
-            linearLayout.addView(b1);
-            linearLayout.addView(b2);
-            linearLayout.addView(b3);
+            buttonListener(btn_call, btn_chat, btn_chat_setting, position);
+
+
+            linearLayout.addView(btn_call);
+            linearLayout.addView(btn_chat);
+            linearLayout.addView(btn_chat_setting);
 
             layout.addView(linearLayout);
-
-            ImageView imageView = new ImageView(getApplicationContext());
-            imageView.setImageResource(imageId[position]);
-
-
-//            layout.addView(textview);
-            layout.addView(imageView);
 
             container.addView(layout);
             container.setBackgroundColor(Color.RED);
@@ -324,7 +330,7 @@ public class SelectParentActivity extends AppCompatActivity {
      * @param int height 뷰의 세로 길이
      *
      * @return Bitmap 리사이즈 된 bitmap
-     */
+
     public Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {
         if (bitmap.getWidth() != width || bitmap.getHeight() != height){
             float ratio = 1.0f;
@@ -338,6 +344,25 @@ public class SelectParentActivity extends AppCompatActivity {
             bitmap = Bitmap.createScaledBitmap(bitmap,
                     (int)(((float)bitmap.getWidth()) * ratio), // Width
                     (int)(((float)bitmap.getHeight()) * ratio), // Height
+                    true);
+        }
+
+        return bitmap;
+    }
+    */
+    public Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {
+        if (bitmap.getWidth() != width || bitmap.getHeight() != height){
+            float widthRatio = 1.0f;
+            float heightRatio = 1.0f;
+
+            widthRatio = (float)width / (float)bitmap.getWidth();
+
+            heightRatio = (float)height / (float)bitmap.getHeight();
+
+
+            bitmap = Bitmap.createScaledBitmap(bitmap,
+                    (int)(((float)bitmap.getWidth()) * widthRatio), // Width
+                    (int)(((float)bitmap.getHeight()) * heightRatio), // Height
                     true);
         }
 

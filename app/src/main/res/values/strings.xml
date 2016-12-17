@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MSG</string>
+    <string name="app_name">혜윰</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="kakao_app_key">4d3ee1f3074ddd288456ecea2cc8a87c</string>
     <string name="kakao_scheme">kakao4d3ee1f3074ddd288456ecea2cc8a87c</string>

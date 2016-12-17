@@ -30,7 +30,8 @@
             android:process=":MqttSubProcess" />
 
         <activity android:name=".MainActivity">
-            <!--android:configChanges="orientation|keyboardHidden"-->
+
+            <!-- android:configChanges="orientation|keyboardHidden" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,9 +55,10 @@
         <activity
             android:name=".ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SelectParentActivity"
+        <activity
+            android:name=".SelectParentActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <!--android:configChanges="orientation|keyboardHidden"-->
+        <!-- android:configChanges="orientation|keyboardHidden" -->
         <activity
             android:name=".AuthPhoneActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -71,6 +73,7 @@
         <activity android:name=".KakaoLinkActivity" />
         <activity android:name=".JoinPhoneActivity" />
         <activity android:name=".LoginPhoneActivity" />
+        <activity android:name=".MenuTest"></activity>
     </application>
 
 </manifest>

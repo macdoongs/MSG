@@ -16,6 +16,8 @@ public class KakaoLinkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kakao_link);
 
+        StatusBar statusBar = new StatusBar(this);
+
         try{
             // https://developers.kakao.com/docs/android#Kakao-계정-로그인이-필요없는-앱설정
 

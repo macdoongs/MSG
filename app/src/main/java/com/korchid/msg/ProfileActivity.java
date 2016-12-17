@@ -44,6 +44,8 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        StatusBar statusBar = new StatusBar(this);
+
         iv_profile = (ImageView) findViewById(R.id.iv_profile);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);

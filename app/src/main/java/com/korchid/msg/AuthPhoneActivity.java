@@ -33,6 +33,8 @@ public class AuthPhoneActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone);
 
+        StatusBar statusBar = new StatusBar(this);
+
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
         btn_back = (Button) findViewById(R.id.btn_back);

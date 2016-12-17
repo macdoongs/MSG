@@ -54,6 +54,8 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone_wait);
 
+        StatusBar statusBar = new StatusBar(this);
+
         final String userId = getIntent().getExtras().getString("phoneNumber");
         phoneNumber = userId;
 

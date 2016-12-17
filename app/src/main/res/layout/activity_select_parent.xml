@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="@drawable/layout_border">
+        android:background="@color/colorTransparent">
 
         <Button
             android:layout_height="match_parent"
@@ -35,38 +35,55 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:background="@color/colorWhite"
-        android:layout_height="380dp">
+        android:layout_height="510dp">
 
     </android.support.v4.view.ViewPager>
-
+<!--
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginTop="10dp">
 
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
         <Button
-            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:id="@+id/btn_call"
-            android:layout_weight="0.40"
-            android:background="@drawable/call" />
+            android:background="@drawable/call"
+            android:layout_width="48dp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <Button
             android:layout_height="match_parent"
             android:id="@+id/btn_chat"
-            android:layout_weight="0.1"
             android:background="@drawable/message"
-            android:layout_width="120dp" />
+            android:layout_width="48dp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <Button
-            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:id="@+id/btn_chat_setting"
-            android:layout_weight="0.40"
-            android:background="@drawable/messagesetting" />
-    </LinearLayout>
+            android:background="@drawable/messagesetting"
+            android:layout_width="48dp" />
 
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+-->
     <SeekBar
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"

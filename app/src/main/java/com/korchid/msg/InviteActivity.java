@@ -42,6 +42,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
 
+        StatusBar statusBar = new StatusBar(this);
 
         btn_contactList = (Button) findViewById(R.id.btn_contactList);
         btn_contactList.setOnClickListener(this);

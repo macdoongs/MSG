@@ -42,6 +42,8 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_phone);
 
+        StatusBar statusBar = new StatusBar(this);
+
         phoneNumber = getIntent().getExtras().getString("phoneNumber");
 
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);

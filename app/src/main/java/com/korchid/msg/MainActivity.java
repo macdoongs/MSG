@@ -5,11 +5,17 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +33,9 @@ import com.korchid.msg.service.ServiceThread;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{//implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MainActivity";
+    private static final int SPLASH_LOGIN = 1000;
+    private static final int SPLASH_LOGOUT = 1500;
+
     private GoogleApiClient mGoogleApiClient;
 
     enum REQUEST_CODE {LOGIN, LOGOUT}
@@ -51,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        StatusBar statusBar = new StatusBar(this);
+
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main);
+
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -64,8 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Log.d(TAG, "timer : " + serviceThread.timer);
 
-        // Loading screen
-        startActivity(new Intent(this,SplashActivity.class));
+
 
         btn_next = (Button) findViewById(R.id.btn_next);
         btn_next.setOnClickListener(this);
@@ -77,22 +89,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Use Environmental variable 'SharedPreference'
         SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
-
+        /*
+        // Develop mode
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
         editor.clear();
         editor.commit();
+        */
+
+
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
 
+        Intent intent = new Intent(this, SplashActivity.class);
         loginState = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
         if(loginState.equals("LOGIN")){
             btn_join.setVisibility(View.GONE);
             btn_login.setText("Logout");
+
+            intent.putExtra("duration",  SPLASH_LOGIN);
         }else{
             btn_join.setVisibility(View.VISIBLE);
             btn_join.setOnClickListener(this);
+
+            intent.putExtra("duration",  SPLASH_LOGOUT);
         }
+        // Loading screen
+        startActivity(intent);
+
+
 
 
         btn_reserve = (Button) findViewById(R.id.btn_reserve);
