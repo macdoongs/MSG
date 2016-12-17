@@ -41,30 +41,23 @@
         <activity android:name=".SplashActivity" />
         <activity
             android:name=".ChattingActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".MessageSettingActivity" />
         <activity android:name=".SettingActivity" />
         <activity
-            android:name=".InviteActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".InviteActivity"/>
         <activity
-            android:name=".ReserveActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ReserveActivity" />
         <activity android:name=".DBTest" />
         <activity
-            android:name=".ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ProfileActivity" />
         <activity
-            android:name=".SelectParentActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".SelectParentActivity" />
         <!-- android:configChanges="orientation|keyboardHidden" -->
         <activity
-            android:name=".AuthPhoneActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".AuthPhoneActivity"/>
         <activity
-            android:name=".AuthPhoneWaitActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".AuthPhoneWaitActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,16 +57,14 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         StatusBar statusBar = new StatusBar(this);
 
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+
         final String userId = getIntent().getExtras().getString("phoneNumber");
         phoneNumber = userId;
 
         smsMessage = "";
 
         Log.d(TAG, "phoneNumber : " + phoneNumber);
-
-        btn_back = (Button) findViewById(R.id.btn_back);
-
-        btn_back.setOnClickListener(this);
 
         btn_confirm = (Button) findViewById(R.id.btn_confirm);
         btn_confirm.setOnClickListener(this);
@@ -102,10 +101,6 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         viewId = v.getId();
 
         switch (viewId){
-            case R.id.btn_back:{
-                finish();
-                break;
-            }
             case R.id.btn_confirm:{
                 String url = "https://www.korchid.com/sms-check";
                 String authCode = et_authCode.getText().toString();
@@ -143,6 +138,23 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
             }
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +31,6 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     private Uri mImageCaptureUri;
     private ImageView iv_profile;
 
-    private Button btn_back;
     private Button btn_upload;
 
     private int viewId;
@@ -46,9 +46,9 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
         StatusBar statusBar = new StatusBar(this);
 
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+
         iv_profile = (ImageView) findViewById(R.id.iv_profile);
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(this);
         btn_upload = (Button) findViewById(R.id.btn_upload);
         btn_upload.setOnClickListener(this);
 
@@ -158,10 +158,6 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         viewId = v.getId();
 
         switch (viewId){
-            case R.id.back:{
-                finish();
-                break;
-            }
             case R.id.btn_register:{
                 // Use Environmental variable 'SharedPreference'
                 SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
@@ -221,7 +217,21 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
 
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
 
     // Save Bitmap image
     private void storeCropImage(Bitmap bitmap, String filePath){
@@ -254,6 +264,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         }
 
     }
+
 
 
 }

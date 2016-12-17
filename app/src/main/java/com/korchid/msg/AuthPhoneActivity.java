@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,6 @@ public class AuthPhoneActivity extends AppCompatActivity{
     private static String TAG = "AuthPhoneActivity";
 
     private EditText et_phoneNumber;
-    private Button btn_back;
     private Button btn_register;
     private Button btn_dupCheck;
 
@@ -35,15 +35,9 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
         StatusBar statusBar = new StatusBar(this);
 
-        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
 
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
         btn_dupCheck = (Button) findViewById(R.id.btn_dupCheck);
         btn_dupCheck.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +140,23 @@ public class AuthPhoneActivity extends AppCompatActivity{
             }
         });
     }   // onCreate End
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
 
 
     @Override

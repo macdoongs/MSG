@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.database.Cursor;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,11 +39,13 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     private int viewId;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
 
         StatusBar statusBar = new StatusBar(this);
+
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
 
         btn_contactList = (Button) findViewById(R.id.btn_contactList);
         btn_contactList.setOnClickListener(this);
@@ -65,7 +68,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
 
-
+        /*
         ContactUtil contactUtil = new ContactUtil(getApplicationContext());
 
         ArrayList<Contact> contactList = contactUtil.getContactList();
@@ -73,7 +76,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         for(int i=0; i<contactList.size(); i++){
             Log.d("CONTACT", contactList.get(i).getName());
         }
-
+        */
     }
 
 
@@ -122,6 +125,22 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     @Override

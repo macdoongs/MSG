@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -33,7 +34,6 @@ public class SelectParentActivity extends AppCompatActivity {
     private ViewPager pager;
     private SeekBar seekBar;
     private Button btn_call, btn_chat, btn_chat_setting;
-    private Button btn_back;
     private ImageView imageView;
 
     // Temp Data Array
@@ -57,6 +57,8 @@ public class SelectParentActivity extends AppCompatActivity {
 
         StatusBar statusBar = new StatusBar(this);
 
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main);
+
         pager = (ViewPager) findViewById(R.id.pager);
 
         SelectParentActivity.MyAdapter adapter = new SelectParentActivity.MyAdapter();
@@ -72,15 +74,6 @@ public class SelectParentActivity extends AppCompatActivity {
         btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
         buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
         */
-        btn_back = (Button) findViewById(R.id.btn_back);
-
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
 
 
         // SeekBar setting
@@ -314,6 +307,22 @@ public class SelectParentActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     /**     http://bbulog.tistory.com/25

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,7 +25,6 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
     private NumberPicker np_week;
     private NumberPicker np_number;
 
-    private Button btn_back;
     private Button btn_polite;
     private Button btn_impolite;
     private Button btn_inPerson;
@@ -43,8 +43,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
         StatusBar statusBar = new StatusBar(this);
 
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(this);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
 
         btn_polite = (Button) findViewById(R.id.btn_polite);
         btn_polite.setOnClickListener(this);
@@ -91,10 +90,6 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         viewId = v.getId();
 
         switch (viewId){
-            case R.id.btn_back:{
-                finish();
-                break;
-            }
             case R.id.btn_polite:{
                 Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
                 intent.putExtra("Type", MessageSetting.Type.POLITE);
@@ -129,6 +124,22 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isEnable) {

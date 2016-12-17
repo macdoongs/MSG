@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -27,7 +28,25 @@ public class SettingActivity extends AppCompatActivity {
 
         StatusBar statusBar = new StatusBar(this);
 
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+
         setList();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     private void setList(){

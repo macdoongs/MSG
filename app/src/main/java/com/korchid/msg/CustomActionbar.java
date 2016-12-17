@@ -17,7 +17,12 @@ public class CustomActionbar {
 
         // http://choayo.tistory.com/145
         ActionBar actionBar = appCompatActivity.getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
+        if(resource == R.layout.actionbar_main){
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }else{
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
 

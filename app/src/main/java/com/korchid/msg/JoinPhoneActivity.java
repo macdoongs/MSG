@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +28,6 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
     private EditText et_phoneNumber;
     private EditText et_password;
     private EditText et_passwordConfirm;
-    private Button btn_back;
     private Button btn_register;
 
     private String phoneNumber = "";
@@ -44,6 +44,8 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
         StatusBar statusBar = new StatusBar(this);
 
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+
         phoneNumber = getIntent().getExtras().getString("phoneNumber");
 
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
@@ -52,8 +54,6 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         et_password = (EditText) findViewById(R.id.et_password);
         et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
 
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(this);
 
         btn_register = (Button) findViewById(R.id.btn_register);
         btn_register.setOnClickListener(this);
@@ -64,10 +64,6 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         viewId = v.getId();
 
         switch (viewId){
-            case R.id.btn_back:{
-                finish();
-                break;
-            }
             case R.id.btn_register:{
                 phoneNumber = et_phoneNumber.getText().toString();
                 password = et_password.getText().toString();
@@ -182,5 +178,21 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
         }
+    }// onClick End
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 }

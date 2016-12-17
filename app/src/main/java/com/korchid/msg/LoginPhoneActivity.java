@@ -22,7 +22,6 @@ import java.util.HashMap;
 public class LoginPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "LoginPhoneActivity";
 
-    private Button btn_back;
     private Button btn_login;
     private Button btn_findPassword;
 
@@ -44,19 +43,8 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
         StatusBar statusBar = new StatusBar(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
 
-        // Set custom view layout
-        View mCustomView = LayoutInflater.from(this).inflate(R.layout.actionbar_main, null);
-        actionBar.setCustomView(mCustomView);
-
-        // Set actionbar layout layoutparams
-        ActionBar.LayoutParams params = new ActionBar.LayoutParams(
-                ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-        actionBar.setCustomView(mCustomView, params);
 
         sharedPreferences = getSharedPreferences("login", 0);
 
@@ -90,8 +78,6 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
         et_password = (EditText) findViewById(R.id.et_password);
 
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(this);
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
@@ -105,10 +91,6 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         viewId = v.getId();
 
         switch (viewId){
-            case R.id.btn_back:{
-                finish();
-                break;
-            }
             case R.id.btn_login:{
                 phoneNumber = et_phoneNumber.getText().toString();
                 password = et_password.getText().toString();
@@ -171,31 +153,21 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         }
     }// onClick End
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //ActionBar 메뉴 클릭에 대한 이벤트 처리
-        String txt = null;
+
         int id = item.getItemId();
         switch (id){
-            case R.id.action_settings:
-                txt = "Item1 click";
+            case android.R.id.home:
+                this.finish();
                 break;
-            case R.id.item1:
-                txt = "Item2 click";
-                break;
-            case R.id.item2:
-                txt = "item3 click";
+            default:
                 break;
         }
-        Toast.makeText(this,txt,Toast.LENGTH_LONG).show();
-        return super.onOptionsItemSelected(item);
+
+        return true;
     }
 
 }

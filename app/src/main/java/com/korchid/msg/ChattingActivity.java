@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -89,6 +90,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_chatting);
 
         StatusBar statusBar = new StatusBar(this);
+
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
 
         Log.d(TAG, "onCreate");
 
@@ -255,6 +258,23 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+
+        int id = item.getItemId();
+
+        switch (id){
+            case android.R.id.home:
+                this.finish();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     //비트맵의 byte배열을 얻는다
