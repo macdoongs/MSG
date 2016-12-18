@@ -8,6 +8,8 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,9 +56,37 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         et_password = (EditText) findViewById(R.id.et_password);
         et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
 
-
         btn_register = (Button) findViewById(R.id.btn_register);
         btn_register.setOnClickListener(this);
+        btn_register.setEnabled(false);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+                String input2 = et_password.getText().toString();
+
+                if(input.length() > 0 && input2.length() > 0){
+                    btn_register.setEnabled(true);
+                    btn_register.setBackgroundResource(R.color.colorPrimary);
+                }else{
+                    btn_register.setEnabled(false);
+                }
+            }
+        };
+
+        et_passwordConfirm.addTextChangedListener(textWatcher);
+
     }
 
     @Override

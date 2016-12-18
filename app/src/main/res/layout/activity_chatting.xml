@@ -67,7 +67,7 @@
                     android:layout_height="match_parent"
                     android:layout_width="wrap_content"
                     android:text="Send"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorTransparent"
                     android:background="@color/colorWhite" />
 
             </LinearLayout>

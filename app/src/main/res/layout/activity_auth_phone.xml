@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_dupCheck"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorTransparent" />
             </LinearLayout>
 
             <Space
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_sendSMS"
                 android:layout_width="250dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorTransparent"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>

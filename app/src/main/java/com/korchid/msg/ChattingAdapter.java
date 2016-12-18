@@ -36,8 +36,6 @@ public class ChattingAdapter extends BaseAdapter {
             mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        //설명 2:
-
         @Override
         public int getCount() {
             return chattingArrayList.size();
@@ -51,8 +49,6 @@ public class ChattingAdapter extends BaseAdapter {
         public long getItemId(int position){
             return position;
         }
-
-        //설명 3:
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {

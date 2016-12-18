@@ -15,6 +15,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,7 +87,35 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         btn_reSend = (Button) findViewById(R.id.btn_reSend);
         btn_reSend.setOnClickListener(this);
 
+        btn_confirm.setEnabled(false);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if(input.length() > 0){
+                    btn_confirm.setEnabled(true);
+                    btn_confirm.setBackgroundResource(R.color.colorPrimary);
+                }else{
+                    btn_confirm.setEnabled(false);
+                }
+            }
+        };
+
         et_authCode = (EditText) findViewById(R.id.et_authCode);
+        et_authCode.addTextChangedListener(textWatcher);
+
 
         tv_authTime = (TextView) findViewById(R.id.tv_authTime);
 
@@ -282,7 +312,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
                         long remainTime = (expirationTime - currentTime) / 1000;
 
-                        if(remainTime > 0){
+                        if(remainTime >= 0){
                             long min = remainTime / 60;
                             long sec = remainTime - min * 60;
 

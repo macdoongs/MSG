@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -115,7 +118,37 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         lv_message = (ListView)findViewById(R.id.lv_message);
 
         et_message = (EditText)findViewById(R.id.et_message);
+
         btn_send = (Button)findViewById(R.id.btn_send);
+
+        btn_send.setEnabled(false);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if(input.length() > 0){
+                    btn_send.setEnabled(true);
+                    btn_send.setTextColor(getResources().getColor(R.color.colorPrimary));
+                }else{
+                    btn_send.setEnabled(false);
+                    btn_send.setTextColor(getResources().getColor(R.color.colorTransparent));
+                }
+            }
+        };
+
+        et_message.addTextChangedListener(textWatcher);
 
         adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
         lv_message.setAdapter(adapter);

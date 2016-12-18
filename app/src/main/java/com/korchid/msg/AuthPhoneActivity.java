@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +26,7 @@ import java.lang.reflect.Array;
 
 public class AuthPhoneActivity extends AppCompatActivity{
     private static String TAG = "AuthPhoneActivity";
+    private static final int NUMBER_MIN_LENGTH = 6;
 
     private EditText et_phoneNumber;
     private Button btn_register;
@@ -70,15 +73,45 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
+        btn_register = (Button) findViewById(R.id.btn_sendSMS);
         btn_dupCheck = (Button) findViewById(R.id.btn_dupCheck);
+
+        btn_dupCheck.setEnabled(false);
+        btn_register.setEnabled(false);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if(input.length() > 0){
+                    btn_dupCheck.setEnabled(true);
+                    btn_dupCheck.setBackgroundResource(R.color.colorPrimary);
+                }else{
+                    btn_dupCheck.setEnabled(false);
+                    btn_register.setEnabled(false);
+                }
+            }
+        };
+
+        et_phoneNumber.addTextChangedListener(textWatcher);
+
         btn_dupCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 phoneNumber = et_phoneNumber.getText().toString();
 
-                String internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
-
-                Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
+                phoneNumber = phoneNumber.trim();
 
                 if(phoneNumber.equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
@@ -94,7 +127,28 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
+                }else if(phoneNumber.length() < NUMBER_MIN_LENGTH){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
+
+                    builder.setTitle("Warning");
+                    builder.setMessage("Min length : 7");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }else{
+                    btn_register.setBackgroundResource(R.color.colorPrimary);
+                    btn_register.setEnabled(true);
+
+                    String internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
+                    Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
+
                     Handler httpHandler = new Handler(){
                         @Override
                         public void handleMessage(Message msg) {
@@ -121,7 +175,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
             }
         });
 
-        btn_register = (Button) findViewById(R.id.btn_sendSMS);
+
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

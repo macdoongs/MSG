@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_register"
                 android:layout_width="250dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorTransparent"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>

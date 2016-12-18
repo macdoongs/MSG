@@ -93,10 +93,14 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             }
             case R.id.btn_inviteParent:{
                 tv_role.setText("Invite Parent.");
+                btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
+                btn_inviteChild.setBackgroundResource(R.color.colorTransparent);
                 break;
             }
             case R.id.btn_inviteChild:{
                 tv_role.setText("Invite Child.");
+                btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
+                btn_inviteChild.setBackgroundResource(R.color.colorPrimary);
                 break;
             }
             case R.id.btn_send:{
