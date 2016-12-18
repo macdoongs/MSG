@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -34,22 +35,32 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "AuthPhoneWaitActivity";
-    Button btn_confirm;
-    Button btn_reSend;
-    EditText et_authCode;
+    private static final String sms_token = "dNb4wEIZKv8:APA91bGwcxOlb-_kLZCbNzR6GVxTh9CW7Hb8mnTmo1iBp_Vfr0UEWe3ZsLL6vv02bMMLpi27hL6A57dCRJaFG5Cy4k-kc6QN8ecoT5Uf8V4jzT6J5qkBdZ8ZQoC4O-WgJt566NL-5AnE";
+    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
-    String sms_token = "dNb4wEIZKv8:APA91bGwcxOlb-_kLZCbNzR6GVxTh9CW7Hb8mnTmo1iBp_Vfr0UEWe3ZsLL6vv02bMMLpi27hL6A57dCRJaFG5Cy4k-kc6QN8ecoT5Uf8V4jzT6J5qkBdZ8ZQoC4O-WgJt566NL-5AnE";
-    final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    SMSReceiver smsReceiver;
-    String smsMessage;
-    String phoneNumber;
+    private Button btn_confirm;
+    private Button btn_reSend;
+    private EditText et_authCode;
+    private TextView tv_authTime;
+
+    private TimerTask btnTask;
+    private TimerTask tvTask;
+    private Timer btnTimer;
+    private Timer tvTimer;
+
+    private SMSReceiver smsReceiver;
+    private String smsMessage;
+    private String phoneNumber;
     private int viewId;
 
     @Override
@@ -76,6 +87,8 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         et_authCode = (EditText) findViewById(R.id.et_authCode);
 
+        tv_authTime = (TextView) findViewById(R.id.tv_authTime);
+
         smsReceiver = new SMSReceiver();
         IntentFilter intentFilter = new IntentFilter(SMS_RECEIVED);
         registerReceiver(smsReceiver, intentFilter);
@@ -90,11 +103,19 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         HttpPost httpPost = new HttpPost(url, params, new Handler());
         httpPost.start();
 
+
+        // Check expiration time
+        final Handler handler = new Handler();
+        final long expirationTime = System.currentTimeMillis() + 300000;
+        checkRemainTime(handler, expirationTime);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        btnTimer.cancel();
+        tvTimer.cancel();
         if( smsReceiver != null ) {
             unregisterReceiver(smsReceiver);
             smsReceiver = null;
@@ -107,6 +128,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         switch (viewId){
             case R.id.btn_confirm:{
+
                 String url = "https://www.korchid.com/sms-check";
                 String authCode = et_authCode.getText().toString();
 
@@ -124,6 +146,8 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                         String[] line = response.split("\n");
 
                         if(line[0].equals("OK")){
+                            btnTimer.cancel();
+                            tvTimer.cancel();
                             Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
                             intent.putExtra("phoneNumber", phoneNumber);
                             startActivityForResult(intent, 0);
@@ -146,6 +170,15 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // Check expiration time
+
+                        final Handler handler = new Handler();
+                        final long expirationTime = System.currentTimeMillis() + 300000;
+                        checkRemainTime(handler, expirationTime);
+
+                        btn_confirm.setBackgroundResource(R.color.colorPrimary);
+                        btn_confirm.setOnClickListener(AuthPhoneWaitActivity.this);
+
                         String url = "https://www.korchid.com/sms-sender/";
 
                         HashMap<String, String> params = new HashMap<>();
@@ -212,6 +245,59 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    // http://csjung.tistory.com/153
+    // 안드로이드의 UI는 단일 스레드 모델이기 때문에 스레드를 사용하고 싶다면 핸들러를 사용
+    public void checkRemainTime(final Handler handler, final long expirationTime){
+        if(btnTimer != null){
+            btnTimer.cancel();
+        }
+        if(tvTimer != null){
+            tvTimer.cancel();
+        }
+
+        btnTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        btn_confirm.setOnClickListener(null);
+                        btn_confirm.setBackgroundResource(R.color.colorTransparent);
+                    }
+                });
+            }
+        };
+
+        btnTimer = new Timer();
+        btnTimer.schedule(btnTask, 300000);
+
+
+        tvTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        long currentTime = System.currentTimeMillis();
+
+                        long remainTime = (expirationTime - currentTime) / 1000;
+
+                        if(remainTime > 0){
+                            long min = remainTime / 60;
+                            long sec = remainTime - min * 60;
+
+                            String message = "남은 시간 : " + min + ":" + sec;
+
+                            tv_authTime.setText(message);
+                        }
+                    }
+                });
+            }
+        };
+
+        tvTimer = new Timer();
+        tvTimer.schedule(tvTask, 1000, 1000);
+    }
 
     public class SMSReceiver  extends BroadcastReceiver {
         /**

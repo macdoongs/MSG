@@ -113,10 +113,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("duration",  SPLASH_LOGIN);
         }else{
             btn_join.setVisibility(View.VISIBLE);
-            btn_join.setOnClickListener(this);
+
 
             intent.putExtra("duration",  SPLASH_LOGOUT);
         }
+        btn_join.setOnClickListener(this);
         // Loading screen
         startActivity(intent);
 

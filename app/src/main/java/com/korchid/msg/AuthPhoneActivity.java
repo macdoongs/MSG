@@ -13,9 +13,14 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.lang.reflect.Array;
 
 public class AuthPhoneActivity extends AppCompatActivity{
     private static String TAG = "AuthPhoneActivity";
@@ -23,19 +28,45 @@ public class AuthPhoneActivity extends AppCompatActivity{
     private EditText et_phoneNumber;
     private Button btn_register;
     private Button btn_dupCheck;
+    private Spinner sp_nationCode;
 
     private String phoneNumber = "";
+    private String nationCode = "";
     private int viewId;
-    private boolean isDuplicate = true;
+    private boolean isDuplicate = true; // true - No check state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone);
 
+
         StatusBar statusBar = new StatusBar(this);
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+
+
+        // Setting nation code spinner
+        final String[] option = getResources().getStringArray(R.array.spinnerNationCode);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, option);
+        sp_nationCode = (Spinner) findViewById(R.id.sp_nationCode);
+        sp_nationCode.setAdapter(arrayAdapter);
+        sp_nationCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getApplicationContext(), option[i], Toast.LENGTH_LONG).show();
+                String content = option[i];
+                // Delete nation name
+                nationCode = content.split(" ")[0];
+                isDuplicate = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
@@ -44,6 +75,10 @@ public class AuthPhoneActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 phoneNumber = et_phoneNumber.getText().toString();
+
+                String internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
+                Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
                 if(phoneNumber.equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
@@ -94,7 +129,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                 //isDuplicate = false;
 
                 if(isDuplicate){
-                    Toast.makeText(getApplicationContext(), "Please duplicate check", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please duplicate check", Toast.LENGTH_SHORT).show();
                 }else {
                     phoneNumber = et_phoneNumber.getText().toString();
 
@@ -116,9 +151,6 @@ public class AuthPhoneActivity extends AppCompatActivity{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
-
-                                // DB check
-
 
                                 Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
                                 intent.putExtra("phoneNumber", phoneNumber);

@@ -44,6 +44,12 @@
             android:background="@color/colorPrimary"
             android:id="@+id/btn_confirm" />
 
+        <TextView
+            android:text="Auth time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_authTime" />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="100dp" />

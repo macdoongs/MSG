@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="spinnerNationCode">
+        <item>+82 Korea</item>
+        <item>+1 America</item>
+        <item>+81 Japan</item>
+        <item>+86 China</item>
+    </string-array>
     <string-array name="spinnerWeek">
         <item>Week</item>
         <item>1</item>

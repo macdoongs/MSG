@@ -15,6 +15,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.Space;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import static com.korchid.msg.R.id.nav_header_container;
 
 public class SelectParentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "SelectParentActivity";
+
 
     private ViewPager pager;
     private SeekBar seekBar;
@@ -66,6 +68,9 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         Log.d(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_home);
 
 /*
@@ -126,6 +131,8 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
         */
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(parent[0]);
 
         // SeekBar setting
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -158,6 +165,9 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
             @Override
             public void onPageSelected(final int position) {
                 seekBar.setProgress(position);
+
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.setTitle(parent[position]);
 
                 //imageView.setImageResource(imageId[position]);
                 //buttonListener(btn_call, btn_chat, btn_chat_setting, position);
@@ -223,16 +233,6 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Log.d(TAG, "MyAdapter : instantiateItem");
-
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                }
-            });
-
-            thread.start();
-
 
 
             LinearLayout layout = new LinearLayout(getApplicationContext());
