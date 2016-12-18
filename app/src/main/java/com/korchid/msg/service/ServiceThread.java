@@ -69,7 +69,7 @@ public class ServiceThread extends Thread {
 
             Log.d(TAG, to);
             try{
-                Thread.sleep(10000); //10초씩 쉰다.
+                Thread.sleep(60000); //10초씩 쉰다.
             }catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }

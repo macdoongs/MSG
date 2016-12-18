@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -119,12 +120,15 @@ public class SettingAdapter extends BaseAdapter {
             case SETTING:{
                 setting = (Setting) arrayList.get(idx);
                 Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
+                Toast.makeText(mActivity.getApplicationContext(), setting.getTitle(), Toast.LENGTH_SHORT).show();
 
                 break;
             }
             case MESSAGE_SETTING:{
                 messageSetting = (MessageSetting) arrayList.get(idx);
                 Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle() + messageSetting.getTime());
+                Toast.makeText(mActivity.getApplicationContext(), messageSetting.getTitle(), Toast.LENGTH_SHORT).show();
+
 
                 break;
             }

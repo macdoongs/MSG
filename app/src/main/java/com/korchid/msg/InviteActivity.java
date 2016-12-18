@@ -1,13 +1,18 @@
 package com.korchid.msg;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.database.Cursor;
 import android.telephony.SmsManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +25,7 @@ import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "InviteActivity";
@@ -67,6 +73,35 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         et_nickname = (EditText) findViewById(R.id.et_nickname);
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
+        btn_send.setEnabled(false);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+                String input2 = et_nickname.getText().toString();
+
+                if(input.length() > 0 && input2.length() > 0){
+                    btn_send.setEnabled(true);
+                    btn_send.setBackgroundResource(R.color.colorPrimary);
+                }else{
+                    btn_send.setEnabled(false);
+                    btn_send.setBackgroundResource(R.color.colorTransparent);
+                }
+            }
+        };
+
+        et_phoneNumber.addTextChangedListener(textWatcher);
 
         /*
         ContactUtil contactUtil = new ContactUtil(getApplicationContext());
@@ -104,20 +139,49 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_send:{
-                String nickname = et_nickname.getText().toString();
-                String phoneNumber = et_phoneNumber.getText().toString();
-                String message = "Invite MSG.  http://www.korchid.com/dropbox-release";
+                AlertDialog.Builder builder = new AlertDialog.Builder(InviteActivity.this);
 
-                // SMS Compose
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumber));
-                intent.putExtra("sms_body", message);
-                startActivity(intent);
+                builder.setTitle("재확인");
+                builder.setMessage("초대 메시지를 보내시겠습니까?");
+                builder.setPositiveButton("네!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String nickname = et_nickname.getText().toString();
+                        String phoneNumber = et_phoneNumber.getText().toString();
+                        String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
 
-                /*
-                // SMS Auto-sender
-                SmsManager smsManager =     SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-                */
+
+                        // SMS Compose
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumber));
+                        intent.putExtra("sms_body", message);
+                        startActivity(intent);
+
+/*
+                        // SMS Auto-sender
+                        Intent intent;
+                        SmsManager smsManager = SmsManager.getDefault();
+                        smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+*/
+                        long waitTime = System.currentTimeMillis();
+                        intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+                        intent.putExtra("waitTime", waitTime);
+                        startActivity(intent);
+
+                    }
+                });
+                builder.setNegativeButton("아니오..", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+
+
                 break;
             }
             case R.id.btn_kakaoLink:{

@@ -7,6 +7,8 @@ import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -81,9 +83,41 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
+        btn_login.setEnabled(false);
+
+        // http://egloos.zum.com/killins/v/3008925
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+                String input2 = et_phoneNumber.getText().toString();
+
+                if(input.length() > 0 && input2.length() > 0){
+                    btn_login.setEnabled(true);
+                    btn_login.setBackgroundResource(R.color.colorPrimary);
+                }else{
+                    btn_login.setEnabled(false);
+                }
+            }
+        };
+        et_password.addTextChangedListener(textWatcher);
+
+
 
         btn_findPassword = (Button) findViewById(R.id.btn_findPassword);
         btn_findPassword.setOnClickListener(this);
+
+
     }
 
     @Override

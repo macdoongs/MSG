@@ -1,14 +1,30 @@
 package com.korchid.msg;
 
+import android.content.Intent;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class UserInfoActivity extends AppCompatActivity {
     private static final String TAG = "UserInfoActivity";
 
+    ImageView iv_profile;
+
+    RadioGroup rbtnGroup;
+    RadioButton rbtn_male;
+    RadioButton rbtn_female;
+    RadioButton rbtn_etc;
+
+    Button btn_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +35,66 @@ public class UserInfoActivity extends AppCompatActivity {
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "User Information");
 
+
+        iv_profile = (ImageView) findViewById(R.id.iv_profile);
+        iv_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        rbtnGroup = (RadioGroup) findViewById(R.id.rbtnGroup);
+
+        rbtn_male = (RadioButton) findViewById(R.id.rbtn_male);
+        rbtn_female = (RadioButton) findViewById(R.id.rbtn_female);
+        rbtn_etc = (RadioButton) findViewById(R.id.rbtn_etc);
+
+        btn_register = (Button) findViewById(R.id.btn_register);
+        btn_register.setEnabled(false);
+
+        rbtnGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(!btn_register.isEnabled()) {
+                    btn_register.setBackgroundResource(R.color.colorPrimary);
+                    btn_register.setEnabled(true);
+                }
+            }
+        });
+
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int id = rbtnGroup.getCheckedRadioButtonId();
+
+                switch (id){
+                    case R.id.rbtn_male:{
+                        Toast.makeText(getApplicationContext(), "Male", Toast.LENGTH_SHORT).show();
+
+                        break;
+                    }
+                    case R.id.rbtn_female:{
+                        Toast.makeText(getApplicationContext(), "Female", Toast.LENGTH_SHORT).show();
+
+                        break;
+                    }
+                    case R.id.rbtn_etc:{
+                        Toast.makeText(getApplicationContext(), "Etc", Toast.LENGTH_SHORT).show();
+
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+                }
+
+                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                startActivityForResult(intent, 0);
+
+            }
+        });
 
     }
 
@@ -43,7 +119,37 @@ public class UserInfoActivity extends AppCompatActivity {
                 break;
             }
             case R.id.itemNext:{
-                Toast.makeText(this.getApplicationContext(), "Next!", Toast.LENGTH_SHORT).show();
+                if(btn_register.isEnabled()){
+                    int btn_id = rbtnGroup.getCheckedRadioButtonId();
+
+                    switch (btn_id){
+                        case R.id.rbtn_male:{
+                            Toast.makeText(getApplicationContext(), "Male", Toast.LENGTH_SHORT).show();
+
+                            break;
+                        }
+                        case R.id.rbtn_female:{
+                            Toast.makeText(getApplicationContext(), "Female", Toast.LENGTH_SHORT).show();
+
+                            break;
+                        }
+                        case R.id.rbtn_etc:{
+                            Toast.makeText(getApplicationContext(), "Etc", Toast.LENGTH_SHORT).show();
+
+                            break;
+                        }
+                        default:{
+                            break;
+                        }
+                    }
+
+                    Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                    startActivityForResult(intent, 0);
+                }else{
+                    Toast.makeText(this.getApplicationContext(), "Check radio button", Toast.LENGTH_SHORT).show();
+                }
+                //
+
                 break;
             }
             default:
@@ -52,4 +158,22 @@ public class UserInfoActivity extends AppCompatActivity {
 
         return true;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (resultCode){
+            case RESULT_OK:{
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+
+    }
 }
+
