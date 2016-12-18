@@ -13,7 +13,7 @@ import android.view.View;
 
 public class CustomActionbar {
 
-    public CustomActionbar (AppCompatActivity appCompatActivity, @LayoutRes int resource){
+    public CustomActionbar (AppCompatActivity appCompatActivity, @LayoutRes int resource, String title){
 
         // http://choayo.tistory.com/145
         ActionBar actionBar = appCompatActivity.getSupportActionBar();
@@ -23,8 +23,10 @@ public class CustomActionbar {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
+
+        //actionBar.setDisplayShowTitleEnabled(false);
+        //actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setTitle(title);
 
         // Set custom view layout
         View mCustomView = LayoutInflater.from(appCompatActivity).inflate(resource, null);

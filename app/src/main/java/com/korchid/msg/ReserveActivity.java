@@ -2,6 +2,7 @@ package com.korchid.msg;
 
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -43,7 +44,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Reserve");
 
         btn_polite = (Button) findViewById(R.id.btn_polite);
         btn_polite.setOnClickListener(this);

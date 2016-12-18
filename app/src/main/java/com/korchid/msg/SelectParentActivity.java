@@ -413,6 +413,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
                 //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
                 intent.putExtra("topic", topic[idx]);
+                intent.putExtra("parentName", parent[idx]);
                 startActivity(intent);
             }
         });

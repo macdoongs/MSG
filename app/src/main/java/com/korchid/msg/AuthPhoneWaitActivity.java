@@ -72,9 +72,10 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Auth code");
 
         final String userId = getIntent().getExtras().getString("phoneNumber");
+
         phoneNumber = userId;
 
         smsMessage = "";

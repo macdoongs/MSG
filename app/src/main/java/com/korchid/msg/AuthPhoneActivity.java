@@ -46,7 +46,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Phone Number");
 
 
         // Setting nation code spinner
@@ -79,6 +79,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
         btn_dupCheck.setEnabled(false);
         btn_register.setEnabled(false);
 
+        // http://egloos.zum.com/killins/v/3008925
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

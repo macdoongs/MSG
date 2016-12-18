@@ -46,7 +46,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Profile");
 
         iv_profile = (ImageView) findViewById(R.id.iv_profile);
         btn_upload = (Button) findViewById(R.id.btn_upload);

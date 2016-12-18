@@ -19,6 +19,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
+        <Button
+            android:text="Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_userInfo"
+            android:background="@color/colorPrimary" />
+
         <TextView
             android:id="@+id/userName"
             android:textSize="30sp"

@@ -43,7 +43,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Login");
 
 
         sharedPreferences = getSharedPreferences("login", 0);

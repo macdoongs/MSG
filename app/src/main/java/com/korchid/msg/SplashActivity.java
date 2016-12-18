@@ -1,6 +1,7 @@
 package com.korchid.msg;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,7 +15,7 @@ import android.util.Log;
 public class SplashActivity extends Activity {
     private static final String TAG = "SplashActivity";
 
-    int duration = 0;
+    int duration = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,8 @@ public class SplashActivity extends Activity {
 
         StatusBar statusBar = new StatusBar(this);
 
-        duration = getIntent().getIntExtra("duration", 1000);
+        duration = getIntent().getIntExtra("duration", duration);
+
 
         Handler handler = new Handler();
         // Duration : 2 second

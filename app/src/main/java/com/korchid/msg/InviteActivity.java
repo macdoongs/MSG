@@ -45,7 +45,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Invite");
 
         btn_contactList = (Button) findViewById(R.id.btn_contactList);
         btn_contactList.setOnClickListener(this);

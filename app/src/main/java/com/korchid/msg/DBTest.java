@@ -23,7 +23,7 @@ public class DBTest extends AppCompatActivity {
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "DB Test");
 
         final DBHelper dbHelper = GlobalApplication.getGlobalApplicationContext().getDBHelper();
 

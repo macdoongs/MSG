@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -69,6 +70,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private StatusReceiver statusReceiver;
 
     private String nickname;
+    private String parentName;
     private String count;
     private String title;
     private String message1;
@@ -88,9 +90,14 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
+        Intent intent = getIntent();
+        parentName = intent.getStringExtra("parentName");
+
+
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, parentName);
+
 
         Log.d(TAG, "onCreate");
 
@@ -100,12 +107,14 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
 
 
-        Intent intent = getIntent();
+
         pic = null;
         count = "";
         nickname = "Me";
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
+
+
 
         Log.d(TAG, "Topic : " + title);
 

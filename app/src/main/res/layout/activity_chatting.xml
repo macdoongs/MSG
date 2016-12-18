@@ -8,11 +8,13 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="@color/colorGray"
     >
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -20,14 +22,14 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorWhite">
+            android:layout_height="match_parent">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_height="370dp">
+                android:layout_weight="1"
+                android:layout_height="match_parent">
 
                 <ListView
                     android:id="@+id/lv_message"
@@ -39,9 +41,10 @@
             </LinearLayout>
 
             <LinearLayout
-            android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:orientation="horizontal"
-            android:background="@drawable/layout_border"
+                android:layout_gravity="bottom"
+                android:background="@drawable/layout_round_border"
                 android:layout_height="80dp">
 
                 <Button
@@ -49,7 +52,7 @@
                     android:layout_margin="4dp"
                     android:background="@drawable/plus"
                     android:layout_height="wrap_content"
-                    android:layout_width="46dp" />
+                    android:layout_width="53dp" />
 
                 <EditText
                     android:id="@+id/et_message"
@@ -91,6 +94,6 @@
             </GridLayout>
 
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
 </RelativeLayout>

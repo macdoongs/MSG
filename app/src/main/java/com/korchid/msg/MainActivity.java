@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button btn_reserve;
     private Button btn_temp;
+    private Button btn_userInfo;
 
     private String loginState;
     private int viewId;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_temp = (Button) findViewById(R.id.btn_temp);
         btn_temp.setOnClickListener(this);
 
+        btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
+        btn_userInfo.setOnClickListener(this);
+
 
         // if sharedPreferences.getString value is 0, assign 2th parameter
         Log.d(TAG, "SharedPreference");
@@ -172,6 +176,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             case R.id.btn_temp:{
                 startActivity(new Intent(getApplicationContext(), DBTest.class));
+                break;
+            }
+            case R.id.btn_userInfo:{
+                startActivity(new Intent(getApplicationContext(), UserInfoActivity.class));
                 break;
             }
             default:{

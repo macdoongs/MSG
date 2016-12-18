@@ -46,7 +46,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Join");
 
         phoneNumber = getIntent().getExtras().getString("phoneNumber");
 
