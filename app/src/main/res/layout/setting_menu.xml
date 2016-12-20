@@ -11,45 +11,47 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="10dp"
-        android:padding="5dp" >
+        android:orientation="horizontal">
 
 
         <LinearLayout
-            android:layout_width="0dp"
             android:layout_height="70dp"
-            android:layout_weight="1"
             android:gravity="left"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:layout_width="60dp">
 
 
             <ImageView
                 android:id="@+id/iv_title"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:background="@drawable/mainsetting" />
+                android:background="@drawable/mainsetting"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"/>
+
+            <CheckBox
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/cb_option"
+                android:layout_gravity="center_vertical"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="2.5"
+            android:layout_marginLeft="30dp"
             android:gravity="center_vertical"
-            android:orientation="vertical" >
+            android:orientation="horizontal"
+            android:layout_width="match_parent">
 
 
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
                 android:text="Title"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_gravity="center" />
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>

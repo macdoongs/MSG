@@ -122,20 +122,25 @@ public class UserInfoActivity extends AppCompatActivity {
                 if(btn_register.isEnabled()){
                     int btn_id = rbtnGroup.getCheckedRadioButtonId();
 
+                    Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+
                     switch (btn_id){
                         case R.id.rbtn_male:{
                             Toast.makeText(getApplicationContext(), "Male", Toast.LENGTH_SHORT).show();
 
+                            intent.putExtra("Sex", "Male");
                             break;
                         }
                         case R.id.rbtn_female:{
                             Toast.makeText(getApplicationContext(), "Female", Toast.LENGTH_SHORT).show();
 
+                            intent.putExtra("Sex", "Female");
                             break;
                         }
                         case R.id.rbtn_etc:{
                             Toast.makeText(getApplicationContext(), "Etc", Toast.LENGTH_SHORT).show();
 
+                            intent.putExtra("Sex", "Etc");
                             break;
                         }
                         default:{
@@ -143,7 +148,7 @@ public class UserInfoActivity extends AppCompatActivity {
                         }
                     }
 
-                    Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+
                     startActivityForResult(intent, 0);
                 }else{
                     Toast.makeText(this.getApplicationContext(), "Check radio button", Toast.LENGTH_SHORT).show();

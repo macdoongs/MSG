@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
         btn_next = (Button) findViewById(R.id.btn_next);
         btn_next.setOnClickListener(this);
 

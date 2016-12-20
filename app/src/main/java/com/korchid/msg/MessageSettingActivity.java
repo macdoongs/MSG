@@ -9,7 +9,10 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +30,8 @@ public class MessageSettingActivity extends AppCompatActivity {
     private String nickname;
     private String title;
 
-   ArrayList<Object> settingArrayList;
+    ArrayList<Object> settingArrayList;
+    public ArrayList<String> messageArrayList;
     private SettingAdapter settingAdapter;
 
     private MessageSetting.Type type;
@@ -126,17 +130,40 @@ public class MessageSettingActivity extends AppCompatActivity {
         thread.start();
 
         ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
+        lv_setting.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // parent는 AdapterView의 속성의 모두 사용 할 수 있다.
+                String tv = (String)adapterView.getAdapter().getItem(i);
+                Toast.makeText(getApplicationContext(), tv, Toast.LENGTH_SHORT).show();
+
+                // view는 클릭한 Row의 view를 Object로 반환해 준다.
+//                TextView tv_view = (TextView)view.findViewById(R.id.tv_row_title);
+//                tv_view.setText("바꿈");
+                for(int n=0; n<5; n++){
+                }
+
+                // Position 은 클릭한 Row의 position 을 반환해 준다.
+                Toast.makeText(getApplicationContext(), "" + i, Toast.LENGTH_SHORT).show();
+                // l_Position 은 클릭한 Row의 long type의 position 을 반환해 준다.
+                Toast.makeText(getApplicationContext(), "l = " + l, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         num = 0;
 
         messageSettingHandler = new MessageSettingHandler();
 
-        for(int i=0; i<settingArrayList.size(); i++){
-            Log.d(TAG, "List " + i + "th : " + settingArrayList.get(i).toString());
-        }
+
 
 
         settingAdapter = new SettingAdapter(MessageSettingActivity.this,  settingArrayList, SettingAdapter.Type.MESSAGE_SETTING);
+
 
         lv_setting.setAdapter(settingAdapter);
 
@@ -210,6 +237,7 @@ public class MessageSettingActivity extends AppCompatActivity {
 
     public void listUpdate(){
         Log.d(TAG, "listUpdate");
+
         settingAdapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
     }
 }

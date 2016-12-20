@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ public class SettingAdapter extends BaseAdapter {
 
     private ArrayList<Setting> settingArray;
     private ArrayList<MessageSetting> messageSettingArrayList;
+    private ArrayList<String> messageArrayList;
     private ArrayList<Object> arrayList;
 
     private Setting setting;
@@ -38,10 +41,15 @@ public class SettingAdapter extends BaseAdapter {
 
     private Type type;
 
+    CheckBox cb_option;
+
+
     public SettingAdapter(Activity activity, ArrayList<Object> settingArray, Type type) {
         this.mActivity = activity;
         this.arrayList = settingArray;
         this.type = type;
+
+        messageArrayList = new ArrayList<>();
 
         mInflater = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -49,7 +57,6 @@ public class SettingAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-
 
         return arrayList.size();
     }
@@ -74,6 +81,8 @@ public class SettingAdapter extends BaseAdapter {
 
         ImageView iv_title = (ImageView)convertView.findViewById(R.id.iv_title);
 
+        cb_option = (CheckBox) convertView.findViewById(R.id.cb_option);
+
         TextView tv_title = (TextView)convertView.findViewById(R.id.tv_title);
 
         LinearLayout layout_view =  (LinearLayout)convertView.findViewById(R.id.ll_container);
@@ -92,11 +101,14 @@ public class SettingAdapter extends BaseAdapter {
             setting = (Setting) arrayList.get(position);
             Log.d(TAG, "Setting : " + setting.getTitle());
             tv_title.setText(setting.getTitle());
+            cb_option.setVisibility(View.GONE);
             resourceId =  mActivity.getResources().getIdentifier( setting.getPicture(), "drawable", mActivity.getPackageName());
         }else if(type == Type.MESSAGE_SETTING){
             messageSetting = (MessageSetting) arrayList.get(position);
             Log.d(TAG, "Message Setting : " + messageSetting.getTitle());
             tv_title.setText(messageSetting.getTitle());
+            cb_option.setVisibility(View.VISIBLE);
+            cb_option.setChecked(false);
             resourceId =  mActivity.getResources().getIdentifier( messageSetting.getPicture(), "drawable", mActivity.getPackageName());
         }
 
@@ -120,15 +132,24 @@ public class SettingAdapter extends BaseAdapter {
             case SETTING:{
                 setting = (Setting) arrayList.get(idx);
                 Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
-                Toast.makeText(mActivity.getApplicationContext(), setting.getTitle(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mActivity.getApplicationContext(), setting.getTitle(), Toast.LENGTH_SHORT).show();
 
                 break;
             }
             case MESSAGE_SETTING:{
                 messageSetting = (MessageSetting) arrayList.get(idx);
                 Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle() + messageSetting.getTime());
-                Toast.makeText(mActivity.getApplicationContext(), messageSetting.getTitle(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mActivity.getApplicationContext(), messageSetting.getTitle(), Toast.LENGTH_SHORT).show();
 
+                Log.d(TAG, "Size : " + messageArrayList.size());
+
+
+
+                if(messageArrayList.size() < 5){
+                    String reservationMessage = messageSetting.getTitle() + "/" + messageSetting.getTime();
+                    messageArrayList.add(reservationMessage);
+                    cb_option.setChecked(true);
+                }
 
                 break;
             }
