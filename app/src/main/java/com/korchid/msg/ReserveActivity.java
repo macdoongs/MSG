@@ -1,6 +1,9 @@
 package com.korchid.msg;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +18,10 @@ import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.HashMap;
 
 public class ReserveActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     private static final String TAG = "ReserveActivity";
@@ -31,6 +37,15 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
     private Button btn_inPerson;
     private Button btn_reserve;
 
+    private TextView tv_message1;
+    private TextView tv_message2;
+    private TextView tv_message3;
+    private TextView tv_message4;
+    private TextView tv_message5;
+
+
+    private String message;
+    private String messageData;
     private int viewId;
     private int weekNum;
     private int times;
@@ -84,6 +99,13 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+
+        tv_message1 = (TextView) findViewById(R.id.tv_message1);
+        tv_message2 = (TextView) findViewById(R.id.tv_message2);
+        tv_message3 = (TextView) findViewById(R.id.tv_message3);
+        tv_message4 = (TextView) findViewById(R.id.tv_message4);
+        tv_message5 = (TextView) findViewById(R.id.tv_message5);
+
     }
 
     @Override
@@ -94,13 +116,13 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btn_polite:{
                 Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
                 intent.putExtra("Type", MessageSetting.Type.POLITE);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
                 break;
             }
             case R.id.btn_impolite:{
                 Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
                 intent.putExtra("Type", MessageSetting.Type.IMPOLITE);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 break;
             }
             case R.id.btn_inPerson:{
@@ -110,11 +132,81 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
             case R.id.btn_reserve:{
-                weekNum = np_week.getValue();
-                times = np_number.getValue();
+                final String weekNum = "" + np_week.getValue();
+                final String times = "" + np_number.getValue();
+                final String enable = "" + sw_enable.isEnabled();
+                final String userId = "";
 
-                GlobalApplication.getGlobalApplicationContext().setWeekNum(weekNum);
-                GlobalApplication.getGlobalApplicationContext().setTimes(times);
+                Log.d(TAG, "enable : " + enable);
+
+
+                String stringUrl = "https://www.korchid.com/user-info";
+                HashMap<String, String> params = new HashMap<>();
+                params.put("enable", enable);
+                params.put("weekNum", weekNum);
+                params.put("times", times);
+                params.put("message", messageData);
+
+
+                Handler httpHandler = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        Log.d(TAG, "handleMessage");
+
+                        String response = msg.getData().getString("response");
+
+                        String[] line = response.split("\n");
+
+                        //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
+
+                        if (line[0].equals("OK")) {
+                            Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+
+                            // http://mommoo.tistory.com/38
+                            // Use Environmental variable 'SharedPreference'
+                            SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", 0);
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                            editor.putBoolean("USER_INFO", true);
+                            editor.putString("WEEK_NUMBER", weekNum);
+                            editor.putString("MESSAGE", messageData);
+                            editor.putString("TIMES", times);
+                            editor.putString("enable", enable);
+
+                            editor.commit(); // Apply file
+
+                            /*
+                            // Delete preference value
+                            // 1. Remove "key" data
+                            editor.remove("key");
+
+                            // 2. Remove xml data
+                            editor.clear();
+                            */
+
+                            // if sharedPreferences.getString value is 0, assign 2th parameter
+                            Log.d(TAG, "SharedPreference");
+                            Log.d(TAG, "USER_INFO : " + sharedPreferences.getBoolean("USER_INFO", false));
+                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString("MESSAGE", ""));
+                            Log.d(TAG, "TIMES : " + sharedPreferences.getString("TIMES", ""));
+                            Log.d(TAG, "enable : " + sharedPreferences.getString("enable", "false"));
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                };
+
+
+
+                HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
+                httpPost.start();
+
+
+
+
+                //GlobalApplication.getGlobalApplicationContext().setWeekNum(weekNum);
+                //GlobalApplication.getGlobalApplicationContext().setTimes(times);
 
                 Log.d(TAG, "Week : " + weekNum + ", times : " + times);
                 finish();
@@ -124,6 +216,73 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
         }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode){
+            case RESULT_OK:{
+                switch (requestCode){
+                    case 0:{//polite
+                        messageData = data.getStringExtra("message");
+                        String[] messageReserved = messageData.split("/");
+                        Log.d(TAG, "messageReserved length : " + messageReserved.length);
+                        tv_message1.setText("");
+                        tv_message2.setText("");
+                        tv_message3.setText("");
+                        tv_message4.setText("");
+                        tv_message5.setText("");
+                        for(int i=0; i<messageReserved.length; i++){
+                            switch (i){
+                                case 0:{
+                                    tv_message1.setText(messageReserved[i]);
+                                    break;
+                                }
+                                case 1:{
+                                    tv_message2.setText(messageReserved[i]);
+                                    break;
+                                }
+                                case 2:{
+                                    tv_message3.setText(messageReserved[i]);
+                                    break;
+                                }
+                                case 3:{
+                                    tv_message4.setText(messageReserved[i]);
+                                    break;
+                                }
+                                case 4:{
+                                    tv_message5.setText(messageReserved[i]);
+                                    break;
+                                }
+                                default:{
+                                 break;
+                                }
+                            }
+
+                        }
+
+                        break;
+                    }
+                    case 1:{//impolite
+
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+                }
+                break;
+            }
+            case RESULT_CANCELED:{
+
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+
 
     }
 
@@ -152,5 +311,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             //do stuff when Switch if OFF
         }
     }
+
+
 
 }

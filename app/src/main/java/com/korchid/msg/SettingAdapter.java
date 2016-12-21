@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -40,14 +41,20 @@ public class SettingAdapter extends BaseAdapter {
     private Activity mActivity;
 
     private Type type;
+    private int size;
 
+    CheckableLinearLayout ll_container;
     CheckBox cb_option;
+    ImageView iv_title;
+    TextView tv_title;
 
 
     public SettingAdapter(Activity activity, ArrayList<Object> settingArray, Type type) {
         this.mActivity = activity;
         this.arrayList = settingArray;
         this.type = type;
+
+        this.size = 0;
 
         messageArrayList = new ArrayList<>();
 
@@ -79,13 +86,13 @@ public class SettingAdapter extends BaseAdapter {
             convertView = mInflater.inflate(resource, parent, false);
         }
 
-        ImageView iv_title = (ImageView)convertView.findViewById(R.id.iv_title);
+        iv_title = (ImageView)convertView.findViewById(R.id.iv_title);
 
         cb_option = (CheckBox) convertView.findViewById(R.id.cb_option);
 
-        TextView tv_title = (TextView)convertView.findViewById(R.id.tv_title);
+        tv_title = (TextView)convertView.findViewById(R.id.tv_title);
 
-        LinearLayout layout_view =  (LinearLayout)convertView.findViewById(R.id.ll_container);
+        ll_container =  (CheckableLinearLayout)convertView.findViewById(R.id.ll_container);
 
         /*
         http://ldelight.tistory.com/entry/Android-%EB%AC%B8%EC%9E%90%EC%97%B4%EB%A1%9C-Resource-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0
@@ -115,13 +122,23 @@ public class SettingAdapter extends BaseAdapter {
 
         iv_title.setBackgroundResource(resourceId);
 
-        layout_view.setOnClickListener(new View.OnClickListener(){
+        ll_container.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 goIntent(position);
             }
         });
+/*
+        cb_option.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    ((MessageSetting) compoundButton.getParent()).setCheck(true);
+                }
+            }
+        });
 
+*/
         return convertView;
 
     }
@@ -130,26 +147,51 @@ public class SettingAdapter extends BaseAdapter {
         Log.d(TAG, "goIntent");
         switch (type){
             case SETTING:{
+                Log.d(TAG, "SETTING");
                 setting = (Setting) arrayList.get(idx);
-                Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
+                //Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
                 //Toast.makeText(mActivity.getApplicationContext(), setting.getTitle(), Toast.LENGTH_SHORT).show();
 
                 break;
             }
             case MESSAGE_SETTING:{
+                Log.d(TAG, "MESSAGE_SETTING");
                 messageSetting = (MessageSetting) arrayList.get(idx);
-                Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle() + messageSetting.getTime());
+
+                //Log.d(TAG, "idx : " + idx + " " + messageSetting.getTitle() + messageSetting.getTime());
                 //Toast.makeText(mActivity.getApplicationContext(), messageSetting.getTitle(), Toast.LENGTH_SHORT).show();
 
-                Log.d(TAG, "Size : " + messageArrayList.size());
+                //Log.d(TAG, "Size : " + messageArrayList.size());
+
+
+                ll_container.setChecked(true);
+
+
+                if(size < 5){
+                    Log.d(TAG, "Check : " + ((MessageSetting) arrayList.get(idx)).isCheck());
+
+
+                    ((MessageSetting) arrayList.get(idx)).setCheck(true);
+                    Log.d(TAG, "after Check : " + ((MessageSetting) arrayList.get(idx)).isCheck());
+
+ //                   messageArrayList.get(messageArrayList.lastIndexOf(messageArrayList));
+
+                    //messageSetting.setCheck(true);
+                }
 
 
 
                 if(messageArrayList.size() < 5){
-                    String reservationMessage = messageSetting.getTitle() + "/" + messageSetting.getTime();
-                    messageArrayList.add(reservationMessage);
+
+
+//                    String reservationMessage = messageSetting.getTitle() + "/" + messageSetting.getTime();
+//                    messageArrayList.add(reservationMessage);
+
                     cb_option.setChecked(true);
+
                 }
+
+                size++;
 
                 break;
             }

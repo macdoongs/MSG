@@ -8,9 +8,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -133,14 +135,19 @@ public class MessageSettingActivity extends AppCompatActivity {
         lv_setting.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG, "onItemSelected : " + i);
                 // parent는 AdapterView의 속성의 모두 사용 할 수 있다.
                 String tv = (String)adapterView.getAdapter().getItem(i);
+                Log.d(TAG, "tv : " + tv);
                 Toast.makeText(getApplicationContext(), tv, Toast.LENGTH_SHORT).show();
+
+
 
                 // view는 클릭한 Row의 view를 Object로 반환해 준다.
 //                TextView tv_view = (TextView)view.findViewById(R.id.tv_row_title);
 //                tv_view.setText("바꿈");
                 for(int n=0; n<5; n++){
+
                 }
 
                 // Position 은 클릭한 Row의 position 을 반환해 준다.
@@ -167,23 +174,62 @@ public class MessageSettingActivity extends AppCompatActivity {
 
         lv_setting.setAdapter(settingAdapter);
 
+
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_content_complete, menu);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //ActionBar 메뉴 클릭에 대한 이벤트 처리
+        Log.d(TAG, "onOptionsItemSelected");
 
         int id = item.getItemId();
+
         switch (id){
-            case android.R.id.home:
+            case android.R.id.home: {
                 this.finish();
                 break;
+            }
+            case R.id.itemComplete:{
+                Intent intent = new Intent();
+
+
+                Log.d(TAG, "size : " + settingArrayList.size());
+                String result = "";
+                for(int i = 0; i<settingArrayList.size(); i++){
+                    MessageSetting messageSetting = (MessageSetting) settingArrayList.get(i);
+
+
+
+                    Log.d(TAG, "check : " + messageSetting.isCheck());
+                    if(messageSetting.isCheck()){
+                        result += messageSetting.getTitle() + "/";
+                        Log.d(TAG, messageSetting.getTitle());
+                    }
+
+                }
+
+                intent.putExtra("message", result);
+                setResult(RESULT_OK, intent);
+
+                this.finish();
+                break;
+            }
             default:
                 break;
         }
 
         return true;
     }
+
 
     class MessageSettingHandler extends Handler{
         ArrayList messageSettingArrayList;
@@ -210,7 +256,7 @@ public class MessageSettingActivity extends AppCompatActivity {
                 case POLITE:{
                     if(typeNum.equals("0")){
                         Log.d(TAG, "Add typeNum 0");
-                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
+                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time, false));
                         Log.d(TAG, "" + settingArrayList.size());
                     }
                     break;
@@ -218,7 +264,7 @@ public class MessageSettingActivity extends AppCompatActivity {
                 case IMPOLITE:{
                     if(typeNum.equals("1")){
                         Log.d(TAG, "Add typeNum 1");
-                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time));
+                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time, false));
                     }
                     break;
                 }

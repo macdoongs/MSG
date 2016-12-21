@@ -11,13 +11,23 @@ public class MessageSetting extends Setting {
 
     private Type type;
     private String time;
+    private boolean check;
 
-
-    public MessageSetting(int id, String picture, Type type, String title, String time) {
+    public MessageSetting(int id, String picture, Type type, String title, String time, boolean check) {
         super(id, picture, title);
 
         this.type = type;
         this.time = time;
+        this.check = check;
+    }
+
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 
     public Type getType() {

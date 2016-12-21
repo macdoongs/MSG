@@ -119,25 +119,31 @@
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView15" />
+                    android:id="@+id/tv_message1" />
 
                 <TextView
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView14" />
+                    android:id="@+id/tv_message2" />
 
                 <TextView
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView13" />
+                    android:id="@+id/tv_message3" />
 
                 <TextView
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView12" />
+                    android:id="@+id/tv_message4" />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_message5" />
 
             </LinearLayout>
 
