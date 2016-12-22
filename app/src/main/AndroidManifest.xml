@@ -65,7 +65,8 @@
         <activity android:name=".LoginPhoneActivity" />
         <activity android:name=".MenuTest" />
         <activity android:name=".UserInfoActivity" />
-        <activity android:name=".FindPasswordActivity"></activity>
+        <activity android:name=".FindPasswordActivity" />
+        <activity android:name=".InPersonMessageSettingActivity"></activity>
     </application>
 
 </manifest>

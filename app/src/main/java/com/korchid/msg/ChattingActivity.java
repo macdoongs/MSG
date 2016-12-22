@@ -50,6 +50,7 @@ import com.korchid.msg.service.MqttService.ConnectionStatus;
  * Created by mac0314 on 2016-11-28.
  */
 
+// Chatting between parent and child
 public class ChattingActivity extends AppCompatActivity implements View.OnClickListener, MessageHandler, StatusHandler {
     private static final String TAG = "ChattingActivity";
 

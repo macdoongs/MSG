@@ -22,6 +22,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+// Modify and register profile image
 public class ProfileActivity  extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "ProfileActivity";
     private static final int PICK_FROM_CAMERA = 0;

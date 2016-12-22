@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 
+// SMS authentification - request sms message
 public class AuthPhoneActivity extends AppCompatActivity{
     private static String TAG = "AuthPhoneActivity";
     private static final int NUMBER_MIN_LENGTH = 6;

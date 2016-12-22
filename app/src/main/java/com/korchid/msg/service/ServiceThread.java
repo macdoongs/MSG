@@ -4,14 +4,18 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.korchid.msg.HttpPost;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by mac0314 on 2016-12-05.
  */
 
 // http://twinw.tistory.com/50
+// Message reservation time check thread
 public class ServiceThread extends Thread {
     private static final String TAG = "ServiceThread";
     Handler handler;
@@ -59,6 +63,16 @@ public class ServiceThread extends Thread {
                 }
 
             }catch (Exception e){
+                // Error handling sample
+                String strUrl = "https://www.korchid.com/msg-error";
+                HashMap<String, String> params = new HashMap<>();
+                params.put("userId", "");
+                params.put("log", "Log : " + e.getMessage());
+
+
+                HttpPost httpPost = new HttpPost(strUrl, params, new Handler());
+                httpPost.start();
+
                 Log.e(TAG, e.getMessage());
             }
 

@@ -38,6 +38,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import static com.korchid.msg.R.id.nav_header_container;
 
+// Select parent that user want to chat
 public class SelectParentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "SelectParentActivity";
 

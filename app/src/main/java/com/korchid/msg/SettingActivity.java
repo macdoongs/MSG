@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * Created by mac0314 on 2016-11-28.
  */
 
+// Main setting
 public class SettingActivity extends AppCompatActivity {
     private static final String TAG = "SettingActivity";
 

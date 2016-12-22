@@ -10,6 +10,7 @@ import android.view.WindowManager;
  * Created by mac0314 on 2016-12-17.
  */
 
+// Depending device version - different status bar color
 public class StatusBar {
     public StatusBar(Activity activity) {
 

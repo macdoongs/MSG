@@ -15,6 +15,7 @@ import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// Wait connecting parent and send kakao link
 public class KakaoLinkActivity extends AppCompatActivity {
     private static final String TAG = "KakaoLinkActivity";
 

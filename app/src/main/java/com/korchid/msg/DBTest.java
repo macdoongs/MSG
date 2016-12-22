@@ -12,6 +12,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+// sqlite testing page
 public class DBTest extends AppCompatActivity {
     private static final String TAG = "DBTest";
 

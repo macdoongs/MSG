@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
  * Created by mac0314 on 2016-12-21.
  */
 
+// For checkbox - listview interworking
 public class CheckableLinearLayout extends LinearLayout implements Checkable{
     private static final String TAG = "CheckableLinearLayout";
 

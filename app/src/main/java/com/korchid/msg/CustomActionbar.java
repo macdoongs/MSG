@@ -11,6 +11,7 @@ import android.view.View;
  * Created by mac0314 on 2016-12-17.
  */
 
+
 public class CustomActionbar {
 
     public CustomActionbar (AppCompatActivity appCompatActivity, @LayoutRes int resource, String title){
@@ -18,6 +19,7 @@ public class CustomActionbar {
         // http://choayo.tistory.com/145
         ActionBar actionBar = appCompatActivity.getSupportActionBar();
         if(resource == R.layout.actionbar_main){
+            // No actionbar menu and Only logo image
             actionBar.setDisplayHomeAsUpEnabled(false);
         }else{
             actionBar.setDisplayHomeAsUpEnabled(true);

@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+// Setting user information
 public class UserInfoActivity extends AppCompatActivity {
     private static final String TAG = "UserInfoActivity";
 

@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
+// Register phone number and password
 public class JoinPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "JoinPhoneActivity";
 

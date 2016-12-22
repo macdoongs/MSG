@@ -121,24 +121,28 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (viewId){
             case R.id.btn_contactList:{
+                // Show phone contact list
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                 startActivityForResult(intent, 0);
                 break;
             }
             case R.id.btn_inviteParent:{
+                // TODO save role
                 tv_role.setText("Invite Parent.");
                 btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
                 btn_inviteChild.setBackgroundResource(R.color.colorTransparent);
                 break;
             }
             case R.id.btn_inviteChild:{
+                // TODO save role
                 tv_role.setText("Invite Child.");
                 btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
                 btn_inviteChild.setBackgroundResource(R.color.colorPrimary);
                 break;
             }
             case R.id.btn_send:{
+                // Send invitation SMS message
                 AlertDialog.Builder builder = new AlertDialog.Builder(InviteActivity.this);
 
                 builder.setTitle("재확인");
@@ -147,16 +151,17 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String nickname = et_nickname.getText().toString();
-                        String phoneNumber = et_phoneNumber.getText().toString();
+                        String parentPhoneNumber = et_phoneNumber.getText().toString();
                         String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
 
 
                         // SMS Compose
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumber));
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + parentPhoneNumber));
                         intent.putExtra("sms_body", message);
                         startActivity(intent);
 
 /*
+                        // TODO convert function
                         // SMS Auto-sender
                         Intent intent;
                         SmsManager smsManager = SmsManager.getDefault();
@@ -164,6 +169,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 */
                         long waitTime = System.currentTimeMillis();
                         intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+                        intent.putExtra("parentPhoneNumber", parentPhoneNumber);
                         intent.putExtra("waitTime", waitTime);
                         startActivity(intent);
 
@@ -185,6 +191,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_kakaoLink:{
+                // Wait to connect parent, child and send kakao link
                 Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
                 startActivity(intent);
                 break;

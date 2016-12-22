@@ -10,6 +10,7 @@ import android.util.Log;
  * Created by mac0314 on 2016-12-03.
  */
 
+// SQLite helper
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DBHelper";
 

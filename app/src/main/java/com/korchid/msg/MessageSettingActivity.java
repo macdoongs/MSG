@@ -27,6 +27,7 @@ import java.util.ArrayList;
  * Created by mac0314 on 2016-11-30.
  */
 
+// Setting - Reservation message
 public class MessageSettingActivity extends AppCompatActivity {
     private static final String TAG = "MessageSettingActivity";
     private String nickname;

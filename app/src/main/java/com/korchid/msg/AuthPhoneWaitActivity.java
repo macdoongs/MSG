@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// Wait sms message
 public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "AuthPhoneWaitActivity";
     private static final String sms_token = "dNb4wEIZKv8:APA91bGwcxOlb-_kLZCbNzR6GVxTh9CW7Hb8mnTmo1iBp_Vfr0UEWe3ZsLL6vv02bMMLpi27hL6A57dCRJaFG5Cy4k-kc6QN8ecoT5Uf8V4jzT6J5qkBdZ8ZQoC4O-WgJt566NL-5AnE";

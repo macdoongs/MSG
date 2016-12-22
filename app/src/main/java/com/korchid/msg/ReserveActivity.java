@@ -23,11 +23,13 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
+// Register reservation message and the number of sending
 public class ReserveActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     private static final String TAG = "ReserveActivity";
     public static final int TOTAL_WEEK = 7;
 
     private Switch sw_enable;
+    private Switch sw_alert;
 
     private NumberPicker np_week;
     private NumberPicker np_number;
@@ -50,7 +52,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
     private int weekNum;
     private int times;
     private Boolean isEnable;
-
+    private Boolean isAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,11 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         sw_enable = (Switch) findViewById(R.id.sw_enable);
         if (sw_enable != null) {
             sw_enable.setOnCheckedChangeListener(this);
+        }
+
+        sw_alert = (Switch) findViewById(R.id.sw_alert);
+        if(sw_alert != null){
+            sw_alert.setOnCheckedChangeListener(this);
         }
 
         np_week = (NumberPicker) findViewById(R.id.np_week);
@@ -122,13 +129,14 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btn_impolite:{
                 Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
                 intent.putExtra("Type", MessageSetting.Type.IMPOLITE);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 0);
                 break;
             }
             case R.id.btn_inPerson:{
-                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), InPersonMessageSettingActivity.class);
                 intent.putExtra("Type", MessageSetting.Type.IN_PERSON);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
+
                 break;
             }
             case R.id.btn_reserve:{
@@ -302,14 +310,41 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
-    public void onCheckedChanged(CompoundButton buttonView, boolean isEnable) {
-        Toast.makeText(this, "The Switch is " + (isEnable ? "on" : "off"),
-                Toast.LENGTH_SHORT).show();
-        if(isEnable) {
-            //do stuff when Switch is ON
-        } else {
-            //do stuff when Switch if OFF
+    public void onCheckedChanged(CompoundButton buttonView, boolean isSWOn) {
+        int swId = buttonView.getId();
+
+        switch (swId){
+            case R.id.sw_enable:{
+                this.isEnable = isSWOn;
+                Toast.makeText(this, "The sw_enable is " + (isEnable ? "on" : "off"),
+                        Toast.LENGTH_SHORT).show();
+                if(isEnable) {
+                    //do stuff when Switch is ON
+                } else {
+                    //do stuff when Switch if OFF
+                }
+
+                break;
+            }
+            case R.id.sw_alert: {
+                this.isAlert = isSWOn;
+                Toast.makeText(this, "The sw_alert is " + (isEnable ? "on" : "off"),
+                        Toast.LENGTH_SHORT).show();
+                if(isEnable) {
+                    //do stuff when Switch is ON
+                } else {
+                    //do stuff when Switch if OFF
+                }
+
+                break;
+            }
+            default:{
+                break;
+            }
         }
+
+
+
     }
 
 

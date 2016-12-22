@@ -71,6 +71,7 @@ import static android.content.Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT;
 // https://github.com/dirkmoors/MqttService
 // http://dalelane.co.uk/blog/?p=1599
 
+// MQTT chatting
 public class MqttService extends Service implements IMqttCallback
 {
     private static final String TAG = "MqttService";

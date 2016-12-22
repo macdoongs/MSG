@@ -36,6 +36,12 @@
                 android:id="@+id/sw_enable"
                 android:layout_width="150dp" />
 
+            <Switch
+                android:text="Enable alert"
+                android:layout_height="wrap_content"
+                android:id="@+id/sw_alert"
+                android:layout_width="150dp" />
+
             <TextView
                 android:text="Take off"
                 android:layout_width="match_parent"

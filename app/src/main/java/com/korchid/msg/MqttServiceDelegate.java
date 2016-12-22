@@ -12,6 +12,8 @@ import com.korchid.msg.service.MqttService.ConnectionStatus;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// MQTT chatting
 public class MqttServiceDelegate
 {
 	private static final String TAG = "MqttServiceDelegate";
