@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_login.setOnClickListener(this);
 
         Intent intent = new Intent(this, SplashActivity.class);
+        intent.putExtra("USER_ID_NUM", sharedPreferences.getString("USER_ID_NUM", "0"));
         loginState = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
         if(loginState.equals("LOGIN")){
             btn_join.setVisibility(View.GONE);
@@ -213,10 +214,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
 
                 if(btn_login.getText().toString().equals("Login")){
-                    Log.d(TAG, "0");
+                    //Log.d(TAG, "0");
                     startActivityForResult(intent, 0);
                 }else{
-                    Log.d(TAG, "1");
+                    //Log.d(TAG, "1");
                     startActivityForResult(intent, 1);
                 }
                 break;

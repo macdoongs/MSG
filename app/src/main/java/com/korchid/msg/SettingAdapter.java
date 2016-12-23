@@ -2,6 +2,7 @@ package com.korchid.msg;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
@@ -151,6 +152,32 @@ public class SettingAdapter extends BaseAdapter {
                 setting = (Setting) arrayList.get(idx);
                 //Log.d(TAG, "idx : " + idx + " " + setting.getTitle());
                 //Toast.makeText(mActivity.getApplicationContext(), setting.getTitle(), Toast.LENGTH_SHORT).show();
+
+                switch (idx){
+                    case 0:{
+                        Intent intent = new Intent(mActivity, ReserveActivity.class);
+                        mActivity.startActivityForResult(intent, 0);
+
+                        break;
+                    }
+                    case 1:{
+                        Intent intent = new Intent(mActivity, InviteActivity.class);
+                        mActivity.startActivityForResult(intent, 0);
+
+                        break;
+                    }
+                    case 2:{
+
+                        break;
+                    }
+                    case 3:{
+                        mActivity.finish();
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+                }
 
                 break;
             }

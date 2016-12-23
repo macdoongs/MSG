@@ -236,6 +236,8 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 //GlobalApplication.getGlobalApplicationContext().setTimes(times);
 
                 Log.d(TAG, "Week : " + weekNum + ", times : " + times);
+                Intent intent = new Intent();
+                setResult(RESULT_OK);
                 finish();
                 break;
             }
