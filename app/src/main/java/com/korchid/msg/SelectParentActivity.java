@@ -69,10 +69,11 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         Log.d(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
-
-
-
         setContentView(R.layout.activity_home);
+
+        // Remove previous activity
+        MainActivity mainActivity = (MainActivity) MainActivity.activity;
+        mainActivity.finish();
 
 /*
         getLayoutInflater().inflate(R.layout.nav_header_main, null);

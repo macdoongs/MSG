@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_polite"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorTransparent" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_impolite"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorTransparent" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_inPerson"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorTransparent" />
             </LinearLayout>
 
             <LinearLayout
@@ -171,7 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_reserve"
-                android:background="@color/colorTransparent" />
+                android:background="@color/colorPrimary" />
 
         </LinearLayout>
 

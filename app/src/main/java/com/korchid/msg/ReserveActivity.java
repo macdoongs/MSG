@@ -51,6 +51,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
     private int viewId;
     private int weekNum;
     private int times;
+    private int textNum;
     private Boolean isEnable;
     private Boolean isAlert;
 
@@ -65,16 +66,18 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
         btn_polite = (Button) findViewById(R.id.btn_polite);
         btn_polite.setOnClickListener(this);
+        btn_polite.setEnabled(false);
 
         btn_impolite = (Button) findViewById(R.id.btn_impolite);
         btn_impolite.setOnClickListener(this);
+        btn_impolite.setEnabled(false);
 
         btn_inPerson = (Button) findViewById(R.id.btn_inPerson);
         btn_inPerson.setOnClickListener(this);
+        btn_inPerson.setEnabled(false);
 
         btn_reserve = (Button) findViewById(R.id.btn_reserve);
         btn_reserve.setOnClickListener(this);
-
 
         sw_enable = (Switch) findViewById(R.id.sw_enable);
         if (sw_enable != null) {
@@ -140,6 +143,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
             case R.id.btn_reserve:{
+
                 SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -260,7 +264,6 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                             switch (i){
                                 case 0:{
                                     tv_message1.setText(messageReserved[i]);
-
                                     break;
                                 }
                                 case 1:{
@@ -336,8 +339,20 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                         Toast.LENGTH_SHORT).show();
                 if(isSWOn) {
                     //do stuff when Switch is ON
+                    btn_polite.setEnabled(true);
+                    btn_polite.setBackgroundResource(R.color.colorPrimary);
+                    btn_impolite.setEnabled(true);
+                    btn_impolite.setBackgroundResource(R.color.colorPrimary);
+                    btn_inPerson.setEnabled(true);
+                    btn_inPerson.setBackgroundResource(R.color.colorPrimary);
                 } else {
-                    //do stuff when Switch if OFF
+                    //do stuff when Switch is OFF
+                    btn_polite.setEnabled(false);
+                    btn_polite.setBackgroundResource(R.color.colorTransparent);
+                    btn_impolite.setEnabled(false);
+                    btn_impolite.setBackgroundResource(R.color.colorTransparent);
+                    btn_inPerson.setEnabled(false);
+                    btn_inPerson.setBackgroundResource(R.color.colorTransparent);
                 }
 
                 break;

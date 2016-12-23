@@ -1,10 +1,14 @@
 package com.korchid.msg;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import java.util.HashMap;
 
 // Setting user information
 public class UserInfoActivity extends AppCompatActivity {
@@ -26,6 +32,10 @@ public class UserInfoActivity extends AppCompatActivity {
     RadioButton rbtn_etc;
 
     Button btn_register;
+
+    String userId = "";
+    String profile = "/";
+    String sex = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +83,17 @@ public class UserInfoActivity extends AppCompatActivity {
                 switch (id){
                     case R.id.rbtn_male:{
                         Toast.makeText(getApplicationContext(), "Male", Toast.LENGTH_SHORT).show();
-
+                        sex = "Male";
                         break;
                     }
                     case R.id.rbtn_female:{
                         Toast.makeText(getApplicationContext(), "Female", Toast.LENGTH_SHORT).show();
-
+                        sex = "Female";
                         break;
                     }
                     case R.id.rbtn_etc:{
                         Toast.makeText(getApplicationContext(), "Etc", Toast.LENGTH_SHORT).show();
-
+                        sex = "Etc";
                         break;
                     }
                     default:{
@@ -91,12 +101,67 @@ public class UserInfoActivity extends AppCompatActivity {
                     }
                 }
 
+                SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+
+                userId = sharedPreferences.getString("USER_ID_NUM", "");
+
+                String stringUrl = "https://www.korchid.com/msg-user-info";
+                HashMap<String, String> params = new HashMap<>();
+                params.put("userId", userId);
+                params.put("profile", profile);
+                params.put("sex", sex);
+
+                Handler httpHandler = new Handler();
+
+                HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
+                httpPost.start();
+
                 Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
                 startActivityForResult(intent, 0);
 
             }
         });
 
+    }
+
+
+    class httpHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            String response = msg.getData().getString("response");
+
+            String[] line = response.split("\n");
+
+            Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
+
+            if(line[0].equals("Error")){
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }else if(line[0].equals("No")){
+                Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", 0);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString("USER_PROFILE", profile);
+                editor.putString("USER_SEX", sex);
+                editor.commit(); // Apply file
+
+                Log.d(TAG, "SharedPreference");
+                Log.d(TAG, "USER_PROFILE : " + sharedPreferences.getString("USER_PROFILE", ""));
+                Log.d(TAG, "USER_SEX : " + sharedPreferences.getString("USER_SEX", "Etc"));
+
+                Intent intent = new Intent();
+                //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+
+        }
     }
 
 
@@ -123,7 +188,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 if(btn_register.isEnabled()){
                     int btn_id = rbtnGroup.getCheckedRadioButtonId();
 
-                    Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
 
                     switch (btn_id){
                         case R.id.rbtn_male:{
@@ -149,6 +214,20 @@ public class UserInfoActivity extends AppCompatActivity {
                         }
                     }
 
+                    SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+
+                    userId = sharedPreferences.getString("USER_ID_NUM", "");
+
+                    String stringUrl = "https://www.korchid.com/msg-user-info";
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("userId", userId);
+                    params.put("profile", profile);
+                    params.put("sex", sex);
+
+                    Handler httpHandler = new Handler();
+
+                    HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
+                    httpPost.start();
 
                     startActivityForResult(intent, 0);
                 }else{

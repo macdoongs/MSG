@@ -1,5 +1,6 @@
 package com.korchid.msg;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int SPLASH_LOGIN = 1000;
     private static final int SPLASH_LOGOUT = 1500;
 
+    public static Activity activity;
+
     private GoogleApiClient mGoogleApiClient;
 
     enum REQUEST_CODE {LOGIN, LOGOUT}
@@ -58,10 +61,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         StatusBar statusBar = new StatusBar(this);
+
+        activity = this;
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
 
@@ -83,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btn_next = (Button) findViewById(R.id.btn_next);
         btn_next.setOnClickListener(this);
+        btn_next.setVisibility(View.GONE);
 
         btn_invite = (Button) findViewById(R.id.btn_invite);
         btn_invite.setOnClickListener(this);
@@ -92,12 +99,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Use Environmental variable 'SharedPreference'
         SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
 
+        /*
         // Develop mode
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.clear();
         editor.commit();
-
+        */
 
 
 
@@ -109,13 +117,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(loginState.equals("LOGIN")){
             btn_join.setVisibility(View.GONE);
             btn_login.setText("Logout");
+
+            btn_next.setVisibility(View.VISIBLE);
+
             GlobalApplication.getGlobalApplicationContext().setUserId(sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
             GlobalApplication.getGlobalApplicationContext().setUserPassword(sharedPreferences.getString("USER_PASSWORD", "000000"));
 
             intent.putExtra("duration",  SPLASH_LOGIN);
         }else{
             btn_join.setVisibility(View.VISIBLE);
-
+            btn_next.setVisibility(View.GONE);
 
             intent.putExtra("duration",  SPLASH_LOGOUT);
         }
@@ -145,6 +156,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart");
+        super.onRestart();
+    }
+
+    @Override
     public void onClick(View v) {
         viewId = v.getId();
 
@@ -166,8 +213,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
 
                 if(btn_login.getText().toString().equals("Login")){
+                    Log.d(TAG, "0");
                     startActivityForResult(intent, 0);
                 }else{
+                    Log.d(TAG, "1");
                     startActivityForResult(intent, 1);
                 }
                 break;
@@ -199,9 +248,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case RESULT_OK:{
                 if(requestCode == 0){
                     btn_join.setVisibility(View.GONE);
+                    btn_next.setVisibility(View.VISIBLE);
                     btn_login.setText("Logout");
                 }else if(requestCode == 1){
                     btn_join.setVisibility(View.VISIBLE);
+                    btn_next.setVisibility(View.GONE);
                     btn_login.setText("Login");
                 }
 
