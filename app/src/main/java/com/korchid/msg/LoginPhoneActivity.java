@@ -141,6 +141,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                         String[] line = response.split("\n");
 
+                        String[] partition = line[0].split("/");
                         //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
 
                         if(line[0].equals("Error")){
@@ -150,13 +151,22 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                         }else{
                             Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
 
-                            SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
+                            for(int i=0; i<partition.length; i++){
+                                Log.d(TAG, "partition " + i + " : " + partition[i]);
+                            }
+
+
+
+
+                            SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
 
                             editor.putString("USER_LOGIN", "LOGIN");
                             editor.putString("USER_PHONE", phoneNumber);
                             editor.putString("USER_PASSWORD", password);
+                            editor.putString("USER_ID_NUM", partition[0]);
+                            editor.putString("USER_TOKEN", partition[1]);
                             editor.commit(); // Apply file
 
                             Log.d(TAG, "SharedPreference");

@@ -423,7 +423,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
                 startActivity(intent);
             }
         });
@@ -453,7 +453,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
         switch (id){
             case R.id.nav_messageSetting:{
-                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
                 startActivity(intent);
                 break;
             }

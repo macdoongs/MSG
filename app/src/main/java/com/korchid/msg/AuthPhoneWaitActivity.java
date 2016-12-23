@@ -344,11 +344,11 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "onReceive() 메소드 호출됨.");
+            Log.d(TAG, "onReceive() 메소드 호출됨.");
 
             // SMS 수신 시의 메시지인지 다시 한번 확인합니다.
             if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
-                Log.i(TAG, "SMS를 수신하였습니다.");
+                Log.d(TAG, "SMS를 수신하였습니다.");
 
                 // SMS 메시지를 파싱합니다.
                 Bundle bundle = intent.getExtras();
@@ -368,15 +368,15 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
                 // SMS 수신 시간 확인
                 Date receivedDate = new Date(messages[0].getTimestampMillis());
-                Log.i(TAG, "SMS received date : " + receivedDate.toString());
+                Log.d(TAG, "SMS received date : " + receivedDate.toString());
 
                 // SMS 발신 번호 확인
                 String sender = messages[0].getOriginatingAddress();
-                Log.i(TAG, "SMS sender : " + sender);
+                Log.d(TAG, "SMS sender : " + sender);
 
                 // SMS 메시지 확인
                 String contents = messages[0].getMessageBody().toString();
-                Log.i(TAG, "SMS contents : " + contents);
+                Log.d(TAG, "SMS contents : " + contents);
                 smsMessage = contents;
 
                 et_authCode.setText(smsMessage);

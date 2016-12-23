@@ -90,14 +90,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_join = (Button) findViewById(R.id.btn_join);
 
         // Use Environmental variable 'SharedPreference'
-        SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
-        /*
+        SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+
         // Develop mode
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.clear();
         editor.commit();
-        */
+
 
 
 
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_join.setOnClickListener(this);
         // Loading screen
         startActivity(intent);
+
 
 
 

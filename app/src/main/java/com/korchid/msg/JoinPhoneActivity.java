@@ -156,7 +156,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
                                         // http://mommoo.tistory.com/38
                                         // Use Environmental variable 'SharedPreference'
-                                        SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
+                                        SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
 
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
 

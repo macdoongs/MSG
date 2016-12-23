@@ -3,11 +3,14 @@ package com.korchid.msg;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -58,11 +61,43 @@ public class InPersonMessageSettingActivity extends AppCompatActivity implements
 
         et_inPersonMessage = (EditText) findViewById(R.id.et_inPersonMessage);
 
+        btn_register.setEnabled(false);
+        btn_add.setEnabled(false);
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if(input.length() > 0){
+                    btn_register.setEnabled(true);
+                    btn_register.setBackgroundResource(R.color.colorPrimary);
+                    btn_add.setEnabled(true);
+                    btn_add.setBackgroundResource(R.color.colorPrimary);
+                }else{
+                    btn_add.setEnabled(false);
+                }
+            }
+        };
+
+        et_inPersonMessage.addTextChangedListener(textWatcher);
+
         tv_message1 = (TextView) findViewById(R.id.tv_message1);
         tv_message2 = (TextView) findViewById(R.id.tv_message2);
         tv_message3 = (TextView) findViewById(R.id.tv_message3);
         tv_message4 = (TextView) findViewById(R.id.tv_message4);
         tv_message5 = (TextView) findViewById(R.id.tv_message5);
+
+
 
     }
 
@@ -117,20 +152,25 @@ public class InPersonMessageSettingActivity extends AppCompatActivity implements
                 break;
             }
             case R.id.btn_register:{
+                if(messageNumber <= 0){
+                    Toast.makeText(getApplicationContext(), "Please add message", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Intent intent = new Intent();
+                    String result = "";
+                    for(int i=0; i<message.size(); i++){
+                        result += message.get(i).toString() + "/";
+                    }
+                    Log.d(TAG, "result : " + result);
+
+                    intent.putExtra("message", result);
+                    setResult(RESULT_OK, intent);
 
 
-                Intent intent = new Intent();
-                String result = "";
-                for(int i=0; i<message.size(); i++){
-                    result += message.get(i).toString() + "/";
+                    finish();
                 }
-                Log.d(TAG, "result : " + result);
-
-                intent.putExtra("message", result);
-                setResult(RESULT_OK, intent);
 
 
-                finish();
                 break;
             }
             default:{

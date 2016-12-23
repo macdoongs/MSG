@@ -91,7 +91,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     }
                 }
 
-                Intent intent = new Intent(getApplicationContext(), MessageSettingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
                 startActivityForResult(intent, 0);
 
             }

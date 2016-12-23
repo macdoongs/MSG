@@ -142,7 +142,6 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_send:{
-                // Send invitation SMS message
                 AlertDialog.Builder builder = new AlertDialog.Builder(InviteActivity.this);
 
                 builder.setTitle("재확인");
@@ -191,7 +190,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_kakaoLink:{
-                // Wait to connect parent, child and send kakao link
+                // Wait to connect parent, child and send K
                 Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
                 startActivity(intent);
                 break;

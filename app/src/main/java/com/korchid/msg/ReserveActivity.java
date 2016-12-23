@@ -140,25 +140,37 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
             case R.id.btn_reserve:{
+                SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 final String weekNum = "" + np_week.getValue();
                 final String times = "" + np_number.getValue();
-                final String enable = "" + sw_enable.isEnabled();
-                final String userId = "";
+                final String swEnable = "" + sw_enable.isEnabled();
+                final String swAlert = "" + sw_alert.isEnabled();
+                final String userId = sharedPreferences.getString("USER_ID_NUM", "");
+                final String message = messageData;
 
-                Log.d(TAG, "enable : " + enable);
+                Log.d(TAG, "userId : " + userId);
 
 
-                String stringUrl = "https://www.korchid.com/user-info";
+                String stringUrl = "https://www.korchid.com/msg-message-setting";
                 HashMap<String, String> params = new HashMap<>();
-                params.put("enable", enable);
+                params.put("swEnable", swEnable);
+                params.put("swAlert", swAlert);
                 params.put("weekNum", weekNum);
+                params.put("userId", userId);
                 params.put("times", times);
-                params.put("message", messageData);
+                params.put("message", message);
 
 
                 Handler httpHandler = new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
+                        SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", 0);
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
                         Log.d(TAG, "handleMessage");
 
                         String response = msg.getData().getString("response");
@@ -172,15 +184,15 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
                             // http://mommoo.tistory.com/38
                             // Use Environmental variable 'SharedPreference'
-                            SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", 0);
 
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
 
                             editor.putBoolean("USER_INFO", true);
                             editor.putString("WEEK_NUMBER", weekNum);
-                            editor.putString("MESSAGE", messageData);
+                            editor.putString("MESSAGE", message);
                             editor.putString("TIMES", times);
-                            editor.putString("enable", enable);
+                            editor.putString("ENABLE", swEnable);
+                            editor.putString("ALERT", swAlert);
+
 
                             editor.commit(); // Apply file
 
@@ -196,9 +208,12 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                             // if sharedPreferences.getString value is 0, assign 2th parameter
                             Log.d(TAG, "SharedPreference");
                             Log.d(TAG, "USER_INFO : " + sharedPreferences.getBoolean("USER_INFO", false));
-                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString("MESSAGE", ""));
+                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString("USER_ID_NUM", ""));
                             Log.d(TAG, "TIMES : " + sharedPreferences.getString("TIMES", ""));
-                            Log.d(TAG, "enable : " + sharedPreferences.getString("enable", "false"));
+                            Log.d(TAG, "WEEK_NUMBER : " + sharedPreferences.getString("WEEK_NUMBER", ""));
+                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString("MESSAGE", ""));
+                            Log.d(TAG, "ENABLE : " + sharedPreferences.getString("ENABLE", "false"));
+                            Log.d(TAG, "ALERT : " + sharedPreferences.getString("ALERT", "false"));
                         } else {
                             Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
                         }
@@ -245,6 +260,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                             switch (i){
                                 case 0:{
                                     tv_message1.setText(messageReserved[i]);
+
                                     break;
                                 }
                                 case 1:{
@@ -316,9 +332,9 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         switch (swId){
             case R.id.sw_enable:{
                 this.isEnable = isSWOn;
-                Toast.makeText(this, "The sw_enable is " + (isEnable ? "on" : "off"),
+                Toast.makeText(this, "The sw_enable is " + (isSWOn ? "on" : "off"),
                         Toast.LENGTH_SHORT).show();
-                if(isEnable) {
+                if(isSWOn) {
                     //do stuff when Switch is ON
                 } else {
                     //do stuff when Switch if OFF
@@ -328,9 +344,9 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             }
             case R.id.sw_alert: {
                 this.isAlert = isSWOn;
-                Toast.makeText(this, "The sw_alert is " + (isEnable ? "on" : "off"),
+                Toast.makeText(this, "The sw_alert is " + (isSWOn ? "on" : "off"),
                         Toast.LENGTH_SHORT).show();
-                if(isEnable) {
+                if(isSWOn) {
                     //do stuff when Switch is ON
                 } else {
                     //do stuff when Switch if OFF
