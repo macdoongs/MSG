@@ -33,6 +33,9 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+
 // Wait sms message
 public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "AuthPhoneWaitActivity";
@@ -54,6 +57,8 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
     private String phoneNumber;
     private int viewId;
 
+    private String mode = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +68,9 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Auth code");
 
-        final String userId = getIntent().getExtras().getString("phoneNumber");
+        final String userId = getIntent().getExtras().getString(USER_PHONE_NUMBER);
+
+        mode = getIntent().getStringExtra("mode");
 
         phoneNumber = userId;
 
@@ -166,11 +173,21 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                         String[] line = response.split("\n");
 
                         if(line[0].equals("OK")){
-                            btnTimer.cancel();
-                            tvTimer.cancel();
-                            Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
-                            intent.putExtra("phoneNumber", phoneNumber);
-                            startActivityForResult(intent, 0);
+                            if(mode.equals("join")) {
+                                btnTimer.cancel();
+                                tvTimer.cancel();
+                                Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
+                                intent.putExtra(USER_PHONE_NUMBER, phoneNumber);
+                                startActivityForResult(intent, 0);
+                            }else if(mode.equals("find")){
+                                btnTimer.cancel();
+                                tvTimer.cancel();
+                                Intent intent = new Intent();
+                                intent.putExtra(USER_PHONE_NUMBER, phoneNumber);
+                                intent.putExtra(USER_PASSWORD, "12345");
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
                         }else{
                             Toast.makeText(getApplicationContext(), "Check your Auth code" + response, Toast.LENGTH_LONG).show();
                         }

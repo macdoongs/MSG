@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.korchid.msg.ui.CustomActionbar;
@@ -33,7 +34,8 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 public class JoinPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "JoinPhoneActivity";
 
-    private EditText et_phoneNumber;
+    private TextView tv_phoneNumber;
+
     private EditText et_password;
     private EditText et_passwordConfirm;
     private Button btn_register;
@@ -54,10 +56,10 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Join");
 
-        phoneNumber = getIntent().getExtras().getString("phoneNumber");
+        phoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
 
-        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
-        et_phoneNumber.setText(phoneNumber);
+        tv_phoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
+        tv_phoneNumber.setText(phoneNumber);
 
         et_password = (EditText) findViewById(R.id.et_password);
         et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
@@ -101,7 +103,6 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
         switch (viewId){
             case R.id.btn_register:{
-                phoneNumber = et_phoneNumber.getText().toString();
                 password = et_password.getText().toString();
                 passwordConfirm = et_passwordConfirm.getText().toString();
 

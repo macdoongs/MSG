@@ -1,11 +1,13 @@
 package com.korchid.msg.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -39,6 +41,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
     private EditText et_password;
 
     private String phoneNumber;
+    private String userPhoneNumber;
     private String password;
     private int viewId;
 
@@ -56,29 +59,25 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Login");
 
 
-        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+        // Read user device phone number
+        TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        userPhoneNumber = telManager.getLine1Number();
 
-        editor = sharedPreferences.edit();
+
 
         final String state = getIntent().getStringExtra(USER_LOGIN_STATE);
 
         Log.d(TAG, "Login : " + state);
 
         if (state.equals("LOGIN")) {
-            // Delete preference value
-            // 1. Remove "key" data
-            //editor.remove("key");
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            // 2. Remove xml data
             editor.clear();
             editor.commit();
 
-            Log.d(TAG, "SharedPreference");
-            Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
-            Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
-            Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "000000"));
-
             Intent intent = new Intent();
+            intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
             setResult(RESULT_OK, intent);
             finish();
         }
@@ -87,6 +86,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
         et_password = (EditText) findViewById(R.id.et_password);
 
+        et_phoneNumber.setText(userPhoneNumber);
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
@@ -183,6 +183,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                             Intent intent = new Intent();
                             //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
+                            intent.putExtra(USER_LOGIN_STATE, "LOGIN");
                             setResult(RESULT_OK, intent);
                             finish();
                         }
@@ -195,7 +196,10 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 break;
             }
             case R.id.btn_findPassword:{
-
+                Intent intent = new Intent(getApplicationContext(), FindPasswordActivity.class);
+                intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+                Log.d(TAG, "userPhoneNumber : " + userPhoneNumber);
+                startActivityForResult(intent, 0);
                 break;
             }
             default:{
@@ -221,4 +225,28 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         return true;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode){
+            case RESULT_OK:{
+                // find password activity
+                if(requestCode == 0){
+                    Log.d(TAG, "find password OK");
+                    password = data.getStringExtra(USER_PASSWORD);
+                    this.et_password.setText(password);
+                }
+                break;
+            }
+            case RESULT_CANCELED:{
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+
+    }
 }

@@ -1,11 +1,13 @@
 package com.korchid.msg.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -55,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_temp;
     private Button btn_userInfo;
 
-    private String loginState;
-    private String userRole;
+    private String userPhoneNumber = "";
+    private String loginState = "";
+    private String userRole = "";
     private int viewId;
 
 
@@ -66,24 +69,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Modify UI
         StatusBar statusBar = new StatusBar(this);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
 
         activity = this;
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+
+
         final ServiceThread serviceThread = new ServiceThread(new Handler());
-        serviceThread.timer = "2016-12-13 14:55";
+        //serviceThread.timer = "2016-12-13 14:55";
         serviceThread.start();
 
-        Log.d(TAG, "timer : " + serviceThread.timer);
+        //Log.d(TAG, "timer : " + serviceThread.timer);
 
-        serviceThread.timer = "2016-12-16 19:15";
+        //serviceThread.timer = "2016-12-16 19:15";
 
-        Log.d(TAG, "timer : " + serviceThread.timer);
+        //Log.d(TAG, "timer : " + serviceThread.timer);
 
 
 
@@ -100,14 +106,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Use Environmental variable 'SharedPreference'
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
-/*
+
         // Develop mode
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.clear();
         editor.commit();
 
-*/
+
+        userPhoneNumber = sharedPreferences.getString(USER_PHONE_NUMBER, "010-0000-0000");
+        //Log.d(TAG, "USER phone number : " + userPhoneNumber);
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
@@ -121,9 +129,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_login.setText("LOGOUT");
 
             btn_next.setVisibility(View.VISIBLE);
-
-            GlobalApplication.getGlobalApplicationContext().setUserId(sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
-            GlobalApplication.getGlobalApplicationContext().setUserPassword(sharedPreferences.getString(USER_PASSWORD, "000000"));
 
             intent.putExtra("duration",  SPLASH_LOGIN);
         }else{
@@ -149,13 +154,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
         btn_userInfo.setOnClickListener(this);
 
-
+/*
         // if sharedPreferences.getString value is 0, assign 2th parameter
         Log.d(TAG, "SharedPreference");
         Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
         Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
         Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "000000"));
-
+*/
         sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
         userRole = sharedPreferences.getString(USER_ROLE, "");
@@ -207,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (viewId){
             case R.id.btn_next:{
                 Intent intent = new Intent(getApplicationContext(), SelectParentActivity.class);
+                intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                 intent.putExtra(USER_ROLE, userRole);
                 startActivity(intent);
                 break;
@@ -222,18 +228,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             case R.id.btn_login:{
                 Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
+                intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+                int requestCode;
 
-                if(btn_login.getText().toString().equals("LOGIN")){
+                if(loginState.equals("LOGOUT")){
                     // If current state = logout
                     //Log.d(TAG, "Current state : Logout");
                     intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
-                    startActivityForResult(intent, 0);
+                    requestCode = 0;
                 }else{
                     // If current state = login
                     //Log.d(TAG, "Current state : Login");
                     intent.putExtra(USER_LOGIN_STATE, "LOGIN");
-                    startActivityForResult(intent, 1);
+                    requestCode = 1;
                 }
+/*
+                if(btn_login.getText().toString().equals("LOGIN")){
+                    // If current state = logout
+                    //Log.d(TAG, "Current state : Logout");
+                    intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
+                    requestCode = 0;
+                }else{
+                    // If current state = login
+                    //Log.d(TAG, "Current state : Login");
+                    intent.putExtra(USER_LOGIN_STATE, "LOGIN");
+                    requestCode = 1;
+                }
+*/
+                startActivityForResult(intent, requestCode);
+
                 break;
             }
             case R.id.btn_reserve:{
@@ -261,16 +284,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (resultCode){
             case RESULT_OK:{
+
+                loginState = data.getStringExtra(USER_LOGIN_STATE);
+
                 if(requestCode == 0){
+                    // LOGIN success
                     btn_join.setVisibility(View.GONE);
                     btn_next.setVisibility(View.VISIBLE);
                     btn_login.setText("LOGOUT");
-                    Log.d(TAG, "btn : " + btn_login.getText().toString());
+
+                    Log.d(TAG, "loginState : " + loginState);
                 }else if(requestCode == 1){
+                    // LOGOUT success
                     btn_join.setVisibility(View.VISIBLE);
                     btn_next.setVisibility(View.GONE);
                     btn_login.setText("LOGIN");
-                    Log.d(TAG, "btn : " + btn_login.getText().toString());
+                    Log.d(TAG, "loginState : " + loginState);
                 }
 
                 break;

@@ -27,6 +27,9 @@ import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+
 // SMS authentification - request sms message
 public class AuthPhoneActivity extends AppCompatActivity{
     private static String TAG = "AuthPhoneActivity";
@@ -38,6 +41,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
     private Spinner sp_nationCode;
 
     private String phoneNumber = "";
+    private String internationalPhoneNumber = "";
     private String nationCode = "";
     private int viewId;
     private boolean isDuplicate = true; // true - No check state
@@ -150,7 +154,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                     btn_register.setBackgroundResource(R.color.colorPrimary);
                     btn_register.setEnabled(true);
 
-                    String internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+                    internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
 
                     Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
@@ -212,7 +216,8 @@ public class AuthPhoneActivity extends AppCompatActivity{
                                 //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
 
                                 Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
-                                intent.putExtra("phoneNumber", phoneNumber);
+                                intent.putExtra("mode", "join");
+                                intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
 
                                 startActivityForResult(intent, 0);
                             }
@@ -257,7 +262,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
         switch (resultCode){
             case RESULT_OK:{
                 Intent intent = new Intent();
-                //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
+                intent.putExtra(USER_LOGIN_STATE, "LOGIN");
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
