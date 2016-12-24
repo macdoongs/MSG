@@ -17,12 +17,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.korchid.msg.global.QuickstartPreferences;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
 import java.util.HashMap;
+
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
 // Register phone number and password
 public class JoinPhoneActivity extends AppCompatActivity implements View.OnClickListener{
@@ -156,13 +162,13 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
                                         // http://mommoo.tistory.com/38
                                         // Use Environmental variable 'SharedPreference'
-                                        SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                                        editor.putString("USER_LOGIN", "LOGIN");
-                                        editor.putString("USER_PHONE", phoneNumber);
-                                        editor.putString("USER_PASSWORD", password);
+                                        editor.putString(USER_LOGIN_STATE, "LOGIN");
+                                        editor.putString(USER_PHONE_NUMBER, phoneNumber);
+                                        editor.putString(USER_PASSWORD, password);
                                         editor.commit(); // Apply file
 
                                         /*
@@ -176,9 +182,9 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
                                         // if sharedPreferences.getString value is 0, assign 2th parameter
                                         Log.d(TAG, "SharedPreference");
-                                        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
-                                        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-                                        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
+                                        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
+                                        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
+                                        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "123123"));
                                     }else{
                                         Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
                                     }

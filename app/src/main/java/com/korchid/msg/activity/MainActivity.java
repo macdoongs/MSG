@@ -12,11 +12,18 @@ import android.widget.Button;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.korchid.msg.global.QuickstartPreferences;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.global.GlobalApplication;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 import com.korchid.msg.service.ServiceThread;
+
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
 /**
  * Created by mac0314 on 2016-11-28.
@@ -87,32 +94,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_join = (Button) findViewById(R.id.btn_join);
 
         // Use Environmental variable 'SharedPreference'
-        SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
-        /*
+/*
         // Develop mode
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.clear();
         editor.commit();
-        */
 
-
+*/
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
 
         Intent intent = new Intent(this, SplashActivity.class);
-        intent.putExtra("USER_ID_NUM", sharedPreferences.getString("USER_ID_NUM", "0"));
-        loginState = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
+        intent.putExtra(USER_ID_NUMBER, sharedPreferences.getString(USER_ID_NUMBER , "0"));
+        loginState = sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT");
+        //Log.d(TAG, "Login state : " + loginState);
         if(loginState.equals("LOGIN")){
             btn_join.setVisibility(View.GONE);
-            btn_login.setText("Logout");
+            btn_login.setText("LOGOUT");
 
             btn_next.setVisibility(View.VISIBLE);
 
-            GlobalApplication.getGlobalApplicationContext().setUserId(sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-            GlobalApplication.getGlobalApplicationContext().setUserPassword(sharedPreferences.getString("USER_PASSWORD", "000000"));
+            GlobalApplication.getGlobalApplicationContext().setUserId(sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
+            GlobalApplication.getGlobalApplicationContext().setUserPassword(sharedPreferences.getString(USER_PASSWORD, "000000"));
 
             intent.putExtra("duration",  SPLASH_LOGIN);
         }else{
@@ -141,9 +148,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // if sharedPreferences.getString value is 0, assign 2th parameter
         Log.d(TAG, "SharedPreference");
-        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
-        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "000000"));
+        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
+        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
+        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "000000"));
     }
 
     @Override
@@ -203,11 +210,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_login:{
                 Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
 
-                if(btn_login.getText().toString().equals("Login")){
+                if(btn_login.getText().toString().equals("LOGIN")){
+                    // If current state = logout
                     //Log.d(TAG, "0");
+                    intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
                     startActivityForResult(intent, 0);
                 }else{
+                    // If current state = login
                     //Log.d(TAG, "1");
+                    intent.putExtra(USER_LOGIN_STATE, "LOGIN");
                     startActivityForResult(intent, 1);
                 }
                 break;
@@ -240,11 +251,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(requestCode == 0){
                     btn_join.setVisibility(View.GONE);
                     btn_next.setVisibility(View.VISIBLE);
-                    btn_login.setText("Logout");
+                    btn_login.setText("LOGOUT");
+                    Log.d(TAG, "btn : " + btn_login.getText().toString());
                 }else if(requestCode == 1){
                     btn_join.setVisibility(View.VISIBLE);
                     btn_next.setVisibility(View.GONE);
-                    btn_login.setText("Login");
+                    btn_login.setText("LOGIN");
+                    Log.d(TAG, "btn : " + btn_login.getText().toString());
                 }
 
                 break;

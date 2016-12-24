@@ -27,18 +27,18 @@ import java.util.HashMap;
 public class UserInfoActivity extends AppCompatActivity {
     private static final String TAG = "UserInfoActivity";
 
-    ImageView iv_profile;
+    private ImageView iv_profile;
 
-    RadioGroup rbtnGroup;
-    RadioButton rbtn_male;
-    RadioButton rbtn_female;
-    RadioButton rbtn_etc;
+    private RadioGroup rbtnGroup;
+    private RadioButton rbtn_male;
+    private RadioButton rbtn_female;
+    private RadioButton rbtn_etc;
 
-    Button btn_register;
+    private Button btn_register;
 
-    String userId = "";
-    String profile = "/";
-    String sex = "";
+    private String userId = "";
+    private String profile = "/";
+    private String sex = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

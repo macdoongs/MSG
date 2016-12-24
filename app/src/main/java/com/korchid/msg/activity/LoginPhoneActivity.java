@@ -22,6 +22,13 @@ import com.korchid.msg.ui.StatusBar;
 
 import java.util.HashMap;
 
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+
 public class LoginPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "LoginPhoneActivity";
 
@@ -49,12 +56,11 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Login");
 
 
-        sharedPreferences = getSharedPreferences("LOGIN", 0);
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
         editor = sharedPreferences.edit();
 
-        final String state = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
-
+        final String state = getIntent().getStringExtra(USER_LOGIN_STATE);
 
         Log.d(TAG, "Login : " + state);
 
@@ -68,9 +74,9 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
             editor.commit();
 
             Log.d(TAG, "SharedPreference");
-            Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
-            Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-            Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
+            Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
+            Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
+            Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "000000"));
 
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);
@@ -159,21 +165,21 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
 
 
-                            SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                            editor.putString("USER_LOGIN", "LOGIN");
-                            editor.putString("USER_PHONE", phoneNumber);
-                            editor.putString("USER_PASSWORD", password);
-                            editor.putString("USER_ID_NUM", partition[0]);
-                            editor.putString("USER_TOKEN", partition[1]);
+                            editor.putString(USER_LOGIN_STATE, "LOGIN");
+                            editor.putString(USER_PHONE_NUMBER, phoneNumber);
+                            editor.putString(USER_PASSWORD, password);
+                            editor.putString(USER_ID_NUMBER, partition[0]);
+                            editor.putString(USER_LOGIN_TOKEN, partition[1]);
                             editor.commit(); // Apply file
 
                             Log.d(TAG, "SharedPreference");
-                            Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString("USER_LOGIN", "LOGOUT"));
-                            Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString("USER_PHONE", "000-0000-0000"));
-                            Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString("USER_PASSWORD", "123123"));
+                            Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
+                            Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
+                            Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "123123"));
 
                             Intent intent = new Intent();
                             //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
