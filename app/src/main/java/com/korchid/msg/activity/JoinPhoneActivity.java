@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.korchid.msg.global.QuickstartPreferences;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;

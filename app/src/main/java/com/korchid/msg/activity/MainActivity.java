@@ -19,11 +19,13 @@ import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 import com.korchid.msg.service.ServiceThread;
 
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 /**
  * Created by mac0314 on 2016-11-28.
@@ -54,7 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_userInfo;
 
     private String loginState;
+    private String userRole;
     private int viewId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +155,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
         Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
         Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "000000"));
+
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+        userRole = sharedPreferences.getString(USER_ROLE, "");
+
+        Log.d(TAG, "USER_ROLE : " + userRole);
+
     }
 
     @Override
@@ -195,7 +206,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (viewId){
             case R.id.btn_next:{
-                startActivity(new Intent(getApplicationContext(), SelectParentActivity.class));
+                Intent intent = new Intent(getApplicationContext(), SelectParentActivity.class);
+                intent.putExtra(USER_ROLE, userRole);
+                startActivity(intent);
                 break;
             }
             case R.id.btn_invite:{
@@ -212,12 +225,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(btn_login.getText().toString().equals("LOGIN")){
                     // If current state = logout
-                    //Log.d(TAG, "0");
+                    //Log.d(TAG, "Current state : Logout");
                     intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
                     startActivityForResult(intent, 0);
                 }else{
                     // If current state = login
-                    //Log.d(TAG, "1");
+                    //Log.d(TAG, "Current state : Login");
                     intent.putExtra(USER_LOGIN_STATE, "LOGIN");
                     startActivityForResult(intent, 1);
                 }

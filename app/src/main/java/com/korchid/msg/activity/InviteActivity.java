@@ -2,6 +2,7 @@ package com.korchid.msg.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,9 @@ import com.kakao.kakaolink.KakaoLink;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
+
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "InviteActivity";
@@ -36,6 +41,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     private KakaoLink kakaoLink;
 
+    private String role = "parent";
     private int viewId;
 
     @Override
@@ -122,14 +128,14 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_inviteParent:{
-                // TODO save role
+                role = "child";
                 tv_role.setText("Invite Parent.");
                 btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
                 btn_inviteChild.setBackgroundResource(R.color.colorTransparent);
                 break;
             }
             case R.id.btn_inviteChild:{
-                // TODO save role
+                role = "parent";
                 tv_role.setText("Invite Child.");
                 btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
                 btn_inviteChild.setBackgroundResource(R.color.colorPrimary);
@@ -160,6 +166,16 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                         SmsManager smsManager = SmsManager.getDefault();
                         smsManager.sendTextMessage(phoneNumber, null, message, null, null);
 */
+
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putString(USER_ROLE, role);
+                        Log.d(TAG, "USER_ROLE : " + role);
+
+                        editor.commit();
+
                         long waitTime = System.currentTimeMillis();
                         intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
                         intent.putExtra("parentPhoneNumber", parentPhoneNumber);

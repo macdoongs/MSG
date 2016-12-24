@@ -20,6 +20,7 @@ public class QuickstartPreferences {
     public static final String SHARED_PREF_USER_INFO = "USER_INFO";
     public static final String USER_PROFILE = "USER_PROFILE";
     public static final String USER_SEX = "USER_SEX";
+    public static final String USER_ROLE = "USER_ROLE";
 
     // USER Message setting
     public static final String SHARED_PREF_USER_RESERVATION_SETTING = "USER_RESERVATION_SETTING";

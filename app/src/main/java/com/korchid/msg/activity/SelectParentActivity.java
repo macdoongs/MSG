@@ -32,6 +32,8 @@ import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+
 // Select parent that user want to chat
 public class SelectParentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "SelectParentActivity";
@@ -56,6 +58,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
     private int viewId;
     private int profileWidth;
     private int profileHeight;
+    private String userRole = "";
 
 
     @Override
@@ -64,6 +67,8 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        userRole = getIntent().getStringExtra(USER_ROLE);
 
         // Remove previous activity
         MainActivity mainActivity = (MainActivity) MainActivity.activity;
@@ -377,7 +382,9 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
             linearLayout.addView(btn_call);
             linearLayout.addView(btn_chat);
-            linearLayout.addView(btn_chat_setting);
+            if(userRole.equals("child")){
+                linearLayout.addView(btn_chat_setting);
+            }
 
             layout.addView(linearLayout);
 
