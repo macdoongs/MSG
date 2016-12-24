@@ -41,7 +41,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     private KakaoLink kakaoLink;
 
-    private String role = "parent";
+    private String role = "child";
     private int viewId;
 
     @Override

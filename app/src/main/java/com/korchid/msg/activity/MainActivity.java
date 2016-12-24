@@ -91,9 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Log.d(TAG, "timer : " + serviceThread.timer);
 
-
-
-
         btn_next = (Button) findViewById(R.id.btn_next);
         btn_next.setOnClickListener(this);
         btn_next.setVisibility(View.GONE);
@@ -103,46 +100,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btn_join = (Button) findViewById(R.id.btn_join);
 
-        // Use Environmental variable 'SharedPreference'
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
-
-
-        // Develop mode
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.clear();
-        editor.commit();
-
-
-        userPhoneNumber = sharedPreferences.getString(USER_PHONE_NUMBER, "010-0000-0000");
-        //Log.d(TAG, "USER phone number : " + userPhoneNumber);
-
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
-
-        Intent intent = new Intent(this, SplashActivity.class);
-        intent.putExtra(USER_ID_NUMBER, sharedPreferences.getString(USER_ID_NUMBER , "0"));
-        loginState = sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT");
-        //Log.d(TAG, "Login state : " + loginState);
-        if(loginState.equals("LOGIN")){
-            btn_join.setVisibility(View.GONE);
-            btn_login.setText("LOGOUT");
-
-            btn_next.setVisibility(View.VISIBLE);
-
-            intent.putExtra("duration",  SPLASH_LOGIN);
-        }else{
-            btn_join.setVisibility(View.VISIBLE);
-            btn_next.setVisibility(View.GONE);
-
-            intent.putExtra("duration",  SPLASH_LOGOUT);
-        }
-        btn_join.setOnClickListener(this);
-        // Loading screen
-        startActivity(intent);
-
-
-
 
 
         btn_reserve = (Button) findViewById(R.id.btn_reserve);
@@ -153,6 +112,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
         btn_userInfo.setOnClickListener(this);
+
+
+        // Use Environmental variable 'SharedPreference'
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+
+/*
+        // Develop mode
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.clear();
+        editor.commit();
+*/
+
+        userPhoneNumber = sharedPreferences.getString(USER_PHONE_NUMBER, "010-0000-0000");
+        //Log.d(TAG, "USER phone number : " + userPhoneNumber);
+
+
+
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.putExtra(USER_ID_NUMBER, sharedPreferences.getString(USER_ID_NUMBER , "0"));
+        loginState = sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT");
+        //Log.d(TAG, "Login state : " + loginState);
+        if(loginState.equals("LOGIN")){
+            // Current state : Login
+            btn_join.setVisibility(View.GONE);
+            btn_invite.setVisibility(View.VISIBLE);
+            btn_reserve.setVisibility(View.VISIBLE);
+            btn_temp.setVisibility(View.VISIBLE);
+            btn_userInfo.setVisibility(View.VISIBLE);
+            btn_login.setText("LOGOUT");
+
+            btn_next.setVisibility(View.VISIBLE);
+
+            intent.putExtra("duration",  SPLASH_LOGIN);
+        }else{
+            // Current state : Logout
+            btn_join.setVisibility(View.VISIBLE);
+            btn_next.setVisibility(View.GONE);
+            btn_invite.setVisibility(View.GONE);
+            btn_reserve.setVisibility(View.GONE);
+            btn_temp.setVisibility(View.GONE);
+            btn_userInfo.setVisibility(View.GONE);
+
+            intent.putExtra("duration",  SPLASH_LOGOUT);
+        }
+        btn_join.setOnClickListener(this);
+        // Loading screen
+        startActivity(intent);
+
+
 
 /*
         // if sharedPreferences.getString value is 0, assign 2th parameter
@@ -294,12 +303,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btn_login.setText("LOGOUT");
 
                     Log.d(TAG, "loginState : " + loginState);
+
+                    btn_invite.setVisibility(View.VISIBLE);
+                    btn_reserve.setVisibility(View.VISIBLE);
+                    btn_temp.setVisibility(View.VISIBLE);
+                    btn_userInfo.setVisibility(View.VISIBLE);
                 }else if(requestCode == 1){
                     // LOGOUT success
                     btn_join.setVisibility(View.VISIBLE);
                     btn_next.setVisibility(View.GONE);
                     btn_login.setText("LOGIN");
                     Log.d(TAG, "loginState : " + loginState);
+
+                    btn_invite.setVisibility(View.GONE);
+                    btn_reserve.setVisibility(View.GONE);
+                    btn_temp.setVisibility(View.GONE);
+                    btn_userInfo.setVisibility(View.GONE);
                 }
 
                 break;
