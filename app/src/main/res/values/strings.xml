@@ -6,6 +6,15 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+
+    <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
+        send downstream messages to this app.</string>
+    <string name="registering_message">Generating InstanceID token...</string>
+    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
+        sending the fetched token to the server or subscribing to the PubSub topic. Please try
+        running the sample again.</string>
+
+
     <string name="kakao_app_key">4d3ee1f3074ddd288456ecea2cc8a87c</string>
     <string name="kakao_scheme">kakao4d3ee1f3074ddd288456ecea2cc8a87c</string>
     <string name="kakaolink_host">kakaolink</string>

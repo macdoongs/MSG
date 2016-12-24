@@ -6,31 +6,75 @@
         android:minSdkVersion="9"
         android:targetSdkVersion="15" />
 
+    <!-- [START gcm_permission] -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- [END gcm_permission] -->
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
-        android:name=".GlobalApplication"
+        android:name=".global.GlobalApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".service.MqttService"
+            android:name=".mqtt.service.MqttService"
             android:process=":MqttSubProcess" />
 
-        <activity android:name=".MainActivity">
+
+        <!-- [START gcm_receiver] -->
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="gcm.play.android.samples.com.gcmquickstart" />
+            </intent-filter>
+        </receiver>
+        <!-- [END gcm_receiver] -->
+        <!-- [START gcm_listener] -->
+        <service
+            android:name="com.korchid.msg.gcm.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <!-- [END gcm_listener] -->
+        <!-- [START instanceId_listener] -->
+        <service
+            android:name="com.korchid.msg.gcm.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+        <!-- [END instanceId_listener] -->
+        <service
+            android:name="com.korchid.msg.gcm.RegistrationIntentService"
+            android:exported="false">
+        </service>
+
+
+        <activity android:name=".activity.MainActivity">
 
             <!-- android:configChanges="orientation|keyboardHidden" -->
             <intent-filter>
@@ -39,34 +83,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SplashActivity" />
+        <activity android:name=".activity.SplashActivity" />
         <activity
-            android:name=".ChattingActivity"
+            android:name=".activity.ChattingActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".MessageSettingActivity" />
-        <activity android:name=".SettingActivity" />
-        <activity android:name=".InviteActivity" />
-        <activity android:name=".ReserveActivity" />
-        <activity android:name=".DBTest" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".activity.MessageSettingActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.InviteActivity" />
+        <activity android:name=".activity.ReserveActivity" />
+        <activity android:name=".activity.DBTest" />
+        <activity android:name=".activity.ProfileActivity" />
         <activity
-            android:name=".SelectParentActivity"
+            android:name=".activity.SelectParentActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <!-- android:configChanges="orientation|keyboardHidden" -->
-        <activity android:name=".AuthPhoneActivity" />
-        <activity android:name=".AuthPhoneWaitActivity" />
+        <activity android:name=".activity.AuthPhoneActivity" />
+        <activity android:name=".activity.AuthPhoneWaitActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".KakaoLinkActivity" />
-        <activity android:name=".JoinPhoneActivity" />
-        <activity android:name=".LoginPhoneActivity" />
-        <activity android:name=".MenuTest" />
-        <activity android:name=".UserInfoActivity" />
-        <activity android:name=".FindPasswordActivity" />
-        <activity android:name=".InPersonMessageSettingActivity"></activity>
+        <activity android:name=".activity.KakaoLinkActivity" />
+        <activity android:name=".activity.JoinPhoneActivity" />
+        <activity android:name=".activity.LoginPhoneActivity" />
+        <activity android:name=".activity.MenuTest" />
+        <activity android:name=".activity.UserInfoActivity" />
+        <activity android:name=".activity.FindPasswordActivity" />
+        <activity android:name=".activity.InPersonMessageSettingActivity"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,18 @@
+package com.korchid.msg.activity;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.korchid.msg.R;
+
+// Find user password
+public class FindPasswordActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_find_password);
+
+
+    }
+}

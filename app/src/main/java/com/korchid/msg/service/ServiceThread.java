@@ -2,9 +2,8 @@ package com.korchid.msg.service;
 
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.korchid.msg.HttpPost;
+import com.korchid.msg.http.HttpPost;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
