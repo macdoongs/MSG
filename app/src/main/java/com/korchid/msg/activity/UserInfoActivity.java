@@ -23,6 +23,12 @@ import com.korchid.msg.ui.StatusBar;
 
 import java.util.HashMap;
 
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
+
 // Setting user information
 public class UserInfoActivity extends AppCompatActivity {
     private static final String TAG = "UserInfoActivity";
@@ -104,9 +110,9 @@ public class UserInfoActivity extends AppCompatActivity {
                     }
                 }
 
-                SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN , 0);
 
-                userId = sharedPreferences.getString("USER_ID_NUM", "");
+                userId = sharedPreferences.getString(USER_ID_NUMBER, "");
 
                 String stringUrl = "https://www.korchid.com/msg-user-info";
                 HashMap<String, String> params = new HashMap<>();
@@ -146,17 +152,17 @@ public class UserInfoActivity extends AppCompatActivity {
 
 
 
-                SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", 0);
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                editor.putString("USER_PROFILE", profile);
-                editor.putString("USER_SEX", sex);
+                editor.putString(USER_PROFILE, profile);
+                editor.putString(USER_SEX, sex);
                 editor.commit(); // Apply file
 
                 Log.d(TAG, "SharedPreference");
-                Log.d(TAG, "USER_PROFILE : " + sharedPreferences.getString("USER_PROFILE", ""));
-                Log.d(TAG, "USER_SEX : " + sharedPreferences.getString("USER_SEX", "Etc"));
+                Log.d(TAG, "USER_PROFILE : " + sharedPreferences.getString(USER_PROFILE, ""));
+                Log.d(TAG, "USER_SEX : " + sharedPreferences.getString(USER_SEX, "Etc"));
 
                 Intent intent = new Intent();
                 //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
@@ -217,9 +223,9 @@ public class UserInfoActivity extends AppCompatActivity {
                         }
                     }
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
-                    userId = sharedPreferences.getString("USER_ID_NUM", "");
+                    userId = sharedPreferences.getString(USER_ID_NUMBER, "");
 
                     String stringUrl = "https://www.korchid.com/msg-user-info";
                     HashMap<String, String> params = new HashMap<>();

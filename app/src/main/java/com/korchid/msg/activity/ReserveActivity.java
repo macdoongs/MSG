@@ -24,6 +24,15 @@ import com.korchid.msg.ui.StatusBar;
 
 import java.util.HashMap;
 
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_MESSAGE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
+
 // Register reservation message and the number of sending
 public class ReserveActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     private static final String TAG = "ReserveActivity";
@@ -145,7 +154,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             }
             case R.id.btn_reserve:{
 
-                SharedPreferences sharedPreferences = getSharedPreferences("LOGIN", 0);
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -172,7 +181,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 Handler httpHandler = new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
-                        SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", 0);
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING , 0);
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -191,12 +200,12 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                             // Use Environmental variable 'SharedPreference'
 
 
-                            editor.putBoolean("USER_INFO", true);
-                            editor.putString("WEEK_NUMBER", weekNum);
-                            editor.putString("MESSAGE", message);
-                            editor.putString("TIMES", times);
-                            editor.putString("ENABLE", swEnable);
-                            editor.putString("ALERT", swAlert);
+                            editor.putBoolean(RESERVATION_CHECK, true);
+                            editor.putString(RESERVATION_WEEK_NUMBER, weekNum);
+                            editor.putString(RESERVATION_MESSAGE, message);
+                            editor.putString(RESERVATION_TIMES, times);
+                            editor.putString(RESERVATION_ENABLE, swEnable);
+                            editor.putString(RESERVATION_MESSAGE_ALERT, swAlert);
 
 
                             editor.commit(); // Apply file
@@ -212,13 +221,12 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
                             // if sharedPreferences.getString value is 0, assign 2th parameter
                             Log.d(TAG, "SharedPreference");
-                            Log.d(TAG, "USER_INFO : " + sharedPreferences.getBoolean("USER_INFO", false));
-                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString("USER_ID_NUM", ""));
-                            Log.d(TAG, "TIMES : " + sharedPreferences.getString("TIMES", ""));
-                            Log.d(TAG, "WEEK_NUMBER : " + sharedPreferences.getString("WEEK_NUMBER", ""));
-                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString("MESSAGE", ""));
-                            Log.d(TAG, "ENABLE : " + sharedPreferences.getString("ENABLE", "false"));
-                            Log.d(TAG, "ALERT : " + sharedPreferences.getString("ALERT", "false"));
+                            Log.d(TAG, "USER_INFO : " + sharedPreferences.getBoolean(RESERVATION_CHECK, false));
+                            Log.d(TAG, "TIMES : " + sharedPreferences.getString(RESERVATION_TIMES, ""));
+                            Log.d(TAG, "WEEK_NUMBER : " + sharedPreferences.getString(RESERVATION_WEEK_NUMBER, ""));
+                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString(RESERVATION_MESSAGE, ""));
+                            Log.d(TAG, "ENABLE : " + sharedPreferences.getString(RESERVATION_ENABLE, "false"));
+                            Log.d(TAG, "ALERT : " + sharedPreferences.getString(RESERVATION_MESSAGE_ALERT, "false"));
                         } else {
                             Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
                         }

@@ -26,6 +26,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+
 // Modify and register profile image
 public class ProfileActivity  extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "ProfileActivity";
@@ -165,16 +169,9 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         switch (viewId){
             case R.id.btn_register:{
                 // Use Environmental variable 'SharedPreference'
-                SharedPreferences sharedPreferences = getSharedPreferences("login", 0);
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
-                // if sharedPreferences.getString value is 0, assign 2th parameter
-                String login = sharedPreferences.getString("USER_LOGIN", "LOGOUT");
-                String facebookLogin = sharedPreferences.getString("FACEBOOK_LOGIN", "LOGOUT");
-                String userId = sharedPreferences.getString("USER_ID", "");
-                String userName = sharedPreferences.getString("USER_NAME", "");
-                String userPassword = sharedPreferences.getString("USER_PASSWORD", "");
-                String userPhone = sharedPreferences.getString("USER_PHONE", "");
-                String userEmail = sharedPreferences.getString("USER_EMAIL", "");
+
 
                 //DB query
 
