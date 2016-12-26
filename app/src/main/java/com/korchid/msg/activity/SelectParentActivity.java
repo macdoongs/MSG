@@ -1,11 +1,14 @@
 package com.korchid.msg.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
@@ -27,11 +30,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.korchid.msg.R;
+import com.korchid.msg.http.HttpGet;
+import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.ui.StatusBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.util.HashMap;
+
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_MESSAGE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 // Select parent that user want to chat
@@ -59,6 +75,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
     private int profileWidth;
     private int profileHeight;
     private String userRole = "";
+    private String userPhoneNumber = "";
 
 
     @Override
@@ -99,10 +116,57 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 */
 
 
+        userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         StatusBar statusBar = new StatusBar(this);
+
+
+        if(userRole.equals("parent")){
+            // User : parent
+
+        }else{
+            // User : child
+
+        }
+        String senderPhoneNumber = "010-2368-0314";
+        String receiverPhoneNumber = "010-7754-1642";
+
+        String stringUrl = "https://www.korchid.com/msg-wait-connection/" + senderPhoneNumber + "/" + receiverPhoneNumber;
+
+        Handler httpHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                Log.d(TAG, "handleMessage");
+
+                String response = msg.getData().getString("response");
+
+                String[] line = response.split("\n");
+
+                //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
+
+                if (line[0].equals("Error")) {
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+
+
+
+                } else {
+                    String topic = line[0];
+                    Toast.makeText(getApplicationContext(), "Topic : " + topic, Toast.LENGTH_LONG).show();
+
+                }
+            }
+        };
+
+
+
+        HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
+        httpGet.start();
+
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

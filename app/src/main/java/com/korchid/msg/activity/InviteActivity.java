@@ -41,7 +41,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     private KakaoLink kakaoLink;
 
-    private String role = "child";
+    private String userRole = "child";
     private int viewId;
 
     @Override
@@ -128,14 +128,14 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_inviteParent:{
-                role = "child";
+                userRole = "child";
                 tv_role.setText("Invite Parent.");
                 btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
                 btn_inviteChild.setBackgroundResource(R.color.colorTransparent);
                 break;
             }
             case R.id.btn_inviteChild:{
-                role = "parent";
+                userRole = "parent";
                 tv_role.setText("Invite Child.");
                 btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
                 btn_inviteChild.setBackgroundResource(R.color.colorPrimary);
@@ -171,8 +171,8 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                        editor.putString(USER_ROLE, role);
-                        Log.d(TAG, "USER_ROLE : " + role);
+                        editor.putString(USER_ROLE, userRole);
+                        Log.d(TAG, "USER_ROLE : " + userRole);
 
                         editor.commit();
 
