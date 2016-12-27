@@ -38,6 +38,7 @@ import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.ui.StatusBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_CHECK;
@@ -132,10 +133,12 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
             // User : child
 
         }
-        String senderPhoneNumber = "010-2368-0314";
+
+        final ArrayList<String> opponentPhoneNumber = new ArrayList<>();
+        String senderPhoneNumber = "+821023680314";
         String receiverPhoneNumber = "010-7754-1642";
 
-        String stringUrl = "https://www.korchid.com/msg-wait-connection/" + senderPhoneNumber + "/" + receiverPhoneNumber;
+        String stringUrl = "https://www.korchid.com/msg-wait-connection/" + senderPhoneNumber;
 
         Handler httpHandler = new Handler(){
             @Override
@@ -155,6 +158,15 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
                 } else {
                     String topic = line[0];
+
+                    for(int i=0; i<line.length; i++){
+
+                        opponentPhoneNumber.add(line[0]);
+                        Log.d(TAG, "opponent " + i + "th : " + line[0]);
+                    }
+
+
+
                     Toast.makeText(getApplicationContext(), "Topic : " + topic, Toast.LENGTH_LONG).show();
 
                 }
