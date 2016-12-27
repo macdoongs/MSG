@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 /*
         // Develop mode
+        // Clear SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.clear();

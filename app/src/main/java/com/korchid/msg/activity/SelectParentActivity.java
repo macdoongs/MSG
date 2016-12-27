@@ -65,6 +65,8 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
 
     // Temp Data Array
+    private ArrayList<String> parentArrayList;
+
     private String[] parent = {"Father", "Mother", "StepMother"};
     private String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
     private String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
@@ -85,6 +87,8 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        parentArrayList = new ArrayList<>();
 
         userRole = getIntent().getStringExtra(USER_ROLE);
 
@@ -134,11 +138,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
         }
 
-        final ArrayList<String> opponentPhoneNumber = new ArrayList<>();
-        String senderPhoneNumber = "+821023680314";
-        String receiverPhoneNumber = "010-7754-1642";
-
-        String stringUrl = "https://www.korchid.com/msg-wait-connection/" + senderPhoneNumber;
+        String stringUrl = "https://www.korchid.com/msg-mapping/" + userPhoneNumber;
 
         Handler httpHandler = new Handler(){
             @Override
@@ -159,13 +159,13 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
                 } else {
                     String topic = line[0];
 
+
+
                     for(int i=0; i<line.length; i++){
+                        String[] dataArray = line[i].split("/");
 
-                        opponentPhoneNumber.add(line[0]);
-                        Log.d(TAG, "opponent " + i + "th : " + line[0]);
+                        parentArrayList.add(dataArray[2]);
                     }
-
-
 
                     Toast.makeText(getApplicationContext(), "Topic : " + topic, Toast.LENGTH_LONG).show();
 
@@ -491,7 +491,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
             public void onClick(View view) {
                 //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
-                intent.putExtra("topic", topic[idx]);
+                intent.putExtra("topic", parentArrayList.get(idx));
                 intent.putExtra("parentName", parent[idx]);
                 startActivity(intent);
             }

@@ -160,10 +160,10 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
                 final String weekNum = "" + np_week.getValue();
                 final String times = "" + np_number.getValue();
-                final String swEnable = "" + sw_enable.isEnabled();
-                final String swAlert = "" + sw_alert.isEnabled();
+                final String swEnable = "" + sw_enable.isChecked();
+                final String swAlert = "" + sw_alert.isChecked();
                 final String userId = sharedPreferences.getString("USER_ID_NUM", "");
-                final String message = messageData;
+                final String message = " ";
 
                 Log.d(TAG, "userId : " + userId);
 
