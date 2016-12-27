@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -35,16 +36,21 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private ImageView iv_profile;
 
+    private EditText et_nickname;
+
     private RadioGroup rbtnGroup;
     private RadioButton rbtn_male;
     private RadioButton rbtn_female;
     private RadioButton rbtn_etc;
+
+
 
     private Button btn_register;
 
     private String userId = "";
     private String profile = "/";
     private String sex = "";
+    private String nickname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,8 @@ public class UserInfoActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
+        et_nickname = (EditText) findViewById(R.id.et_nickname);
 
         rbtnGroup = (RadioGroup) findViewById(R.id.rbtnGroup);
 
@@ -110,6 +118,12 @@ public class UserInfoActivity extends AppCompatActivity {
                     }
                 }
 
+                nickname = et_nickname.getText().toString();
+
+                if(nickname.equals(null)){
+                    nickname = "Me";
+                }
+
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN , 0);
 
                 userId = sharedPreferences.getString(USER_ID_NUMBER, "");
@@ -119,6 +133,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 params.put("userId", userId);
                 params.put("profile", profile);
                 params.put("sex", sex);
+                params.put("nickname", nickname);
 
                 Handler httpHandler = new Handler();
 

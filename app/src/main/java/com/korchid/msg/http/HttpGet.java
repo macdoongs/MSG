@@ -51,7 +51,7 @@ public class HttpGet extends Thread {
             StringBuilder sb = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
-            } 
+            }
 
             // From Thread to Activity
             Message message = Message.obtain(handler);

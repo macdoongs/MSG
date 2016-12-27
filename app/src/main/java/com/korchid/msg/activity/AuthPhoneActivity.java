@@ -177,7 +177,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                         }
                     };
 
-                    HttpGet httpGet = new HttpGet("https://www.korchid.com/msg-signup/" + phoneNumber, httpHandler);
+                    HttpGet httpGet = new HttpGet("https://www.korchid.com/msg-signup/" + internationalPhoneNumber, httpHandler);
                     httpGet.start();
                 }
 
