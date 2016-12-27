@@ -52,23 +52,17 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_phone);
 
-        StatusBar statusBar = new StatusBar(this);
+        initView();
 
+        StatusBar statusBar = new StatusBar(this);
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Join");
 
         phoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
-
-        tv_phoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
         tv_phoneNumber.setText(phoneNumber);
 
-        et_password = (EditText) findViewById(R.id.et_password);
-        et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
-
-        btn_register = (Button) findViewById(R.id.btn_register);
-        btn_register.setOnClickListener(this);
         btn_register.setEnabled(false);
 
-        TextWatcher textWatcher = new TextWatcher() {
+        et_passwordConfirm.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -91,9 +85,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                     btn_register.setEnabled(false);
                 }
             }
-        };
-
-        et_passwordConfirm.addTextChangedListener(textWatcher);
+        });
 
     }
 
@@ -216,6 +208,15 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
             }
         }
     }// onClick End
+
+    private void initView(){
+        tv_phoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
+        et_password = (EditText) findViewById(R.id.et_password);
+        et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
+        btn_register = (Button) findViewById(R.id.btn_register);
+
+        btn_register.setOnClickListener(this);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
