@@ -164,7 +164,10 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
                     for(int i=0; i<line.length; i++){
                         String[] dataArray = line[i].split("/");
 
-                        parentArrayList.add(dataArray[2]);
+                        String[] content = dataArray[2].split(":");
+
+                        parentArrayList.add(content[1]);
+                        Log.d(TAG, "dataArray : " + dataArray[i]);
                     }
 
                     Toast.makeText(getApplicationContext(), "Topic : " + topic, Toast.LENGTH_LONG).show();
