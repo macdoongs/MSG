@@ -54,11 +54,24 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
         initView();
 
-        StatusBar statusBar = new StatusBar(this);
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Join");
 
         phoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
         tv_phoneNumber.setText(phoneNumber);
+
+
+
+    }
+
+    private void initView(){
+        StatusBar statusBar = new StatusBar(this);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Join");
+
+        tv_phoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
+        et_password = (EditText) findViewById(R.id.et_password);
+        et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
+        btn_register = (Button) findViewById(R.id.btn_register);
+
+        btn_register.setOnClickListener(this);
 
         btn_register.setEnabled(false);
 
@@ -86,8 +99,8 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         });
-
     }
+
 
     @Override
     public void onClick(View v) {
@@ -209,14 +222,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         }
     }// onClick End
 
-    private void initView(){
-        tv_phoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
-        et_password = (EditText) findViewById(R.id.et_password);
-        et_passwordConfirm = (EditText) findViewById(R.id.et_passwordConfirm);
-        btn_register = (Button) findViewById(R.id.btn_register);
 
-        btn_register.setOnClickListener(this);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -88,46 +88,19 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        parentArrayList = new ArrayList<>();
-
-        userRole = getIntent().getStringExtra(USER_ROLE);
-
         // Remove previous activity
         MainActivity mainActivity = (MainActivity) MainActivity.activity;
         mainActivity.finish();
 
-/*
-        getLayoutInflater().inflate(R.layout.nav_header_main, null);
+        initView();
 
-        iv_profile = (ImageView) findViewById(R.id.iv_profile);
-        tv_myName = (TextView) findViewById(R.id.tv_name);
-        tv_myPhoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
+        parentArrayList = new ArrayList<>();
 
-        tv_myName.setText(GlobalApplication.getGlobalApplicationContext().getUserId());
-        tv_myPhoneNumber.setText(GlobalApplication.getGlobalApplicationContext().getUserId());
-
-
-        try {
-            Uri uri = GlobalApplication.getGlobalApplicationContext().getProfileImage();
-
-            Log.d(TAG, "Uri : " + uri);
-            if(uri != null){
-                iv_profile.setImageURI(GlobalApplication.getGlobalApplicationContext().getProfileImage());
-            }
-
-        }catch (Exception e){
-            Log.e(TAG, e.getMessage());
-        }
-*/
+        userRole = getIntent().getStringExtra(USER_ROLE);
 
 
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        StatusBar statusBar = new StatusBar(this);
 
 
         if(userRole.equals("parent")){
@@ -177,12 +150,40 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         };
 
 
-
         HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
         httpGet.start();
 
+    }
+
+    private void initView(){
+        /*
+        getLayoutInflater().inflate(R.layout.nav_header_main, null);
+
+        iv_profile = (ImageView) findViewById(R.id.iv_profile);
+        tv_myName = (TextView) findViewById(R.id.tv_name);
+        tv_myPhoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
+
+        tv_myName.setText(GlobalApplication.getGlobalApplicationContext().getUserId());
+        tv_myPhoneNumber.setText(GlobalApplication.getGlobalApplicationContext().getUserId());
 
 
+        try {
+            Uri uri = GlobalApplication.getGlobalApplicationContext().getProfileImage();
+
+            Log.d(TAG, "Uri : " + uri);
+            if(uri != null){
+                iv_profile.setImageURI(GlobalApplication.getGlobalApplicationContext().getProfileImage());
+            }
+
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+*/
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        StatusBar statusBar = new StatusBar(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -258,6 +259,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
             }
         });
+
     }
 
     @Override

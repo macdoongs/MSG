@@ -54,15 +54,11 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_phone);
 
-        StatusBar statusBar = new StatusBar(this);
-
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Login");
-
+        initView();
 
         // Read user device phone number
         TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         userPhoneNumber = telManager.getLine1Number();
-
 
 
         final String state = getIntent().getStringExtra(USER_LOGIN_STATE);
@@ -82,13 +78,22 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
             finish();
         }
 
+        et_phoneNumber.setText(userPhoneNumber);
+
+
+    }
+
+    private void initView(){
+        StatusBar statusBar = new StatusBar(this);
+
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Login");
 
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
         et_password = (EditText) findViewById(R.id.et_password);
 
-        et_phoneNumber.setText(userPhoneNumber);
-
         btn_login = (Button) findViewById(R.id.btn_login);
+        btn_findPassword = (Button) findViewById(R.id.btn_findPassword);
+
         btn_login.setOnClickListener(this);
         btn_login.setEnabled(false);
 
@@ -119,12 +124,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         };
         et_password.addTextChangedListener(textWatcher);
 
-
-
-        btn_findPassword = (Button) findViewById(R.id.btn_findPassword);
         btn_findPassword.setOnClickListener(this);
-
-
     }
 
     @Override

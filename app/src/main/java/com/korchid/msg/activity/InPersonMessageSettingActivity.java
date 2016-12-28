@@ -48,13 +48,16 @@ public class InPersonMessageSettingActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_person_message_setting);
 
+        initView();
 
+        message = new ArrayList<>();
+
+    }
+
+    private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Message setting");
-
-
-        message = new ArrayList<>();
 
         btn_add = (Button) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
@@ -64,6 +67,13 @@ public class InPersonMessageSettingActivity extends AppCompatActivity implements
         btn_register.setOnClickListener(this);
 
         et_inPersonMessage = (EditText) findViewById(R.id.et_inPersonMessage);
+
+
+        tv_message1 = (TextView) findViewById(R.id.tv_message1);
+        tv_message2 = (TextView) findViewById(R.id.tv_message2);
+        tv_message3 = (TextView) findViewById(R.id.tv_message3);
+        tv_message4 = (TextView) findViewById(R.id.tv_message4);
+        tv_message5 = (TextView) findViewById(R.id.tv_message5);
 
         btn_register.setEnabled(false);
         btn_add.setEnabled(false);
@@ -94,17 +104,7 @@ public class InPersonMessageSettingActivity extends AppCompatActivity implements
         };
 
         et_inPersonMessage.addTextChangedListener(textWatcher);
-
-        tv_message1 = (TextView) findViewById(R.id.tv_message1);
-        tv_message2 = (TextView) findViewById(R.id.tv_message2);
-        tv_message3 = (TextView) findViewById(R.id.tv_message3);
-        tv_message4 = (TextView) findViewById(R.id.tv_message4);
-        tv_message5 = (TextView) findViewById(R.id.tv_message5);
-
-
-
     }
-
 
     @Override
     public void onClick(View view) {

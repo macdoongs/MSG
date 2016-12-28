@@ -28,7 +28,7 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        StatusBar statusBar = new StatusBar(this);
+        initView();
 
         duration = getIntent().getIntExtra("duration", duration);
 
@@ -39,6 +39,7 @@ public class SplashActivity extends Activity {
 
         String topic = sharedPreferences.getString("TOPIC", "");
 
+        // TODO if no sharedPreferences data, Load user data - web server
         if(topic.equals("")){
             String userId = getIntent().getStringExtra("USER_ID_NUM");
 
@@ -111,7 +112,7 @@ public class SplashActivity extends Activity {
 
 
         Handler handler = new Handler();
-        // Duration : 2 second
+        // Loading page Duration : 2 second
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -119,5 +120,10 @@ public class SplashActivity extends Activity {
                 finish();
             }
         }, duration);
+    }
+
+    private void initView(){
+
+        StatusBar statusBar = new StatusBar(this);
     }
 }

@@ -44,7 +44,6 @@ public class UserInfoActivity extends AppCompatActivity {
     private RadioButton rbtn_etc;
 
 
-
     private Button btn_register;
 
     private String userId = "";
@@ -57,19 +56,18 @@ public class UserInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
+        initView();
+
+    }
+
+    private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "User Information");
 
 
         iv_profile = (ImageView) findViewById(R.id.iv_profile);
-        iv_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivityForResult(intent, 0);
-            }
-        });
+
 
         et_nickname = (EditText) findViewById(R.id.et_nickname);
 
@@ -80,6 +78,16 @@ public class UserInfoActivity extends AppCompatActivity {
         rbtn_etc = (RadioButton) findViewById(R.id.rbtn_etc);
 
         btn_register = (Button) findViewById(R.id.btn_register);
+
+        iv_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+
         btn_register.setEnabled(false);
 
         rbtnGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -95,6 +103,7 @@ public class UserInfoActivity extends AppCompatActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Register user information - web server
                 int id = rbtnGroup.getCheckedRadioButtonId();
 
                 switch (id){
@@ -147,7 +156,6 @@ public class UserInfoActivity extends AppCompatActivity {
         });
 
     }
-
 
     class httpHandler extends Handler{
         @Override

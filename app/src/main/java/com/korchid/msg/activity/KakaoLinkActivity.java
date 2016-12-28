@@ -38,17 +38,9 @@ public class KakaoLinkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kakao_link);
 
-        StatusBar statusBar = new StatusBar(this);
-
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "초대 기다리기");
-
-
-
-        tv_waitTime = (TextView) findViewById(R.id.tv_waitTime);
-
+        initView();
 
         final long waitTime = getIntent().getLongExtra("waitTime", System.currentTimeMillis()) + 86400000; // plus 1 day
-
 
         final Handler handler = new Handler();
 
@@ -84,13 +76,16 @@ public class KakaoLinkActivity extends AppCompatActivity {
         inviteTimer = new Timer();
         inviteTimer.schedule(inviteTask, 1000, 1000);
 
+    }
 
+    private void initView(){
+        StatusBar statusBar = new StatusBar(this);
 
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "초대 기다리기");
 
+        tv_waitTime = (TextView) findViewById(R.id.tv_waitTime);
         tv_parentName = (TextView) findViewById(R.id.tv_parentName);
         tv_parentPhoneNumber = (TextView) findViewById(R.id.tv_parentPhoneNumber);
-
-
 
         btn_kakaoLink = (Button) findViewById(R.id.btn_kakaoLink);
         btn_kakaoLink.setOnClickListener(new View.OnClickListener() {
@@ -131,10 +126,7 @@ public class KakaoLinkActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
-
 
     @Override
     protected void onDestroy() {

@@ -37,10 +37,24 @@ public class FindPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_password);
 
+        initView();
+
+        userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
+        Log.d(TAG, "userPhoneNumber : " + userPhoneNumber);
+
+        Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
+        intent.putExtra("mode", "find");
+        intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+
+        startActivityForResult(intent, 0);
+    }
+
+    private void initView(){
         tv_phoneNumber = (TextView) findViewById(R.id.tv_phoneNumber);
         tv_password = (TextView) findViewById(R.id.tv_password);
 
         btn_complete = (Button) findViewById(R.id.btn_complete);
+
         btn_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,18 +70,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-        userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
-        Log.d(TAG, "userPhoneNumber : " + userPhoneNumber);
-
-        Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
-        intent.putExtra("mode", "find");
-        intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
-
-        startActivityForResult(intent, 0);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

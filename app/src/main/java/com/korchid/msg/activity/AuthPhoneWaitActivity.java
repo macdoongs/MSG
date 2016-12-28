@@ -64,9 +64,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone_wait);
 
-        StatusBar statusBar = new StatusBar(this);
-
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Auth code");
+        initView();
 
         final String userId = getIntent().getExtras().getString(USER_PHONE_NUMBER);
 
@@ -78,10 +76,41 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         Log.d(TAG, "phoneNumber : " + phoneNumber);
 
-        btn_confirm = (Button) findViewById(R.id.btn_confirm);
-        btn_confirm.setOnClickListener(this);
 
+        // Request sms auth code - web server
+        smsReceiver = new SMSReceiver();
+        IntentFilter intentFilter = new IntentFilter(SMS_RECEIVED);
+        registerReceiver(smsReceiver, intentFilter);
+
+        String url = "https://www.korchid.com/sms-sender/";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("phoneNumber", phoneNumber);
+        params.put("token", sms_token);
+
+
+        HttpPost httpPost = new HttpPost(url, params, new Handler());
+        httpPost.start();
+
+        // Check expiration time
+        final Handler handler = new Handler();
+        final long expirationTime = System.currentTimeMillis() + 300000;
+        checkRemainTime(handler, expirationTime);
+
+    }
+
+    private void initView(){
+        StatusBar statusBar = new StatusBar(this);
+
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Auth code");
+
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);
         btn_reSend = (Button) findViewById(R.id.btn_reSend);
+
+        et_authCode = (EditText) findViewById(R.id.et_authCode);
+        tv_authTime = (TextView) findViewById(R.id.tv_authTime);
+
+        btn_confirm.setOnClickListener(this);
         btn_reSend.setOnClickListener(this);
 
         btn_confirm.setEnabled(false);
@@ -110,32 +139,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
             }
         };
 
-        et_authCode = (EditText) findViewById(R.id.et_authCode);
         et_authCode.addTextChangedListener(textWatcher);
-
-
-        tv_authTime = (TextView) findViewById(R.id.tv_authTime);
-
-        smsReceiver = new SMSReceiver();
-        IntentFilter intentFilter = new IntentFilter(SMS_RECEIVED);
-        registerReceiver(smsReceiver, intentFilter);
-
-        String url = "https://www.korchid.com/sms-sender/";
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("phoneNumber", phoneNumber);
-        params.put("token", sms_token);
-
-
-        HttpPost httpPost = new HttpPost(url, params, new Handler());
-        httpPost.start();
-
-
-        // Check expiration time
-        final Handler handler = new Handler();
-        final long expirationTime = System.currentTimeMillis() + 300000;
-        checkRemainTime(handler, expirationTime);
-
     }
 
     @Override

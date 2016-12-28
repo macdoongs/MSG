@@ -49,6 +49,23 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
 
+        initView();
+
+
+
+        /*
+        // Log console - Contact
+        ContactUtil contactUtil = new ContactUtil(getApplicationContext());
+
+        ArrayList<Contact> contactList = contactUtil.getContactList();
+
+        for(int i=0; i<contactList.size(); i++){
+            Log.d("CONTACT", contactList.get(i).getName());
+        }
+        */
+    }
+
+    private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Invite");
@@ -73,8 +90,8 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         et_nickname = (EditText) findViewById(R.id.et_nickname);
         et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
 
+        // if EditText is Blank, it doesn't work.
         btn_send.setEnabled(false);
-
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -102,32 +119,25 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         };
 
         et_phoneNumber.addTextChangedListener(textWatcher);
-
-        /*
-        ContactUtil contactUtil = new ContactUtil(getApplicationContext());
-
-        ArrayList<Contact> contactList = contactUtil.getContactList();
-
-        for(int i=0; i<contactList.size(); i++){
-            Log.d("CONTACT", contactList.get(i).getName());
-        }
-        */
     }
-
 
     @Override
     public void onClick(View v) {
+        // Button onClick function
         viewId = v.getId();
 
         switch (viewId){
             case R.id.btn_contactList:{
                 // Show phone contact list
+                // User pick one contact
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                 startActivityForResult(intent, 0);
                 break;
             }
             case R.id.btn_inviteParent:{
+                // Invite parent
+                // User role : child
                 userRole = "child";
                 tv_role.setText("Invite Parent.");
                 btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
@@ -135,6 +145,8 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_inviteChild:{
+                // Invite child
+                // User role : parent
                 userRole = "parent";
                 tv_role.setText("Invite Child.");
                 btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
@@ -142,6 +154,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_send:{
+                // check if user want to send invitation sms message
                 AlertDialog.Builder builder = new AlertDialog.Builder(InviteActivity.this);
 
                 builder.setTitle("재확인");
@@ -154,6 +167,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                         String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
 
 
+                        // Temp
                         // SMS Compose
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + parentPhoneNumber));
                         intent.putExtra("sms_body", message);
@@ -200,7 +214,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_kakaoLink:{
-                // Wait to connect parent, child and send K
+                // Wait to connect parent, child and send Kakao link
                 Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
                 startActivity(intent);
                 break;
@@ -213,11 +227,12 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //ActionBar 메뉴 클릭에 대한 이벤트 처리
+        //ActionBar menu click event
 
         int id = item.getItemId();
         switch (id){
             case android.R.id.home:
+                // Back
                 this.finish();
                 break;
             default:
@@ -236,6 +251,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                             ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
             cursor.moveToFirst();
 
+            // Set the contact in EditText
             et_nickname.setText(cursor.getString(0));   // contact - name
             et_phoneNumber.setText(cursor.getString(1));    // contact - phone number
             cursor.close();

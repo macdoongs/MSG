@@ -74,33 +74,20 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
     private Boolean expandedState = false;
-    private Animation aleft;
-    private Animation bleft;
 
     private ArrayList<Chatting> m_arr;
     private ChattingAdapter adapter;
     private static String chatMessage = new String();
 
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
+        initView();
+
         Intent intent = getIntent();
         parentName = intent.getStringExtra("parentName");
-
-
-        StatusBar statusBar = new StatusBar(this);
-
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, parentName);
-
-
-        Log.d(TAG, "onCreate");
-
-        aleft = AnimationUtils.loadAnimation(this, R.anim.aleft);
-        bleft = AnimationUtils.loadAnimation(this, R.anim.bleft);
-
-        expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
-
 
 
         pic = null;
@@ -109,12 +96,38 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
-
-
         Log.d(TAG, "Topic : " + title);
 
         //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
 
+
+        // Register mqtt topic - Web server
+//        String url = "https://www.korchid.com/msg-mqtt";
+//
+//        HashMap<String, String> params = new HashMap<>();
+//        params.put("topic", title);
+//
+//
+//        HttpPost httpPost = new HttpPost(url, params, new Handler());
+//        httpPost.start();
+
+        //Init Receivers
+        bindStatusReceiver();
+        bindMessageReceiver();
+
+        //MqttServiceDelegate.topic = title;
+
+        //Start service if not started
+        MqttServiceDelegate.startService(this, title);
+
+
+
+    }
+
+    private void initView(){
+        StatusBar statusBar = new StatusBar(this);
+
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, parentName);
 
         btn_plus = (Button)findViewById(R.id.btn_plus);
 
@@ -124,6 +137,12 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         et_message = (EditText)findViewById(R.id.et_message);
 
         btn_send = (Button)findViewById(R.id.btn_send);
+
+        expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
+
+
+        btn_send.setOnClickListener(this);
+        btn_plus.setOnClickListener(this);
 
         btn_send.setEnabled(false);
 
@@ -188,28 +207,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 */
-//        String url = "https://www.korchid.com/msg-mqtt";
-//
-//        HashMap<String, String> params = new HashMap<>();
-//        params.put("topic", title);
-//
-//
-//        HttpPost httpPost = new HttpPost(url, params, new Handler());
-//        httpPost.start();
-
-        //Init Receivers
-        bindStatusReceiver();
-        bindMessageReceiver();
-
-        //MqttServiceDelegate.topic = title;
-
-        //Start service if not started
-        MqttServiceDelegate.startService(this, title);
-
-        btn_send.setOnClickListener(this);
-        btn_plus.setOnClickListener(this);
-
     }
+
 
     @Override
     public void onClick(View v) {

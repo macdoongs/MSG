@@ -53,6 +53,13 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        initView();
+
+
+        //iv_userPhoto.setImageBitmap(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name);
+    }
+
+    private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Profile");
@@ -61,7 +68,6 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         btn_upload = (Button) findViewById(R.id.btn_upload);
         btn_upload.setOnClickListener(this);
 
-        //iv_userPhoto.setImageBitmap(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name);
     }
 
     // Take pictures function

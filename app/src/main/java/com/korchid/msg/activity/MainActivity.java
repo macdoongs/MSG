@@ -69,16 +69,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Modify UI
-        StatusBar statusBar = new StatusBar(this);
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
-
+        // Save for terminating in next page
         activity = this;
+
+        initView();
 
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
 
 
         final ServiceThread serviceThread = new ServiceThread(new Handler());
@@ -91,27 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Log.d(TAG, "timer : " + serviceThread.timer);
 
-        btn_next = (Button) findViewById(R.id.btn_next);
-        btn_next.setOnClickListener(this);
-        btn_next.setVisibility(View.GONE);
 
-        btn_invite = (Button) findViewById(R.id.btn_invite);
-        btn_invite.setOnClickListener(this);
-
-        btn_join = (Button) findViewById(R.id.btn_join);
-
-        btn_login = (Button) findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(this);
-
-
-        btn_reserve = (Button) findViewById(R.id.btn_reserve);
-        btn_reserve.setOnClickListener(this);
-
-        btn_temp = (Button) findViewById(R.id.btn_temp);
-        btn_temp.setOnClickListener(this);
-
-        btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
-        btn_userInfo.setOnClickListener(this);
 
 
         // Use Environmental variable 'SharedPreference'
@@ -130,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Log.d(TAG, "USER phone number : " + userPhoneNumber);
 
 
+
+
+        btn_next.setVisibility(View.GONE);
 
         Intent intent = new Intent(this, SplashActivity.class);
         intent.putExtra(USER_ID_NUMBER, sharedPreferences.getString(USER_ID_NUMBER , "0"));
@@ -158,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             intent.putExtra("duration",  SPLASH_LOGOUT);
         }
-        btn_join.setOnClickListener(this);
+
         // Loading screen
         startActivity(intent);
 
@@ -178,6 +159,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "USER_ROLE : " + userRole);
 
     }
+
+    private void initView(){
+        // Modify UI
+        StatusBar statusBar = new StatusBar(this);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
+
+        btn_next = (Button) findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(this);
+
+        btn_invite = (Button) findViewById(R.id.btn_invite);
+        btn_invite.setOnClickListener(this);
+
+        btn_join = (Button) findViewById(R.id.btn_join);
+        btn_join.setOnClickListener(this);
+
+        btn_login = (Button) findViewById(R.id.btn_login);
+        btn_login.setOnClickListener(this);
+
+
+        btn_reserve = (Button) findViewById(R.id.btn_reserve);
+        btn_reserve.setOnClickListener(this);
+
+        btn_temp = (Button) findViewById(R.id.btn_temp);
+        btn_temp.setOnClickListener(this);
+
+        btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
+        btn_userInfo.setOnClickListener(this);
+
+
+    }
+
 
     @Override
     protected void onStart() {

@@ -51,11 +51,20 @@ public class AuthPhoneActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone);
 
+        initView();
 
+
+    }   // onCreate End
+
+    private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Phone Number");
 
+        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
+
+        btn_register = (Button) findViewById(R.id.btn_sendSMS);
+        btn_dupCheck = (Button) findViewById(R.id.btn_dupCheck);
 
         // Setting nation code spinner
         final String[] option = getResources().getStringArray(R.array.spinnerNationCode);
@@ -78,11 +87,6 @@ public class AuthPhoneActivity extends AppCompatActivity{
             }
         });
 
-
-        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
-
-        btn_register = (Button) findViewById(R.id.btn_sendSMS);
-        btn_dupCheck = (Button) findViewById(R.id.btn_dupCheck);
 
         btn_dupCheck.setEnabled(false);
         btn_register.setEnabled(false);
@@ -235,7 +239,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                 }
             }
         });
-    }   // onCreate End
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

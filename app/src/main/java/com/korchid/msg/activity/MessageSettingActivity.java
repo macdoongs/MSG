@@ -60,9 +60,7 @@ public class MessageSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        StatusBar statusBar = new StatusBar(this);
-
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Message setting");
+        initView();
 
         Intent intent = getIntent();
         // Enum data - intent
@@ -75,6 +73,12 @@ public class MessageSettingActivity extends AppCompatActivity {
         Log.d(TAG, "Type : " + type);
 
         setList(type);
+    }
+
+    private void initView(){
+        StatusBar statusBar = new StatusBar(this);
+
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Message setting");
     }
 
     private void setList(final MessageSetting.Type type){

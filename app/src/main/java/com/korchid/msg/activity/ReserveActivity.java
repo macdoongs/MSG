@@ -70,6 +70,11 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
 
+        initView();
+
+    }
+
+    private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "Reserve");
@@ -127,6 +132,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         tv_message5 = (TextView) findViewById(R.id.tv_message5);
 
     }
+
 
     @Override
     public void onClick(View v) {
