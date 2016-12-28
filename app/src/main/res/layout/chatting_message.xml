@@ -7,7 +7,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusable="false">
 
 
         <GridLayout
@@ -18,6 +19,7 @@
             android:rowCount="2"
             android:layout_marginLeft="5dp"
             android:orientation="horizontal"
+            android:focusable="false"
             >
 
             <TextView
@@ -64,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:orientation="vertical"
+            android:focusable="false"
             >
 
         </LinearLayout>
@@ -78,7 +81,8 @@
             android:layout_marginRight="5dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:focusable="false">
 
 
             <TextView

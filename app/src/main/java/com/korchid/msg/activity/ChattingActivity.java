@@ -23,9 +23,11 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import com.korchid.msg.Chatting;
 import com.korchid.msg.adapter.ChattingAdapter;
+import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.mqtt.MqttServiceDelegate;
 import com.korchid.msg.mqtt.MqttServiceDelegate.MessageHandler;
@@ -186,7 +188,14 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 */
-
+//        String url = "https://www.korchid.com/msg-mqtt";
+//
+//        HashMap<String, String> params = new HashMap<>();
+//        params.put("topic", title);
+//
+//
+//        HttpPost httpPost = new HttpPost(url, params, new Handler());
+//        httpPost.start();
 
         //Init Receivers
         bindStatusReceiver();
@@ -217,7 +226,9 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
                 message = message1 + message2 + message3;
 
+                //TODO modify topic
                 String topic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
+                //String topic = title;
 
                 MqttServiceDelegate.publish(
                         ChattingActivity.this,
@@ -405,8 +416,9 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         int end;
         changingString = message;
 
+        //TODO modify topic
         String roomTopic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
-
+        //String roomTopic = title;
 
         Log.d(TAG, topic);
         Log.d(TAG, message);

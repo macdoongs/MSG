@@ -137,6 +137,7 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
             // User : child
 
         }
+
         String stringUrl = "https://www.korchid.com/msg-mapping/" + userPhoneNumber;
 
         Handler httpHandler = new Handler(){
@@ -156,14 +157,18 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
 
 
                 } else {
+                    String topic = line[0];
+
 
 
                     for(int i=0; i<line.length; i++){
                         String[] dataArray = line[i].split("/");
 
-                        parentArrayList.add(dataArray[2]);
-                    }
+                        String[] content = dataArray[2].split(":");
 
+                        parentArrayList.add(content[1]);
+                        Log.d(TAG, "dataArray : " + dataArray[i]);
+                    }
 
                     Toast.makeText(getApplicationContext(), "Topic : " + topic, Toast.LENGTH_LONG).show();
 

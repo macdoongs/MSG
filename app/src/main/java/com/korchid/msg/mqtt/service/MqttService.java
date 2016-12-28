@@ -268,7 +268,9 @@ public class MqttService extends Service implements IMqttCallback
         //mqttTopic = intent.getExtras().getString(MQTT_MSG_RECEIVED_TOPIC);
         mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
 
+        //TODO modify topic
         topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
+        //topics.add(new MqttTopic(mqttTopic));
         Log.d(TAG, "onStartCommand: " + mqttTopic );
         for(int i=0; i<topics.size(); i++){
             Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
