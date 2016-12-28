@@ -230,14 +230,6 @@ public class MqttService extends Service implements IMqttCallback
         //SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
         brokerHostName = "52.78.68.226";
 
-        //topics.add(new MqttTopic("/oneM2M/req/Sajouiot03/:mobius-yt/xml"));
-//        topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
-//        Log.d(TAG, "onCreate: " + mqttTopic + " / " + topics.size());
-//        for(int i=0; i<topics.size(); i++){
-//            Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
-//        }
-
-
         mqttClientFactory = new PahoMqttClientFactory();
 
         executor = Executors.newFixedThreadPool(5);
@@ -269,8 +261,8 @@ public class MqttService extends Service implements IMqttCallback
         mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
 
         //TODO modify topic
-        topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
-        //topics.add(new MqttTopic(mqttTopic));
+        //topics.add(new MqttTopic("/oneM2M/req/" + mqttTopic + "/:mobius-yt/xml"));
+        topics.add(new MqttTopic(mqttTopic));
         Log.d(TAG, "onStartCommand: " + mqttTopic );
         for(int i=0; i<topics.size(); i++){
             Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
@@ -659,6 +651,9 @@ public class MqttService extends Service implements IMqttCallback
         //
         // have we lost our data connection?
         //
+
+
+
         
         if (isOnline() == false)
         {
@@ -801,9 +796,8 @@ public class MqttService extends Service implements IMqttCallback
             notifyUser("Unable to connect", "MQTT", "Unable to connect");
         }        
     }
-    
-    
-    /*private void reconnectInNewThread(){
+    /*
+    private void reconnectInNewThread(){
     	new Thread(new Runnable(){
 			@Override
 			public void run()
@@ -818,8 +812,8 @@ public class MqttService extends Service implements IMqttCallback
 			}
     		
     	}).start(); 
-    }*/
-    
+    }
+    */
     /*
      * (Re-)connect to the message broker
      */

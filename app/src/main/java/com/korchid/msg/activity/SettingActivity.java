@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class SettingActivity extends AppCompatActivity {
     private static final String TAG = "SettingActivity";
 
-    ArrayList settingArrayList;
+    private ArrayList settingArrayList;
     private SettingAdapter settingAdapter;
 
 

@@ -22,21 +22,21 @@ import java.util.ArrayList;
 public class InPersonMessageSettingActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "InPersonSettingActivity";
 
-    Button btn_add;
-    Button btn_register;
+    private Button btn_add;
+    private Button btn_register;
 
-    EditText et_inPersonMessage;
+    private EditText et_inPersonMessage;
 
 
-    TextView tv_message1;
-    TextView tv_message2;
-    TextView tv_message3;
-    TextView tv_message4;
-    TextView tv_message5;
+    private TextView tv_message1;
+    private TextView tv_message2;
+    private TextView tv_message3;
+    private TextView tv_message4;
+    private TextView tv_message5;
 
-    int messageNumber = 0;
+    private int messageNumber = 0;
 
-    int viewId;
+    private int viewId;
 
 
     ArrayList<String> message;

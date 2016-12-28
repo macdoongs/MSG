@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String loginState = "";
     private String userRole = "";
     private int viewId;
+    private int duration = 0;
 
 
     @Override
@@ -88,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //serviceThread.timer = "2016-12-16 19:15";
 
         //Log.d(TAG, "timer : " + serviceThread.timer);
-
-
 
 
         // Use Environmental variable 'SharedPreference'

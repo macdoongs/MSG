@@ -37,8 +37,8 @@ public class MessageSettingActivity extends AppCompatActivity {
     private String nickname;
     private String title;
 
-    ArrayList<Object> settingArrayList;
-    public ArrayList<String> messageArrayList;
+    private ArrayList<Object> settingArrayList;
+    private ArrayList<String> messageArrayList;
     private SettingAdapter settingAdapter;
 
     private MessageSetting.Type type;

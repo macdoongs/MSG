@@ -20,7 +20,7 @@ import com.korchid.msg.ui.StatusBar;
 public class SplashActivity extends Activity {
     private static final String TAG = "SplashActivity";
 
-    int duration = 2000;
+    private int duration = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

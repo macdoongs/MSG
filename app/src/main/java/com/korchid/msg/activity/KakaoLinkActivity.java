@@ -22,14 +22,14 @@ import java.util.TimerTask;
 public class KakaoLinkActivity extends AppCompatActivity {
     private static final String TAG = "KakaoLinkActivity";
 
-    TextView tv_waitTime;
-    TextView tv_parentName;
-    TextView tv_parentPhoneNumber;
+    private TextView tv_waitTime;
+    private TextView tv_parentName;
+    private TextView tv_parentPhoneNumber;
 
-    Button btn_kakaoLink;
+    private Button btn_kakaoLink;
 
-    Timer inviteTimer;
-    TimerTask inviteTask;
+    private Timer inviteTimer;
+    private TimerTask inviteTask;
 
 
     @Override

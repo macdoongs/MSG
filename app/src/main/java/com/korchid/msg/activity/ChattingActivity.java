@@ -84,17 +84,20 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
-        initView();
-
         Intent intent = getIntent();
         parentName = intent.getStringExtra("parentName");
-
 
         pic = null;
         count = "";
         nickname = "Me";
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
+
+        initView();
+
+
+
+
 
         Log.d(TAG, "Topic : " + title);
 
@@ -216,18 +219,13 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         switch (viewId){
             case R.id.btn_send:{
-                String message = "";
 
-                message1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><m2m:rqp xmlns:m2m=\"http://www.onem2m.org/xml/protocols\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><op>1</op><to>/mobius-yt/"+title+"/chatting</to><fr>S0.2.481.1.20160721051547725</fr><rqi>rqi201607211554337900rzY</rqi><ty>4</ty><pc><cin><rn></rn><con>";
+                String message = nickname+": "+ et_message.getText().toString();
 
-                String message2 = nickname+": "+ et_message.getText().toString();
-                String message3 = "</con></cin></pc></m2m:rqp>";
-
-                message = message1 + message2 + message3;
 
                 //TODO modify topic
-                String topic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
-                //String topic = title;
+                //String topic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
+                String topic = title;
 
                 MqttServiceDelegate.publish(
                         ChattingActivity.this,
@@ -416,59 +414,22 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         changingString = message;
 
         //TODO modify topic
-        String roomTopic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
-        //String roomTopic = title;
+        //String roomTopic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
+        String roomTopic = title;
 
         Log.d(TAG, topic);
         Log.d(TAG, message);
-
-        String splitedString[] = changingString.split("</con>");
 
         if(!topic.equals(roomTopic)){
             return;
         }
 
-        int i = -1;
-        while(true){
-            i++;
-            try{
-                start = splitedString[i].indexOf("<con>");
-                start = start+5;
-
-                if(!splitedString[i].substring(splitedString[i].length()-9,splitedString[i].length()-1).equals("Instance")){
-                    changedString += splitedString[i].substring(start, splitedString[i].length());
-                    //    Toast.makeText(getApplicationContext(), splitedString[i].substring(splitedString[i].length()-9,splitedString[i].length()-1),Toast.LENGTH_LONG).show();
-                }
-
-                start = changingString.indexOf("<con>");
-                start = start+5;
-
-                end = changingString.indexOf("</con>");
-                changedString = changingString.substring(start, end);
-                if(!changedString.equals("l version=\"1.0\" encoding=\"UTF-8\"?>")){
-                    chatMessage = changedString;
-                    /*String[] ReturnList = changedString.split(":");
-
-                    name = ReturnList[0];
-                    chatMessage = ReturnList[1];*/
-
-                }
-            }
-            catch(Exception e){
-                Log.e(TAG, e.getMessage());
-
-                break;
-            }
-
-        }
-
         if(chatMessage != null){
 
-            if(!changedString.equals("l version=\"1.0\" encoding=\"UTF-8\"?>")){
-                m_arr.add(new Chatting(nickname, chatMessage));
-            }
+            m_arr.add(new Chatting(nickname, message));
 
-            chatMessage="";
+
+            message="";
             lv_message.setSelection(adapter.getCount()-1);
         }
 
