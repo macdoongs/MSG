@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +19,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kakao.kakaolink.KakaoLink;
+import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
@@ -190,10 +200,43 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                         editor.commit();
 
-                        long waitTime = System.currentTimeMillis();
+
+                        String userId = "2";
+                        String receiverPhoneNumber = "+821022222222";
+
+                        String inviteTime = getCurrentTimeStamp();
+
+                        String strUrl = "https://www.korchid.com/msg-wait-connection";
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("userId", userId);
+                        params.put("receiverPhoneNumber", receiverPhoneNumber);
+                        params.put("inviteTime", inviteTime);
+
+
+                        Handler httpHandler = new Handler(){
+                            @Override
+                            public void handleMessage(Message msg) {
+                                String response = msg.getData().getString("response");
+
+                                //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
+
+                                String[] line = response.split("\n");
+
+                                if(line[0].equals("ERROR")){
+                                    Toast.makeText(getApplicationContext(), "No ID!", Toast.LENGTH_LONG).show();
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        };
+
+                        HttpPost httpPost = new HttpPost(strUrl, params, httpHandler);
+                        httpPost.start();
+
+
                         intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
-                        intent.putExtra("parentPhoneNumber", parentPhoneNumber);
-                        intent.putExtra("waitTime", waitTime);
+                        intent.putExtra("receiverPhoneNumber", receiverPhoneNumber);
+                        intent.putExtra("waitTime", inviteTime);
                         startActivity(intent);
 
                     }
@@ -224,6 +267,16 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
     }
+
+
+    // http://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java
+    public static String getCurrentTimeStamp() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
+        Date now = new Date();
+        String strDate = sdfDate.format(now);
+        return strDate;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

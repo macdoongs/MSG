@@ -82,8 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
 
 
+        // TODO
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
 
 
         final ServiceThread serviceThread = new ServiceThread(new Handler());

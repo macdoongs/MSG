@@ -2,19 +2,27 @@ package com.korchid.msg.activity;
 
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,6 +39,7 @@ public class KakaoLinkActivity extends AppCompatActivity {
     private Timer inviteTimer;
     private TimerTask inviteTask;
 
+    private long inviteTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,43 +47,91 @@ public class KakaoLinkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kakao_link);
 
+
+        String choosingId = "5";
+        String receiverPhoneNumber = getIntent().getStringExtra("receiverPhoneNumber");
+
         initView();
 
-        final long waitTime = getIntent().getLongExtra("waitTime", System.currentTimeMillis()) + 86400000; // plus 1 day
-
-        final Handler handler = new Handler();
-
-        if(inviteTimer != null){
-            inviteTimer.cancel();
-        }
-
-        inviteTask = new TimerTask() {
+        String strUrl = "https://www.korchid.com/msg-wait-connection/" + choosingId + "/" + receiverPhoneNumber;
+        Handler httpHandler = new Handler(){
             @Override
-            public void run() {
+            public void handleMessage(Message msg) {
+                String response = msg.getData().getString("response");
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        long currentTime = (waitTime - System.currentTimeMillis()) / 1000;
-                        if(currentTime >= 0) {
-                            long hour = currentTime / (60 * 60);
-                            long min = (currentTime - hour * 60 * 60) / 60;
-                            long sec = currentTime - hour * 60 * 60 - min * 60;
+                String[] line = response.split("\n");
+
+                //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
+
+                if(line[0].equals("Error")){
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+
+                }else{
+                    Log.d(TAG, "line : " + line[0]);
+
+                    String[] section = line[0].split("/");
+                    String invitingId = section[0];
+                    String isConnection = section[1];
+                    String strInviteTime = section[2];
 
 
-                            String time = "" + hour + ":" + min + ":" + sec;
-                            Log.d(TAG, "time : " + time);
-                            tv_waitTime.setText(time);
-                            tv_waitTime.setTextColor(Color.BLUE);
-                            tv_waitTime.setTextSize(20.0f);
-                        }
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = null;
+                    try {
+                        date = simpleDateFormat.parse(strInviteTime);
+
+                        Log.d(TAG, "Date : " + date);
+
+                        inviteTime = date.getTime();
+                        Log.d(TAG, "inviteTime : " + inviteTime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                });
+
+                    final long waitTime = inviteTime + 86400000; // plus 1 day
+
+                    final Handler handler = new Handler();
+
+                    if(inviteTimer != null){
+                        inviteTimer.cancel();
+                    }
+
+                    inviteTask = new TimerTask() {
+                        @Override
+                        public void run() {
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    long currentTime = (waitTime - System.currentTimeMillis()) / 1000;
+                                    if(currentTime >= 0) {
+                                        long hour = currentTime / (60 * 60);
+                                        long min = (currentTime - hour * 60 * 60) / 60;
+                                        long sec = currentTime - hour * 60 * 60 - min * 60;
+
+
+                                        String time = "" + hour + ":" + min + ":" + sec;
+                                        Log.d(TAG, "time : " + time);
+                                        tv_waitTime.setText(time);
+                                        tv_waitTime.setTextColor(Color.BLUE);
+                                        tv_waitTime.setTextSize(20.0f);
+                                    }
+                                }
+                            });
+                        }
+                    };
+
+                    inviteTimer = new Timer();
+                    inviteTimer.schedule(inviteTask, 1000, 1000);
+
+                }
             }
         };
+        HttpGet httpGet = new HttpGet(strUrl, httpHandler);
+        httpGet.start();
 
-        inviteTimer = new Timer();
-        inviteTimer.schedule(inviteTask, 1000, 1000);
+
+
 
     }
 
