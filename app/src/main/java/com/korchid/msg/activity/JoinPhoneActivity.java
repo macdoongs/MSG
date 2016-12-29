@@ -52,11 +52,11 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_phone);
 
-        initView();
-
-
         phoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
         tv_phoneNumber.setText(phoneNumber);
+
+        initView();
+
 
 
 

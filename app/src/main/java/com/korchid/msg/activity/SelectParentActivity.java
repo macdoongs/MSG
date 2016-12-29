@@ -92,14 +92,14 @@ public class SelectParentActivity extends AppCompatActivity implements Navigatio
         MainActivity mainActivity = (MainActivity) MainActivity.activity;
         mainActivity.finish();
 
-        initView();
-
-        parentArrayList = new ArrayList<>();
 
         userRole = getIntent().getStringExtra(USER_ROLE);
-
-
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
+        parentArrayList = new ArrayList<>();
+
+        initView();
+
+
 
 
 

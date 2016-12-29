@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int viewId;
     private int duration = 0;
 
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Save for terminating in next page
         activity = this;
+
+
+        // Use Environmental variable 'SharedPreference'
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
         initView();
 
@@ -91,8 +97,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Log.d(TAG, "timer : " + serviceThread.timer);
 
 
-        // Use Environmental variable 'SharedPreference'
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+
+
+/*
+        // if sharedPreferences.getString value is 0, assign 2th parameter
+        Log.d(TAG, "SharedPreference");
+        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
+        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
+        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "000000"));
+*/
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+        userRole = sharedPreferences.getString(USER_ROLE, "");
+
+        Log.d(TAG, "USER_ROLE : " + userRole);
+
+    }
+
+    private void initView(){
+        // Modify UI
+        StatusBar statusBar = new StatusBar(this);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
+
+        btn_next = (Button) findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(this);
+
+        btn_invite = (Button) findViewById(R.id.btn_invite);
+        btn_invite.setOnClickListener(this);
+
+        btn_join = (Button) findViewById(R.id.btn_join);
+        btn_join.setOnClickListener(this);
+
+        btn_login = (Button) findViewById(R.id.btn_login);
+        btn_login.setOnClickListener(this);
+
+
+        btn_reserve = (Button) findViewById(R.id.btn_reserve);
+        btn_reserve.setOnClickListener(this);
+
+        btn_temp = (Button) findViewById(R.id.btn_temp);
+        btn_temp.setOnClickListener(this);
+
+        btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
+        btn_userInfo.setOnClickListener(this);
+
 
 /*
         // Develop mode
@@ -141,51 +189,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Loading screen
         startActivity(intent);
-
-
-
-/*
-        // if sharedPreferences.getString value is 0, assign 2th parameter
-        Log.d(TAG, "SharedPreference");
-        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
-        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
-        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "000000"));
-*/
-        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
-
-        userRole = sharedPreferences.getString(USER_ROLE, "");
-
-        Log.d(TAG, "USER_ROLE : " + userRole);
-
-    }
-
-    private void initView(){
-        // Modify UI
-        StatusBar statusBar = new StatusBar(this);
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
-
-        btn_next = (Button) findViewById(R.id.btn_next);
-        btn_next.setOnClickListener(this);
-
-        btn_invite = (Button) findViewById(R.id.btn_invite);
-        btn_invite.setOnClickListener(this);
-
-        btn_join = (Button) findViewById(R.id.btn_join);
-        btn_join.setOnClickListener(this);
-
-        btn_login = (Button) findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(this);
-
-
-        btn_reserve = (Button) findViewById(R.id.btn_reserve);
-        btn_reserve.setOnClickListener(this);
-
-        btn_temp = (Button) findViewById(R.id.btn_temp);
-        btn_temp.setOnClickListener(this);
-
-        btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
-        btn_userInfo.setOnClickListener(this);
-
 
     }
 

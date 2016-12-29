@@ -64,8 +64,6 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone_wait);
 
-        initView();
-
         final String userId = getIntent().getExtras().getString(USER_PHONE_NUMBER);
 
         mode = getIntent().getStringExtra("mode");
@@ -75,6 +73,8 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         smsMessage = "";
 
         Log.d(TAG, "phoneNumber : " + phoneNumber);
+
+        initView();
 
 
         // Request sms auth code - web server

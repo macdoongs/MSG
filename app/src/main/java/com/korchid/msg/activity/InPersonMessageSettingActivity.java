@@ -48,9 +48,10 @@ public class InPersonMessageSettingActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_person_message_setting);
 
-        initView();
 
         message = new ArrayList<>();
+
+        initView();
 
     }
 

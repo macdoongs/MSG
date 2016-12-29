@@ -37,10 +37,11 @@ public class FindPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_password);
 
-        initView();
-
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
         Log.d(TAG, "userPhoneNumber : " + userPhoneNumber);
+
+        initView();
+
 
         Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
         intent.putExtra("mode", "find");
