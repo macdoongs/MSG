@@ -107,7 +107,6 @@
         <activity android:name=".activity.KakaoLinkActivity" />
         <activity android:name=".activity.JoinPhoneActivity" />
         <activity android:name=".activity.LoginPhoneActivity" />
-        <activity android:name=".activity.MenuTest" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.FindPasswordActivity" />
         <activity android:name=".activity.InPersonMessageSettingActivity"></activity>
