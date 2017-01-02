@@ -114,6 +114,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                 break;
             }
             case RESULT_CANCELED:{
+                finish();
                 break;
             }
             default:{

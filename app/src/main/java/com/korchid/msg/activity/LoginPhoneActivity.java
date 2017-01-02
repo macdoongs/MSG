@@ -13,8 +13,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.korchid.msg.ui.CustomActionbar;
@@ -40,8 +43,12 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
     private EditText et_phoneNumber;
     private EditText et_password;
 
+    private Spinner sp_nationCode;
+
+    private String internationalPhoneNumber;
     private String phoneNumber;
     private String userPhoneNumber;
+    private String nationCode = "";
     private String password;
     private int viewId;
 
@@ -55,11 +62,6 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_login_phone);
 
         initView();
-
-        // Read user device phone number
-        TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        userPhoneNumber = telManager.getLine1Number();
-
 
         final String state = getIntent().getStringExtra(USER_LOGIN_STATE);
 
@@ -93,6 +95,27 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_findPassword = (Button) findViewById(R.id.btn_findPassword);
+
+        // Setting nation code spinner
+        final String[] option = getResources().getStringArray(R.array.spinnerNationCode);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, option);
+        sp_nationCode = (Spinner) findViewById(R.id.sp_nationCode);
+        sp_nationCode.setAdapter(arrayAdapter);
+        sp_nationCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(), option[i], Toast.LENGTH_LONG).show();
+                String content = option[i];
+                // Delete nation name
+                nationCode = content.split(" ")[0];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         btn_login.setOnClickListener(this);
         btn_login.setEnabled(false);
@@ -131,14 +154,21 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         viewId = v.getId();
 
+        phoneNumber = et_phoneNumber.getText().toString();
+        password = et_password.getText().toString();
+
+
+        internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
         switch (viewId){
             case R.id.btn_login:{
-                phoneNumber = et_phoneNumber.getText().toString();
-                password = et_password.getText().toString();
+
+
+                //Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
                 String stringUrl = "https://www.korchid.com/msg-login";
                 HashMap<String, String> params = new HashMap<>();
-                params.put("phoneNumber", phoneNumber);
+                params.put("phoneNumber", internationalPhoneNumber);
                 params.put("password", password);
 
                 Handler httpHandler = new Handler(){
@@ -197,8 +227,8 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
             }
             case R.id.btn_findPassword:{
                 Intent intent = new Intent(getApplicationContext(), FindPasswordActivity.class);
-                intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
-                Log.d(TAG, "userPhoneNumber : " + userPhoneNumber);
+                intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
+                Log.d(TAG, "internationalPhoneNumber : " + internationalPhoneNumber);
                 startActivityForResult(intent, 0);
                 break;
             }

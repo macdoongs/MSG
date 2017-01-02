@@ -23,47 +23,53 @@
             android:weightSum="1"
             android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Phone Number"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_margin="10dp"/>
+            <Spinner
+                android:layout_height="wrap_content"
+                android:id="@+id/sp_nationCode"
+                android:layout_weight="0.2"
+                android:layout_width="150dp" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/et_phoneNumber"
-            android:hint="010-0000-0000" />
-
-        <TextView
-            android:text="Password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:id="@+id/textView8"
-            android:textSize="30sp"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/et_password"
-            android:hint="*******" />
-
-            <Button
-                android:text="Login"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_login"
-                android:background="@color/colorTransparent" />
+                android:text="Phone Number"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_margin="10dp"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:inputType="phone"
+                android:ems="10"
+                android:id="@+id/et_phoneNumber"
+                android:hint="010-0000-0000" />
+
+            <TextView
+                android:text="Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:id="@+id/textView8"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/et_password"
+                android:hint="*******" />
+
+                <Button
+                    android:text="Login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_login"
+                    android:background="@color/colorTransparent" />
         </LinearLayout>
 
         <Button
