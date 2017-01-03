@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,9 +48,13 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class SelectOpponentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "SelectOpponentActivity";
+    private final int COUNT = 10;
 
     private SeekBar seekBar;
     private Button btn_call, btn_chat, btn_chat_setting;
+
+    private int mPrevPosition;
+    private LinearLayout mPageMark;
 
     // Temp Data Array
     private ArrayList<String> parentArrayList;
@@ -240,6 +245,14 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setTitle(parent[position]);
 
+                // http://www.hardcopyworld.com/ngine/android/index.php/archives/164
+                //이전 페이지에 해당하는 페이지 표시 이미지 변경
+                mPageMark.getChildAt(mPrevPosition).setBackgroundResource(R.drawable.page_not);
+
+                //현재 페이지에 해당하는 페이지 표시 이미지 변경
+                mPageMark.getChildAt(position).setBackgroundResource(R.drawable.page_select);
+                mPrevPosition = position;                //이전 포지션 값을 현재로 변경
+
                 //imageView.setImageResource(imageId[position]);
                 //buttonListener(btn_call, btn_chat, btn_chat_setting, position);
             }
@@ -249,6 +262,28 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
             }
         });
+
+        mPageMark = (LinearLayout)findViewById(R.id.page_mark);
+
+        initPageMark();
+    }
+
+    private void initPageMark(){
+        for(int i=0; i < COUNT; i++)
+        {
+            ImageView iv = new ImageView(getApplicationContext());
+            iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+
+            if(i==0){
+                iv.setBackgroundResource(R.drawable.page_select);
+            }else{
+                iv.setBackgroundResource(R.drawable.page_not);
+            }
+
+            mPageMark.addView(iv);
+        }
+        mPrevPosition = 0;
     }
 
     public void buttonListener(Button b1, Button b2, Button b3, final int idx){
@@ -289,12 +324,15 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        /*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+        */
     }
 
     @Override
