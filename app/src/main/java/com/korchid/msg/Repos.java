@@ -1,89 +1,126 @@
 package com.korchid.msg;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by mac on 2017-01-03.
  */
 
 public class Repos {
-    String phoneNumber;
-    String nickname;
-    String sex;
-    String role;
-    String birthday;
-    Boolean enable;
-    Boolean alert;
-    int weeknumber;
-    int sendTimes;
+    @SerializedName("PhoneNumber")
+    @Expose
+    private String PhoneNumber;
+    @SerializedName("Nickname")
+    @Expose
+    private String Nickname;
+    @SerializedName("Sex")
+    @Expose
+    private String Sex;
+    @SerializedName("Role")
+    @Expose
+    private String Role;
+    @SerializedName("Birthday")
+    @Expose
+    private String Birthday;
+    @SerializedName("Profile")
+    @Expose
+    private String Profile;
+    @SerializedName("Enable")
+    @Expose
+    private int Enable;
+    @SerializedName("Alert")
+    @Expose
+    private int Alert;
+    @SerializedName("Weeknumber")
+    @Expose
+    private int Weeknumber;
+    @SerializedName("SendTimes")
+    @Expose
+    private int SendTimes;
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return PhoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        PhoneNumber = phoneNumber;
     }
 
     public String getNickname() {
-        return nickname;
+        return Nickname;
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        Nickname = nickname;
     }
 
     public String getSex() {
-        return sex;
+        return Sex;
     }
 
     public void setSex(String sex) {
-        this.sex = sex;
+        Sex = sex;
     }
 
     public String getRole() {
-        return role;
+        return Role;
     }
 
     public void setRole(String role) {
-        this.role = role;
+        Role = role;
     }
 
     public String getBirthday() {
-        return birthday;
+        return Birthday;
     }
 
     public void setBirthday(String birthday) {
-        this.birthday = birthday;
+        Birthday = birthday;
     }
 
-    public Boolean getEnable() {
-        return enable;
+    public String getProfile() {
+        return Profile;
     }
 
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
+    public void setProfile(String profile) {
+        Profile = profile;
     }
 
-    public Boolean getAlert() {
-        return alert;
+    public int getEnable() {
+        return Enable;
     }
 
-    public void setAlert(Boolean alert) {
-        this.alert = alert;
+    public void setEnable(int enable) {
+        Enable = enable;
+    }
+
+    public int getAlert() {
+        return Alert;
+    }
+
+    public void setAlert(int alert) {
+        Alert = alert;
     }
 
     public int getWeeknumber() {
-        return weeknumber;
+        return Weeknumber;
     }
 
     public void setWeeknumber(int weeknumber) {
-        this.weeknumber = weeknumber;
+        Weeknumber = weeknumber;
     }
 
     public int getSendTimes() {
-        return sendTimes;
+        return SendTimes;
     }
 
     public void setSendTimes(int sendTimes) {
-        this.sendTimes = sendTimes;
+        SendTimes = sendTimes;
+    }
+
+    @Override
+    public String toString(){
+        return "PhoneNumber : " + PhoneNumber + ", Nickname : " + Nickname;
     }
 }
