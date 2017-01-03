@@ -48,7 +48,6 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class SelectOpponentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "SelectOpponentActivity";
-    private final int COUNT = 10;
 
     private Button btn_call, btn_chat, btn_chat_setting;
 
@@ -93,7 +92,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_opponent);
+        setContentView(R.layout.activity_home);
 
         // Remove previous activity
         MainActivity mainActivity = (MainActivity) MainActivity.activity;
@@ -184,14 +183,14 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         StatusBar statusBar = new StatusBar(this);
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -201,11 +200,11 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-//
-//        btn_call = (Button) findViewById(R.id.btn_call);
-//        btn_chat = (Button) findViewById(R.id.btn_chat);
-//        btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
-//        buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
+
+        btn_call = (Button) findViewById(R.id.btn_call);
+        btn_chat = (Button) findViewById(R.id.btn_chat);
+        btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
+        //buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(parent[0]);
@@ -232,7 +231,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                 mPageMark.getChildAt(position).setBackgroundResource(R.drawable.page_select);
                 mPrevPosition = position;                //이전 포지션 값을 현재로 변경
 
-                //imageView.setImageResource(imageId[position]);
                 //buttonListener(btn_call, btn_chat, btn_chat_setting, position);
             }
 
@@ -303,21 +301,19 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        /*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
-        */
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_select_opponent, menu);
+        //getMenuInflater().inflate(R.menu.menu_select_opponent, menu);
         return true;
     }
 
@@ -409,8 +405,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             View rootView = inflater.inflate(R.layout.fragment_select_opponent, container, false);
 
 
-
-
             return rootView;
         }
     }
@@ -444,7 +438,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            /*
+/*
             TextView tv_timeTitle = (TextView) findViewById(R.id.tv_timeTitle);
             tv_timeTitle.setText("발송 예정");
 
@@ -475,13 +469,14 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             circularImageView.setBorderColor(Color.DKGRAY);
             circularImageView.mutateBackground(true);
 
+            buttonListener(btn_call, btn_chat, btn_chat_setting, position);
             if(userRole.equals("child")){
                 btn_chat_setting.setVisibility(View.GONE);
             }else{
                 btn_chat_setting.setVisibility(View.VISIBLE);
             }
-*/
 
+*/
             return super.instantiateItem(container, position);
         }
     }

@@ -86,9 +86,6 @@
         <activity android:name=".activity.ReserveActivity" />
         <activity android:name=".activity.DBTest" />
         <activity android:name=".activity.ProfileActivity" />
-        <activity
-            android:name=".activity.SelectParentActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <!-- android:configChanges="orientation|keyboardHidden" -->
         <activity android:name=".activity.AuthPhoneActivity" />
         <activity android:name=".activity.AuthPhoneWaitActivity" />
