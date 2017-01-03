@@ -179,37 +179,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
         lv_message.setAdapter(adapter);
 
-/*
-        // TODO Send Image and message
-        btn_temp = (Button) findViewById(R.id.btn_temp);
-        btn_temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = "";
-
-                //이미지를 불려온다
-                byte[] data = getImageByte(BitmapFactory.decodeResource(getResources(), R.drawable.logo));
-
-                message1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><m2m:rqp xmlns:m2m=\"http://www.onem2m.org/xml/protocols\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><op>1</op><to>/mobius-yt/"+title+"/chatting</to><fr>S0.2.481.1.20160721051547725</fr><rqi>rqi201607211554337900rzY</rqi><ty>4</ty><pc><cin><rn></rn><con>";
-
-                String message2 = nickname+": "+ data.toString();
-                Log.d(TAG, "Message : " + message2);
-                String message3 = "</con></cin></pc></m2m:rqp>";
-
-                message = message1 + message2 + message3;
-
-                String topic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
-
-                MqttServiceDelegate.publish(
-                        ChattingActivity.this,
-                        topic,
-                        //publishEditView.getText().toString().getBytes()
-                        message.getBytes()
-                );
-
-            }
-        });
-*/
     }
 
 
@@ -224,13 +193,11 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
                 //TODO modify topic
-                //String topic = "/oneM2M/req/"+ title +"/:mobius-yt/xml";
                 String topic = title;
 
                 MqttServiceDelegate.publish(
                         ChattingActivity.this,
                         topic,
-                        //publishEditView.getText().toString().getBytes()
                         message.getBytes()
                 );
 
@@ -312,31 +279,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
         super.onBackPressed();
-    }
-
-    public class MobiusConfig{
-        public final static String MOBIUS_ROOT_URL = "http://52.78.68.226:7579/mobius-yt";
-    }
-
-    public interface IReceived{
-        void getResponseBody(String msg);
-    }
-
-    class RequestProfile extends Thread {
-        Handler handler;
-
-        @Override
-        public void run() {
-            StringBuilder stringBuilder = new StringBuilder();
-            String urlStr = "https://www.korchid.com/images/app_icon.jpg";
-
-
-            try {
-
-            }catch (Exception e){
-
-            }
-        }
     }
 
     @Override

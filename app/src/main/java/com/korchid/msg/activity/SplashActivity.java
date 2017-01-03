@@ -50,72 +50,8 @@ public class SplashActivity extends Activity {
         initView();
 
         duration = getIntent().getIntExtra("duration", duration);
-/*
-        Call<List<Repos>> reposListCall = RestfulAdapter.getInstance().listRepos("2");
-
-        reposListCall.enqueue(new Callback<List<Repos>>() {
-            @Override
-            public void onResponse(Call<List<Repos>> call, Response<List<Repos>> response) {
-                for(Repos repos: response.body()) {
-                    Log.d(TAG, repos.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Repos>> call, Throwable t) {
-                Log.d(TAG, "onFailure");
-            }
-        });
 
 
-        Call<JsonObject> jsonObjectCall = RestfulAdapter.getInstance().listRepos("2");
-
-        jsonObjectCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject jsonObject = response.body();
-                Log.d(TAG, "response : " + jsonObject);
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d(TAG, "onFailure");
-            }
-        });
-
-        Call<List<JsonObject>> jsonObjectCall = RestfulAdapter.getInstance().listRepos("2");
-
-        jsonObjectCall.enqueue(new Callback<List<JsonObject>>() {
-            @Override
-            public void onResponse(Call<List<JsonObject>> call, Response<List<JsonObject>> response) {
-                for(JsonObject jsonObject : response.body()){
-                    Log.d(TAG, "response : " + jsonObject);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<JsonObject>> call, Throwable t) {
-                Log.d(TAG, "onFailure");
-            }
-        });
-
-        Call<List<Repos>> reposListCall = RestfulAdapter.getInstance().listRepos("2");
-
-        reposListCall.enqueue(new Callback<List<Repos>>() {
-            @Override
-            public void onResponse(Call<List<Repos>> call, Response<List<Repos>> response) {
-                for(Repos repos: response.body()) {
-                    Log.d(TAG, "response : " + repos.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Repos>> call, Throwable t) {
-                Log.d(TAG, "onFailure");
-            }
-        });
-
-*/
         Call<Repos> reposListCall = RestfulAdapter.getInstance().listRepos("2");
 
         reposListCall.enqueue(new Callback<Repos>() {
@@ -130,52 +66,6 @@ public class SplashActivity extends Activity {
             }
         });
 
-/*
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
-
-
-        final Call<List<Repos>> repos = apiService.listRepos("3");
-
-        try {
-            Log.d(TAG, "start");
-            Response<List<Repos>> response = repos.execute();
-            Log.d(TAG, "response : " + response.body().toString());
-
-        } catch (IOException e) {
-            Log.e(TAG, "Error : " + e.getMessage());
-            e.printStackTrace();
-        }
-
-
-        final String[] result = {null};
-        repos.enqueue(new Callback<List<Repos>>() {
-            @Override
-            public void onResponse(Call<List<Repos>> call, Response<List<Repos>> response) {
-                Log.d(TAG, "onResponse");
-                try{
-                    result[0] = response.body().toString();
-                    Log.d(TAG, "result : " + response.body().toString());
-                }catch (Exception e){
-                    Log.e(TAG, "Error : " + e.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Repos>> call, Throwable throwable) {
-                Log.d(TAG, "onFailure");
-            }
-        });
-*/
-//        for(int i=0; i<repos.size(); i++){
-//            Log.d(TAG, "repos : " + repos.get(i));
-//        }
-/*
         SharedPreferences sharedPreferences = getSharedPreferences("MAPPING", 0);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -233,7 +123,7 @@ public class SplashActivity extends Activity {
 
 
         }
-*/
+
 
         Handler handler = new Handler();
         // Loading page Duration : 2 second

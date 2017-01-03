@@ -13,16 +13,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -38,37 +34,38 @@
             android:name=".mqtt.service.MqttService"
             android:process=":MqttSubProcess" />
 
-
         <!-- [START fcm_default_icon] -->
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-             See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+             Set custom default icon. This is used when no icon is set for incoming notification messages.
+             See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_logo" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorTransparent" />
         <!-- [END fcm_default_icon] -->
 
+
         <!-- [START firebase_service] -->
-        <service
-            android:name=".firebase.fcm.MyFirebaseMessagingService">
+        <service android:name=".firebase.fcm.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
-        <service
-            android:name=".firebase.fcm.MyFirebaseInstanceIDService">
+        <service android:name=".firebase.fcm.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->
-
 
         <activity android:name=".activity.MainActivity">
 
@@ -105,7 +102,11 @@
         <activity android:name=".activity.LoginPhoneActivity" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.FindPasswordActivity" />
-        <activity android:name=".activity.InPersonMessageSettingActivity"></activity>
+        <activity android:name=".activity.InPersonMessageSettingActivity" />
+        <activity
+            android:name=".activity.SelectOpponentActivity"
+            android:label="@string/title_activity_select_opponent"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

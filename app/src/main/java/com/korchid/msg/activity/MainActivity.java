@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+
         FirebaseCrash.report(new Exception("My first Android non-fatal error"));
         FirebaseCrash.log("Error report test");
 
@@ -289,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (viewId){
             case R.id.btn_next:{
-                Intent intent = new Intent(getApplicationContext(), SelectParentActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SelectOpponentActivity.class);
                 intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                 intent.putExtra(USER_ROLE, userRole);
                 startActivity(intent);
@@ -367,6 +368,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(requestCode == 0){
                     // LOGIN success
+                    userPhoneNumber = data.getStringExtra(USER_PHONE_NUMBER);
+
                     btn_join.setVisibility(View.GONE);
                     btn_next.setVisibility(View.VISIBLE);
                     btn_login.setText("LOGOUT");

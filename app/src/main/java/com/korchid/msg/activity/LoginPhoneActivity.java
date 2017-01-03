@@ -200,7 +200,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                             SharedPreferences.Editor editor = sharedPreferences.edit();
 
                             editor.putString(USER_LOGIN_STATE, "LOGIN");
-                            editor.putString(USER_PHONE_NUMBER, phoneNumber);
+                            editor.putString(USER_PHONE_NUMBER, internationalPhoneNumber);
                             editor.putString(USER_PASSWORD, password);
                             editor.putString(USER_ID_NUMBER, partition[0]);
                             editor.putString(USER_LOGIN_TOKEN, partition[1]);
@@ -212,8 +212,8 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                             Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "123123"));
 
                             Intent intent = new Intent();
-                            //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
                             intent.putExtra(USER_LOGIN_STATE, "LOGIN");
+                            intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
                             setResult(RESULT_OK, intent);
                             finish();
                         }
