@@ -1,6 +1,7 @@
 package com.korchid.msg.activity;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,9 +12,11 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.korchid.msg.global.QuickstartPreferences;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.global.GlobalApplication;
@@ -40,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static Activity activity;
 
-    private GoogleApiClient mGoogleApiClient;
 
     enum REQUEST_CODE {LOGIN, LOGOUT}
 
@@ -87,6 +89,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 
+        // If a notification message is tapped, any data accompanying the notification
+        // message is available in the intent extras. In this sample the launcher
+        // intent is fired when the notification is tapped, so any accompanying data would
+        // be handled here. If you want a different intent fired, set the click_action
+        // field of the notification message to the desired intent. The launcher intent
+        // is used when no click_action is specified.
+        //
+        // Handle possible data accompanying notification message.
+        // [START handle_data_extras]
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Log.d(TAG, "Key: " + key + " Value: " + value);
+            }
+        }
+        // [END handle_data_extras]
+
+        // [START subscribe_topics]
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        // [END subscribe_topics]
+
+        // Log and toast
+        String msg = getString(R.string.msg_subscribed);
+        Log.d(TAG, msg);
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+        // Get token
+        String token = FirebaseInstanceId.getInstance().getToken();
+
+        // Log and toast
+        msg = getString(R.string.msg_token_fmt, token);
+        Log.d(TAG, msg);
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+
 
         final ServiceThread serviceThread = new ServiceThread(new Handler());
         //serviceThread.timer = "2016-12-13 14:55";
@@ -98,8 +134,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Log.d(TAG, "timer : " + serviceThread.timer);
 
+        int id=0;
 
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+        }
+        else {
+            id = extras.getInt("notificationId");
+        }
 
+        NotificationManager nm =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        nm.cancel(id);
 
 /*
         // if sharedPreferences.getString value is 0, assign 2th parameter
@@ -113,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userRole = sharedPreferences.getString(USER_ROLE, "");
 
         Log.d(TAG, "USER_ROLE : " + userRole);
+
+
 
     }
 
