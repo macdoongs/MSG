@@ -154,15 +154,15 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         viewId = v.getId();
 
-        phoneNumber = et_phoneNumber.getText().toString();
-        password = et_password.getText().toString();
 
-
-        internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
 
         switch (viewId){
             case R.id.btn_login:{
+                phoneNumber = et_phoneNumber.getText().toString();
+                password = et_password.getText().toString();
 
+
+                internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
 
                 //Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
@@ -226,6 +226,12 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 break;
             }
             case R.id.btn_findPassword:{
+                phoneNumber = et_phoneNumber.getText().toString();
+                password = et_password.getText().toString();
+
+
+                internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
                 Intent intent = new Intent(getApplicationContext(), FindPasswordActivity.class);
                 intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
                 Log.d(TAG, "internationalPhoneNumber : " + internationalPhoneNumber);

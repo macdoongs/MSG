@@ -9,9 +9,17 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.korchid.msg.Repos;
 import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.R;
+import com.korchid.msg.retrofit.LoadingUser;
 import com.korchid.msg.ui.StatusBar;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by mac0314 on 2016-11-28.
@@ -35,6 +43,20 @@ public class SplashActivity extends Activity {
         duration = getIntent().getIntExtra("duration", duration);
 
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://www.korchid.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        LoadingUser loadingUser = retrofit.create(LoadingUser.class);
+
+
+        List<Repos> repos = loadingUser.listRepos("2");
+
+        for(int i=0; i<repos.size(); i++){
+            Log.d(TAG, "repos : " + repos.get(i));
+        }
+/*
         SharedPreferences sharedPreferences = getSharedPreferences("MAPPING", 0);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -92,7 +114,7 @@ public class SplashActivity extends Activity {
 
 
         }
-
+*/
 
         Handler handler = new Handler();
         // Loading page Duration : 2 second
