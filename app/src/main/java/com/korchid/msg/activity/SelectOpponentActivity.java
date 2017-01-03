@@ -50,7 +50,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private static final String TAG = "SelectOpponentActivity";
     private final int COUNT = 10;
 
-    private SeekBar seekBar;
     private Button btn_call, btn_chat, btn_chat_setting;
 
     private int mPrevPosition;
@@ -211,25 +210,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(parent[0]);
 
-        // SeekBar setting
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
-        seekBar.setMax(mViewPager.getAdapter().getCount() - 1);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mViewPager.setCurrentItem(i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
 
         // Pager setting
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -240,7 +220,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
             @Override
             public void onPageSelected(final int position) {
-                seekBar.setProgress(position);
 
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setTitle(parent[position]);
@@ -269,7 +248,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     }
 
     private void initPageMark(){
-        for(int i=0; i < COUNT; i++)
+        for(int i=0; i < parent.length; i++)
         {
             ImageView iv = new ImageView(getApplicationContext());
             iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
