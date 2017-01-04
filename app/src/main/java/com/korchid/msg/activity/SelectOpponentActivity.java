@@ -1,5 +1,6 @@
 package com.korchid.msg.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,6 +44,8 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
+import okhttp3.OkHttpClient;
+
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
@@ -51,18 +54,25 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
     private Button btn_call, btn_chat, btn_chat_setting;
 
+    private TextView tv_timeTitle;
+    private TextView tv_timeReserved;
+    private TextView tv_messageReserved;
+
+    private static RoundedImageView circularImageView;
+
+
     private int mPrevPosition;
     private LinearLayout mPageMark;
 
     // Temp Data Array
-    private ArrayList<String> parentArrayList;
+    private static ArrayList<String> parentArrayList;
 
-    private String[] parent = {"Father", "Mother", "StepMother"};
-    private String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
-    private String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
-    private String[] timeReserved = {"수요일 9시경", "목요일 5시경", "금요일 8시경"};
-    private String[] message = {"아빠 뭐해?", "엄마 뭐해?", "엄마 뭐해요?"};
-    private int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
+    private static String[] parent = {"Father", "Mother", "StepMother"};
+    private static String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
+    private static String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
+    private static String[] timeReserved = {"수요일 9시경", "목요일 5시경", "금요일 8시경"};
+    private static String[] message = {"아빠 뭐해?", "엄마 뭐해?", "엄마 뭐해요?"};
+    private static int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
 
 
     private int viewId;
@@ -71,6 +81,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private String userRole = "";
     private String userPhoneNumber = "";
 
+    private static int sectionNumber = 0;
 
 
     /**
@@ -117,6 +128,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
                 String[] line = response.split("\n");
 
+                Log.d(TAG, "response : " + response);
                 //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
 
                 if (line[0].equals("Error")) {
@@ -201,9 +213,9 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        btn_call = (Button) findViewById(R.id.btn_call);
-        btn_chat = (Button) findViewById(R.id.btn_chat);
-        btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
+//        btn_call = (Button) findViewById(R.id.btn_call);
+//        btn_chat = (Button) findViewById(R.id.btn_chat);
+//        btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
         //buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
 
         ActionBar actionBar = getSupportActionBar();
@@ -220,6 +232,8 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             @Override
             public void onPageSelected(final int position) {
 
+                sectionNumber = position;
+
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setTitle(parent[position]);
 
@@ -231,7 +245,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                 mPageMark.getChildAt(position).setBackgroundResource(R.drawable.page_select);
                 mPrevPosition = position;                //이전 포지션 값을 현재로 변경
 
-                //buttonListener(btn_call, btn_chat, btn_chat_setting, position);
             }
 
             @Override
@@ -240,12 +253,12 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             }
         });
 
-        mPageMark = (LinearLayout)findViewById(R.id.page_mark);
-
         initPageMark();
     }
 
     private void initPageMark(){
+        mPageMark = (LinearLayout)findViewById(R.id.page_mark);
+
         for(int i=0; i < parent.length; i++)
         {
             ImageView iv = new ImageView(getApplicationContext());
@@ -263,41 +276,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mPrevPosition = 0;
     }
 
-    public void buttonListener(Button b1, Button b2, Button b3, final int idx){
-        // Call button
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Show dial
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNum[idx]));
 
-                //Direct call
-                //Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum[idx]));
-                startActivity(intent);
-            }
-        });
-
-        // Chatting button
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
-                intent.putExtra("topic", parentArrayList.get(idx));
-                intent.putExtra("parentName", parent[idx]);
-                startActivity(intent);
-            }
-        });
-
-        // Message Setting button
-        b3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
 
     @Override
     public void onBackPressed() {
@@ -374,6 +353,9 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         return true;
     }
 
+
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -392,21 +374,104 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
          * number.
          */
         public static PlaceholderFragment newInstance(int sectionNumber) {
+            Log.d(TAG, "newInstance");
+            Log.d(TAG, "section : " + sectionNumber);
+
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+
             return fragment;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            Log.d(TAG, "onCreateView");
+            Log.d(TAG, "sectionNumber : " + sectionNumber);
+
             View rootView = inflater.inflate(R.layout.fragment_select_opponent, container, false);
+
+            Button btn_call = (Button) rootView.findViewById(R.id.btn_call);
+            Button btn_chat = (Button) rootView.findViewById(R.id.btn_chat);
+            Button btn_chat_setting = (Button) rootView.findViewById(R.id.btn_chat_setting);
+
+            TextView tv_timeTitle = (TextView) rootView.findViewById(R.id.tv_timeTitle);
+            tv_timeTitle.setText("발송 예정");
+
+            TextView tv_timeReserved = (TextView) rootView.findViewById(R.id.tv_timeReserved);
+            tv_timeReserved.setText(timeReserved[sectionNumber]);
+
+
+
+            TextView tv_messageReserved = (TextView) rootView.findViewById(R.id.tv_messageReserved);
+            tv_messageReserved.setText(message[sectionNumber]);
+
+            RoundedImageView circularImageView = (RoundedImageView) rootView.findViewById(R.id.riv_opponentProfile);
+
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[sectionNumber]);
+
+            int profileWidth = 800;
+            int profileHeight = 800;
+
+            bitmap = resizeBitmap(bitmap, profileWidth, profileHeight);
+            //bitmap = cropBitmap(bitmap, 300, 300);
+
+            circularImageView.setImageBitmap(bitmap);
+
+
+            circularImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            circularImageView.setCornerRadius((float)20);
+            circularImageView.setBorderWidth((float)2);
+            circularImageView.setBorderColor(Color.DKGRAY);
+            circularImageView.mutateBackground(true);
+
+            buttonListener(btn_call, btn_chat, btn_chat_setting, sectionNumber);
+
 
 
             return rootView;
         }
+
+        public void buttonListener(Button b1, Button b2, Button b3, final int idx){
+            // Call button
+            b1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Show dial
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNum[idx]));
+
+                    //Direct call
+                    //Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum[idx]));
+                    startActivity(intent);
+                }
+            });
+
+            // Chatting button
+            b2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                    intent.putExtra("topic", parentArrayList.get(idx));
+                    intent.putExtra("parentName", parent[idx]);
+                    startActivity(intent);
+                }
+            });
+
+            // Message Setting button
+            b3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), ReserveActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+        }
+
+
     }
 
     /**
@@ -421,9 +486,11 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         @Override
         public Fragment getItem(int position) {
+            Log.d(TAG, "getItem");
+            Log.d(TAG, "position : " + position);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(position);
         }
 
         @Override
@@ -433,50 +500,16 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         @Override
         public CharSequence getPageTitle(int position) {
+            Log.d(TAG, "getPageTitle");
             return parent[position];
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-/*
-            TextView tv_timeTitle = (TextView) findViewById(R.id.tv_timeTitle);
-            tv_timeTitle.setText("발송 예정");
+            Log.d(TAG, "instantiateItem");
+            Log.d(TAG, "position : " + position);
+            sectionNumber = position;
 
-            TextView tv_timeReserved = (TextView) findViewById(R.id.tv_timeReserved);
-            tv_timeReserved.setText(timeReserved[position]);
-
-
-
-            TextView tv_messageReserved = (TextView) findViewById(R.id.tv_messageReserved);
-            tv_messageReserved.setText(message[position]);
-
-            RoundedImageView circularImageView = (RoundedImageView) findViewById(R.id.riv_opponentProfile);
-
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[position]);
-
-            profileWidth = 600;
-            profileHeight = 600;
-
-            bitmap = resizeBitmap(bitmap, profileWidth, profileHeight);
-            //bitmap = cropBitmap(bitmap, 300, 300);
-
-            circularImageView.setImageBitmap(bitmap);
-
-
-            circularImageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            circularImageView.setCornerRadius((float)20);
-            circularImageView.setBorderWidth((float)2);
-            circularImageView.setBorderColor(Color.DKGRAY);
-            circularImageView.mutateBackground(true);
-
-            buttonListener(btn_call, btn_chat, btn_chat_setting, position);
-            if(userRole.equals("child")){
-                btn_chat_setting.setVisibility(View.GONE);
-            }else{
-                btn_chat_setting.setVisibility(View.VISIBLE);
-            }
-
-*/
             return super.instantiateItem(container, position);
         }
     }
@@ -515,7 +548,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     return bitmap;
     }
      */
-    public Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {
+    public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height) {
         if (bitmap.getWidth() != width || bitmap.getHeight() != height){
             float widthRatio = 1.0f;
             float heightRatio = 1.0f;

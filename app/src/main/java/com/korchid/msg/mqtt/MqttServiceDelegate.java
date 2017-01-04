@@ -31,7 +31,7 @@ public class MqttServiceDelegate
 		Log.d(TAG, "startService");
 		Log.d(TAG, "topic : " + topic);
 		Intent svc = new Intent(context, MqttService.class);
-		//svc.putExtra(MqttService.MQTT_MSG_RECEIVED_MSG, topic);
+		svc.putExtra(MqttService.MQTT_MSG_RECEIVED_MSG, topic);
 		//MqttService.mqttTopic = topic;
 
 		context.startService(svc); 
