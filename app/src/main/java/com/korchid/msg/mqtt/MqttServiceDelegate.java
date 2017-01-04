@@ -14,25 +14,23 @@ import java.util.List;
 
 
 // MQTT chatting
-public class MqttServiceDelegate
-{
+public class MqttServiceDelegate {
 	private static final String TAG = "MqttServiceDelegate";
-	//public static String topic = "";
 
 	public interface MessageHandler{
-		public void handleMessage(String topic, byte[] payload);
+		void handleMessage(String topic, byte[] payload);
 	}
 	
 	public interface StatusHandler{
-		public void handleStatus(ConnectionStatus status, String reason);
+		void handleStatus(ConnectionStatus status, String reason);
 	}
 	
 	public static void startService(Context context, String topic){
 		Log.d(TAG, "startService");
 		Log.d(TAG, "topic : " + topic);
 		Intent svc = new Intent(context, MqttService.class);
+		// for subscription - put topic to intent
 		svc.putExtra(MqttService.MQTT_MSG_RECEIVED_MSG, topic);
-		//MqttService.mqttTopic = topic;
 
 		context.startService(svc); 
 	}
@@ -47,6 +45,7 @@ public class MqttServiceDelegate
 	{
 		Log.d(TAG, "publish");
 		Intent actionIntent = new Intent(context, MqttService.class);
+		// for publication - put topic, message to intent
         actionIntent.setAction(MqttService.MQTT_PUBLISH_MSG_INTENT);
         actionIntent.putExtra(MqttService.MQTT_PUBLISH_MSG_TOPIC, topic);
         actionIntent.putExtra(MqttService.MQTT_PUBLISH_MSG, payload);
@@ -148,8 +147,6 @@ public class MqttServiceDelegate
 			Log.d(TAG, "Delegate payload : " + payload.toString());
 
 
-
-	        
 	        for(MessageHandler messageHandler : messageHandlers){
 	        	messageHandler.handleMessage(topic, payload);
 	        }

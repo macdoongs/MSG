@@ -72,8 +72,7 @@ import static android.content.Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT;
 // http://dalelane.co.uk/blog/?p=1599
 
 // MQTT chatting
-public class MqttService extends Service implements IMqttCallback
-{
+public class MqttService extends Service implements IMqttCallback {
     private static final String TAG = "MqttService";
 //	private static final Logger LOG = Logger.getLogger(MqttService.class);
 	
@@ -259,7 +258,6 @@ public class MqttService extends Service implements IMqttCallback
 
         mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
 
-        //TODO modify topic
         MqttTopic topicArrayIdx = new MqttTopic(mqttTopic);
 
         // Duplicate check

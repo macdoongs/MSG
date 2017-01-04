@@ -81,7 +81,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private String userRole = "";
     private String userPhoneNumber = "";
 
-    private static int sectionNumber = 0;
 
 
     /**
@@ -213,14 +212,10 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-//        btn_call = (Button) findViewById(R.id.btn_call);
-//        btn_chat = (Button) findViewById(R.id.btn_chat);
-//        btn_chat_setting = (Button) findViewById(R.id.btn_chat_setting);
-        //buttonListener(btn_call, btn_chat, btn_chat_setting, 0);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(parent[0]);
 
+        mViewPager.setCurrentItem(0);
 
         // Pager setting
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -231,9 +226,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
             @Override
             public void onPageSelected(final int position) {
-
-                sectionNumber = position;
-
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setTitle(parent[position]);
 
@@ -375,7 +367,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
          */
         public static PlaceholderFragment newInstance(int sectionNumber) {
             Log.d(TAG, "newInstance");
-            Log.d(TAG, "section : " + sectionNumber);
 
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -389,7 +380,10 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             Log.d(TAG, "onCreateView");
-            Log.d(TAG, "sectionNumber : " + sectionNumber);
+
+            int idx = getArguments().getInt(ARG_SECTION_NUMBER);
+
+            Log.d(TAG, "idx : " + idx);
 
             View rootView = inflater.inflate(R.layout.fragment_select_opponent, container, false);
 
@@ -401,16 +395,16 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             tv_timeTitle.setText("발송 예정");
 
             TextView tv_timeReserved = (TextView) rootView.findViewById(R.id.tv_timeReserved);
-            tv_timeReserved.setText(timeReserved[sectionNumber]);
+            tv_timeReserved.setText(timeReserved[idx]);
 
 
 
             TextView tv_messageReserved = (TextView) rootView.findViewById(R.id.tv_messageReserved);
-            tv_messageReserved.setText(message[sectionNumber]);
+            tv_messageReserved.setText(message[idx]);
 
             RoundedImageView circularImageView = (RoundedImageView) rootView.findViewById(R.id.riv_opponentProfile);
 
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[sectionNumber]);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageId[idx]);
 
             int profileWidth = 800;
             int profileHeight = 800;
@@ -427,7 +421,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             circularImageView.setBorderColor(Color.DKGRAY);
             circularImageView.mutateBackground(true);
 
-            buttonListener(btn_call, btn_chat, btn_chat_setting, sectionNumber);
+            buttonListener(btn_call, btn_chat, btn_chat_setting, idx);
 
 
 
@@ -487,7 +481,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         @Override
         public Fragment getItem(int position) {
             Log.d(TAG, "getItem");
-            Log.d(TAG, "position : " + position);
+
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position);
@@ -507,8 +501,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Log.d(TAG, "instantiateItem");
-            Log.d(TAG, "position : " + position);
-            sectionNumber = position;
 
             return super.instantiateItem(container, position);
         }
