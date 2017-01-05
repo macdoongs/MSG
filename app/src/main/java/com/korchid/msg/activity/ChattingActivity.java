@@ -389,12 +389,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 nm.notify(222, mCompatBuilder.build());
             }
 
-
-
             m_arr.add(new Chatting(userPhoneNumber, message));
 
-
-            message="";
             lv_message.setSelection(adapter.getCount()-1);
         }
 

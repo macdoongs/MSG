@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.DBHelper;
+import com.korchid.msg.sqlite.DBHelper;
 import com.korchid.msg.global.GlobalApplication;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;

@@ -1,4 +1,4 @@
-package com.korchid.msg;
+package com.korchid.msg.sqlite;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -26,11 +26,6 @@ public class DBHelper extends SQLiteOpenHelper {
         // 새로운 테이블 생성
         try{
             db.execSQL("CREATE TABLE USER (_userId INT NOT NULL AUTOINCREMENT, PhoneNumber VARCHAR(30), Password VARCHAR(20), PRIMARY KEY (_userId));");
-            db.execSQL("CREATE TABLE MAPPING (_mappingId INT NOT NULL AUTOINCREMENT, _parentId INT NOT NULL, _childId INT NOT NULL, Topic VARCHAR(30), PRIMARY KEY (_mappingId));");
-            db.execSQL("CREATE TABLE USER_INFO (_infoId INT NOT NULL AUTOINCREMENT, _userId INT NOT NULL, Profile VARCHAR(30), Birthday VARCHAR(20), Sex VARCHAR(10), PRIMARY KEY (_infoId), FOREIGN KEY (_userId) REFERENCES USER(_userId) ON DELETE CASCADE ON UPDATE CASCADE);");
-            db.execSQL("CREATE TABLE SEND_MESSAGE (_messageId INT NOT NULL AUTOINCREMENT, _mappingId INT, _senderId INT, Time VARCHAR(30), Content LONGTEXT, PRIMARY KEY (_messageId), FOREIGN KEY (_mappingId) REFERENCES MAPPING(_mappingId) ON DELETE CASCADE ON UPDATE CASCADE);");
-            db.execSQL("CREATE TABLE RESERVED_MESSAGE (_reservationId INT NOT NULL AUTOINCREMENT, _mappingId INT, Time VARCHAR(30), Content LONGTEXT, PRIMARY KEY(_reservationId), FOREIGN KEY (_mappingId) REFERENCES MAPPING(_mappingId) ON DELETE CASCADE ON UPDATE CASCADE);");
-            db.execSQL("CREATE TABLE ERROR (_errorId INT NOT NULL AUTOINCREMENT, _userId INT, Log LONGTEXT, PRIMARY KEY(_errorId), FOREIGN KEY (_userId) REFERENCES USER(_userId) ON UPDATE CASCADE);");
 
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
