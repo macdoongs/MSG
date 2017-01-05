@@ -79,7 +79,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private int profileWidth;
     private int profileHeight;
     private String userRole = "";
-    private String userPhoneNumber = "";
+    private static String userPhoneNumber = "";
 
 
 
@@ -449,6 +449,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                     //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), ChattingActivity.class);
                     intent.putExtra("topic", parentArrayList.get(idx));
+                    intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                     intent.putExtra("parentName", parent[idx]);
                     startActivity(intent);
                 }

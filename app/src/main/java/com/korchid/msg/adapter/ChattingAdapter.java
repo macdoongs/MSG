@@ -31,10 +31,12 @@ public class ChattingAdapter extends BaseAdapter {
 
         private String name = "";
         private String message = "";
+        private String userPhoneNumber = "";
 
-        public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList) {
+        public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userPhoneNumber) {
             this.MessagingActivity = activity;
             this.chattingArrayList = chattingArrayList;
+            this.userPhoneNumber = userPhoneNumber;
 
             mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
@@ -89,6 +91,7 @@ public class ChattingAdapter extends BaseAdapter {
                 gl_container.setVisibility(View.VISIBLE);
                 tv_yourName.setText(name);
                 tv_yourMessage.setText(message);
+
             }
 
             return convertView;

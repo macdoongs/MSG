@@ -39,6 +39,8 @@ import com.korchid.msg.ui.StatusBar;
 import com.korchid.msg.mqtt.service.MqttService;
 import com.korchid.msg.mqtt.service.MqttService.ConnectionStatus;
 
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+
 
 /**
  * Created by mac0314 on 2016-11-28.
@@ -64,7 +66,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private MessageReceiver msgReceiver;
     private StatusReceiver statusReceiver;
 
-    private String nickname;
+    private String userPhoneNumber;
     private String parentName;
     private String count;
     private String title;
@@ -89,13 +91,11 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         pic = null;
         count = "";
-        nickname = "Me";
+        userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
         initView();
-
-
 
 
 
@@ -176,7 +176,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         et_message.addTextChangedListener(textWatcher);
 
-        adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
+        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userPhoneNumber);
         lv_message.setAdapter(adapter);
 
     }
@@ -189,7 +189,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         switch (viewId){
             case R.id.btn_send:{
 
-                String message = nickname+": "+ et_message.getText().toString();
+                String message = userPhoneNumber + ": " + et_message.getText().toString();
 
 
                 //TODO modify topic
@@ -368,7 +368,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         if(chatMessage != null){
 
-            m_arr.add(new Chatting(nickname, message));
+            m_arr.add(new Chatting(userPhoneNumber, message));
 
 
             message="";
