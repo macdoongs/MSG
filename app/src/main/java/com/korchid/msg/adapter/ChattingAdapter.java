@@ -37,23 +37,14 @@ public class ChattingAdapter extends BaseAdapter {
 
     private ArrayList<Chatting> chattingArrayList;
 
-<<<<<<< HEAD
-    private String name = "";
-    private String message = "";
-
-    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList) {
-        this.MessagingActivity = activity;
-        this.chattingArrayList = chattingArrayList;
-=======
         private String name = "";
         private String message = "";
         private String userPhoneNumber = "";
 
-        public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userPhoneNumber) {
-            this.MessagingActivity = activity;
-            this.chattingArrayList = chattingArrayList;
-            this.userPhoneNumber = userPhoneNumber;
->>>>>>> d27993a326bbb64dbaaf7d14ff06badb7419467c
+    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userPhoneNumber) {
+        this.MessagingActivity = activity;
+        this.chattingArrayList = chattingArrayList;
+        this.userPhoneNumber = userPhoneNumber;
 
         mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -88,8 +79,6 @@ public class ChattingAdapter extends BaseAdapter {
             convertView = mInflater.inflate(resource, parent, false);
         }
 
-
-<<<<<<< HEAD
         LinearLayout ll_container = (LinearLayout) convertView.findViewById(R.id.ll_container);
         GridLayout gl_container = (GridLayout) convertView.findViewById(R.id.gl_container);
 
@@ -110,26 +99,6 @@ public class ChattingAdapter extends BaseAdapter {
             tv_yourName.setText(name);
             tv_yourMessage.setText(message);
         }
-=======
-            if(name.equals(chattingArrayList.get(position).user)){
-                // Application user oneself
-                TextView tv_myName = (TextView) convertView.findViewById(R.id.tv_myName);
-                TextView tv_myMessage = (TextView) convertView.findViewById(R.id.tv_myMessage);
-                ll_container.setVisibility(View.VISIBLE);
-                gl_container.setVisibility(View.INVISIBLE);
-                tv_myName.setText(name);
-                tv_myMessage.setText(message);
-            }else{
-                // Counterpart
-                TextView tv_yourName = (TextView) convertView.findViewById(R.id.tv_yourName);
-                TextView tv_yourMessage = (TextView) convertView.findViewById(R.id.tv_yourMessage);
-                ll_container.setVisibility(View.INVISIBLE);
-                gl_container.setVisibility(View.VISIBLE);
-                tv_yourName.setText(name);
-                tv_yourMessage.setText(message);
-
-            }
->>>>>>> d27993a326bbb64dbaaf7d14ff06badb7419467c
 
         return convertView;
     }

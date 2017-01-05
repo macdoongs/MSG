@@ -71,9 +71,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private MessageReceiver msgReceiver;
     private StatusReceiver statusReceiver;
 
-    private String userPhoneNumber;
+
     private String parentName;
     private String userPhoneNumber;
+    private String nickname;
     private String title;
     private int viewId;
     byte[] pic;
@@ -95,22 +96,12 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
 
         pic = null;
-<<<<<<< HEAD
-        nickname = userPhoneNumber;
-=======
-        count = "";
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
->>>>>>> d27993a326bbb64dbaaf7d14ff06badb7419467c
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
         initView();
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> d27993a326bbb64dbaaf7d14ff06badb7419467c
         Log.d(TAG, "Topic : " + title);
 
         //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
@@ -374,32 +365,12 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         if(message != null){
 
             Log.d(TAG, "nickname : " + nickname + ", userPhoneNumber : " + userPhoneNumber);
-            if(!(nickname.equals(userPhoneNumber))){
-                Log.d(TAG, "Alert in");
-
-                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, ChattingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-                NotificationCompat.Builder mCompatBuilder = new NotificationCompat.Builder(this);
-                mCompatBuilder.setSmallIcon(R.drawable.ic_logo);
-                mCompatBuilder.setTicker(message);
-                mCompatBuilder.setWhen(System.currentTimeMillis());
-                mCompatBuilder.setNumber(10);
-                mCompatBuilder.setContentTitle(nickname);
-                mCompatBuilder.setContentText(message);
-                mCompatBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-                mCompatBuilder.setContentIntent(pendingIntent);
-                mCompatBuilder.setAutoCancel(true);
-
-                nm.notify(222, mCompatBuilder.build());
-
-            }
 
             String[] strArr = message.split(":");
             if(!userPhoneNumber.equals(strArr[0])){
                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 Intent intent = new Intent(this, ChattingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
