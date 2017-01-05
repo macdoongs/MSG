@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Log and toast
         String msg = getString(R.string.msg_subscribed);
         Log.d(TAG, msg);
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
         // Get token
         String token = FirebaseInstanceId.getInstance().getToken();
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Log and toast
         msg = getString(R.string.msg_token_fmt, token);
         Log.d(TAG, msg);
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
 
         final ServiceThread serviceThread = new ServiceThread(new Handler());

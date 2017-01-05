@@ -516,20 +516,21 @@ public class MqttService extends Service implements IMqttCallback {
     private void notifyUser(String alert, String title, String body)
     {
         Log.d(TAG, "notifyUser : alert = " + alert + ", title = " + title + ", body = " + body);
+
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(MqttService.this);
         builder.setSmallIcon(R.drawable.ic_logo)
-                .setContentTitle("알립니다")
-                .setContentText("왔다네~왔다네~ 내~가 왔다네~")
+                .setContentTitle(title)
+                .setContentText(body)
                 .setAutoCancel(true) // 알림바에서 자동 삭제
                 .setVibrate(new long[]{1000,2000,1000,3000,1000,4000});
         // autoCancel : 한번 누르면 알림바에서 사라진다.
         // vibrate : 쉬고, 울리고, 쉬고, 울리고... 밀리세컨
         // 진동이 되려면 AndroidManifest.xml에 진동 권한을 줘야 한다.
 
-        // 알람 클릭시 MainActivity를 화면에 띄운다.
+        // 알람 클릭시 ChattingActivity 화면에 띄운다.
         Intent intent = new Intent(getApplicationContext(),ChattingActivity.class);
         intent.addFlags(FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext()
@@ -691,7 +692,7 @@ public class MqttService extends Service implements IMqttCallback {
             broadcastServiceStatus("Connection lost - reconnecting...");
             
             // try to reconnect
-            //reconnectInNewThread();
+            reconnectInNewThread();
         }
         
         // we're finished - if the phone is switched off, it's okay for the CPU 
@@ -727,8 +728,12 @@ public class MqttService extends Service implements IMqttCallback {
         //   received message so the app UI can be updated with the new data        
         try 
         {
+            String strMessage = message.getPayload().toString();
+
 			broadcastReceivedMessage(topic.getName(), message.getPayload());
             Log.d(TAG, "messageArrived: topic = "+ topic.getName() + ", message = " + new String(message.getPayload()));
+
+
             handler = new myServiceHandler();
 
 
@@ -798,7 +803,7 @@ public class MqttService extends Service implements IMqttCallback {
             notifyUser("Unable to connect", "MQTT", "Unable to connect");
         }        
     }
-    /*
+
     private void reconnectInNewThread(){
     	new Thread(new Runnable(){
 			@Override
@@ -815,7 +820,7 @@ public class MqttService extends Service implements IMqttCallback {
     		
     	}).start(); 
     }
-    */
+
     /*
      * (Re-)connect to the message broker
      */
