@@ -71,7 +71,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private MessageReceiver msgReceiver;
     private StatusReceiver statusReceiver;
 
-    private String nickname;
+    private String userPhoneNumber;
     private String parentName;
     private String userPhoneNumber;
     private String title;
@@ -95,13 +95,22 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
 
         pic = null;
+<<<<<<< HEAD
         nickname = userPhoneNumber;
+=======
+        count = "";
+        userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
+>>>>>>> d27993a326bbb64dbaaf7d14ff06badb7419467c
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
         initView();
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d27993a326bbb64dbaaf7d14ff06badb7419467c
         Log.d(TAG, "Topic : " + title);
 
         //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
@@ -179,7 +188,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         et_message.addTextChangedListener(textWatcher);
 
-        adapter = new ChattingAdapter(ChattingActivity.this, m_arr);
+        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userPhoneNumber);
         lv_message.setAdapter(adapter);
 
     }
@@ -192,7 +201,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         switch (viewId){
             case R.id.btn_send:{
 
-                String message = nickname+": "+ et_message.getText().toString();
+                String message = userPhoneNumber + ": " + et_message.getText().toString();
 
 
                 //TODO modify topic
@@ -411,7 +420,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-            m_arr.add(new Chatting(nickname, message));
+            m_arr.add(new Chatting(userPhoneNumber, message));
 
 
             message="";

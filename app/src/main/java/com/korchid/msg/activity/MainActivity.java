@@ -19,11 +19,14 @@ import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.korchid.msg.global.QuickstartPreferences;
+import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.global.GlobalApplication;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 import com.korchid.msg.service.ServiceThread;
+
+import java.util.HashMap;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
@@ -120,10 +123,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
         // Get token
-        String token = FirebaseInstanceId.getInstance().getToken();
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+        String url = "https://www.korchid.com/msg-mapping";
+        HashMap<String, String> params = new HashMap<>();
+        params.put("deviceToken", deviceToken);
+
+        HttpPost httpPost = new HttpPost(url, params, new Handler());
+        httpPost.start();
 
         // Log and toast
-        msg = getString(R.string.msg_token_fmt, token);
+        msg = getString(R.string.msg_token_fmt, deviceToken);
         Log.d(TAG, msg);
         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
