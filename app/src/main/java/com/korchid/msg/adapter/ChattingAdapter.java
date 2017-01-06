@@ -37,9 +37,9 @@ public class ChattingAdapter extends BaseAdapter {
 
     private ArrayList<Chatting> chattingArrayList;
 
-        private String name = "";
-        private String message = "";
-        private String userPhoneNumber = "";
+    private String name = "";
+    private String message = "";
+    private String userPhoneNumber = "";
 
     public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userPhoneNumber) {
         this.MessagingActivity = activity;
@@ -67,7 +67,7 @@ public class ChattingAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "getView");
 
-        String[] ReturnList = chattingArrayList.get(position).message.split(":");
+        String[] ReturnList = chattingArrayList.get(position).getMessage().split(":");
         name = ReturnList[0];
         message = ReturnList[1];
 
@@ -82,7 +82,7 @@ public class ChattingAdapter extends BaseAdapter {
         LinearLayout ll_container = (LinearLayout) convertView.findViewById(R.id.ll_container);
         GridLayout gl_container = (GridLayout) convertView.findViewById(R.id.gl_container);
 
-        if(name.equals(chattingArrayList.get(position).user)){
+        if(name.equals(chattingArrayList.get(position).getUser())){
             // Application user oneself
             TextView tv_myName = (TextView) convertView.findViewById(R.id.tv_myName);
             TextView tv_myMessage = (TextView) convertView.findViewById(R.id.tv_myMessage);

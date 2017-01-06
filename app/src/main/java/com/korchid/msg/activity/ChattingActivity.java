@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import com.korchid.msg.Chatting;
 import com.korchid.msg.adapter.ChattingAdapter;
 import com.korchid.msg.http.HttpPost;
+import com.korchid.msg.sqlite.DBHelper;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.mqtt.MqttServiceDelegate;
 import com.korchid.msg.mqtt.MqttServiceDelegate.MessageHandler;
@@ -91,6 +93,9 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
         Intent intent = getIntent();
         parentName = intent.getStringExtra("parentName");
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
@@ -99,6 +104,19 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
+
+        String storedMessage = dbHelper.getMessage();
+        String[] strArr = storedMessage.split("\n");
+        for(int i=0; i<strArr.length; i++){
+            String[] line = strArr[i].split("/");
+
+            String userId = line[2];
+            String message = line[3];
+
+            m_arr.add(new Chatting(userPhoneNumber, userId + ": " + message));
+        }
+
+
 
         initView();
 
@@ -125,7 +143,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         //Start service if not started
         MqttServiceDelegate.startService(this, title);
-
 
 
     }

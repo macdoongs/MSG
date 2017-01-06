@@ -1,5 +1,6 @@
 package com.korchid.msg.activity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,9 +34,10 @@ public class DBTest extends AppCompatActivity {
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "DB Test");
 
-        final DBHelper dbHelper = GlobalApplication.getGlobalApplicationContext().getDBHelper();
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-
+        //dbHelper.onUpgrade(db, 0, 1);
 
         // 테이블에 있는 모든 데이터 출력
         final TextView tv_result = (TextView) findViewById(R.id.result);
@@ -62,8 +64,11 @@ public class DBTest extends AppCompatActivity {
                 String item = et_item.getText().toString();
                 int price = Integer.parseInt(et_price.getText().toString());
 
-                dbHelper.insertUser(date, item);
-                tv_result.setText(dbHelper.getUser());
+                String message = date + "/" + item + "/" + price;
+
+                dbHelper.insertMessage(message);
+
+                tv_result.setText(message);
             }
         });
 
@@ -71,8 +76,8 @@ public class DBTest extends AppCompatActivity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data = dbHelper.getUser();
-                tv_result.setText(data);
+                tv_result.setText(dbHelper.getMessage());
+
             }
         });
     }
