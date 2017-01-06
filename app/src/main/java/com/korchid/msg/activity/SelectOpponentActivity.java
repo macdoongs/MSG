@@ -1,11 +1,16 @@
 package com.korchid.msg.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
@@ -38,14 +43,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.korchid.msg.R;
+import com.korchid.msg.alarm.AlarmBroadCastReciever;
+import com.korchid.msg.alarm.AlarmUtil;
 import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.ui.StatusBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import okhttp3.OkHttpClient;
 
+import static com.korchid.msg.alarm.AlarmBroadCastReciever.INTENTFILTER_BROADCAST_TIMER;
+import static com.korchid.msg.alarm.AlarmBroadCastReciever.KEY_DEFAULT;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
@@ -80,7 +90,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private int profileHeight;
     private String userRole = "";
     private static String userPhoneNumber = "";
-
+    private int count;
 
 
     /**
@@ -246,6 +256,10 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         });
 
         initPageMark();
+
+        if (!AlarmBroadCastReciever.isLaunched) {
+            AlarmUtil.getInstance().startFiveSecondAlarm(this);
+        }
     }
 
     private void initPageMark(){
@@ -268,7 +282,30 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mPrevPosition = 0;
     }
 
+    private BroadcastReceiver mTimeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            count++;
+            long time = intent.getLongExtra(KEY_DEFAULT,0);
+            if (time > 0) {
+                Date date = new Date(time);
+                Log.d(TAG, "count : " + count);
+            }
+        }
+    };
 
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(mTimeReceiver);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        registerReceiver(mTimeReceiver,new IntentFilter(INTENTFILTER_BROADCAST_TIMER));
+        super.onResume();
+    }
 
     @Override
     public void onBackPressed() {

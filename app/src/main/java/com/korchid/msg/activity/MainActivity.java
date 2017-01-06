@@ -124,14 +124,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Get token
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
-
+/*
+        // Mapping test
         String url = "https://www.korchid.com/msg-mapping";
         HashMap<String, String> params = new HashMap<>();
         params.put("deviceToken", deviceToken);
 
         HttpPost httpPost = new HttpPost(url, params, new Handler());
         httpPost.start();
-
+*/
         // Log and toast
         msg = getString(R.string.msg_token_fmt, deviceToken);
         Log.d(TAG, msg);
