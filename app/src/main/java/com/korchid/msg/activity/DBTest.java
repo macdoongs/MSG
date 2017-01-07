@@ -37,7 +37,7 @@ public class DBTest extends AppCompatActivity {
         final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        //dbHelper.onUpgrade(db, 0, 1);
+        dbHelper.onUpgrade(db, 0, 1);
 
         // 테이블에 있는 모든 데이터 출력
         final TextView tv_result = (TextView) findViewById(R.id.result);

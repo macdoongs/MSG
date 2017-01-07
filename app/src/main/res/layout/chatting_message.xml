@@ -59,6 +59,12 @@
                 android:layout_toRightOf="@+id/gl_container"
                 android:layout_toEndOf="@+id/gl_container" />
 
+            <ImageView
+                android:layout_height="wrap_content"
+                app:srcCompat="@color/colorWhite"
+                android:id="@+id/iv_yourImage"
+                android:layout_width="wrap_content" />
+
         </GridLayout>
 
         <LinearLayout
@@ -85,22 +91,13 @@
             android:focusable="false">
 
 
-            <TextView
-                android:id="@+id/tv_myName"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:gravity="right"
-                android:paddingRight="10dip"
-                android:text="text"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                />
+                android:layout_height="16sp" />
 
             <TextView
                 android:id="@+id/tv_myMessage"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:layout_gravity="right"
@@ -112,6 +109,12 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@color/colorWhite"
+                android:id="@+id/iv_myImage" />
         </LinearLayout>
 
     </RelativeLayout>

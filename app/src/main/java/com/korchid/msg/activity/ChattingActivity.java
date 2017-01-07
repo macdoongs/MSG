@@ -3,15 +3,18 @@ package com.korchid.msg.activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.test.suitebuilder.TestMethod;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
@@ -68,6 +72,9 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     private EditText et_message;
 
+    private TextView tv_myMessage;
+    private TextView tv_yourMessage;
+
     private Handler handler = new Handler();
 
     private MessageReceiver msgReceiver;
@@ -78,7 +85,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private String userPhoneNumber;
     private String nickname;
     private String title;
-    private int viewId;
     byte[] pic;
 
 
@@ -126,14 +132,14 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
         // Register mqtt topic - Web server
-//        String url = "https://www.korchid.com/msg-mqtt";
-//
-//        HashMap<String, String> params = new HashMap<>();
-//        params.put("topic", title);
-//
-//
-//        HttpPost httpPost = new HttpPost(url, params, new Handler());
-//        httpPost.start();
+        String url = "https://www.korchid.com/msg-mqtt";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("topic", title);
+
+
+        HttpPost httpPost = new HttpPost(url, params, new Handler());
+        httpPost.start();
 
         //Init Receivers
         bindStatusReceiver();
@@ -162,6 +168,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         btn_send = (Button)findViewById(R.id.btn_send);
 
         expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
+
 
 
         btn_send.setOnClickListener(this);
@@ -204,7 +211,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        viewId = v.getId();
+        int viewId = v.getId();
 
         switch (viewId){
             case R.id.btn_send:{
@@ -245,6 +252,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         }
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
