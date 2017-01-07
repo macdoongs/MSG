@@ -83,6 +83,13 @@ public class DBTest extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+
+
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //ActionBar 메뉴 클릭에 대한 이벤트 처리
 

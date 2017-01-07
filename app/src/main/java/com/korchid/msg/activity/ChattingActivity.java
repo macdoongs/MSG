@@ -84,6 +84,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private String parentName;
     private String userPhoneNumber;
     private String nickname;
+    private String opponentProfile;
     private String title;
     byte[] pic;
 
@@ -107,7 +108,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
 
         pic = null;
-        userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
+        opponentProfile = intent.getStringExtra("opponentProfile");
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
@@ -203,7 +204,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         et_message.addTextChangedListener(textWatcher);
 
-        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userPhoneNumber);
+        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userPhoneNumber, opponentProfile);
         lv_message.setAdapter(adapter);
 
     }

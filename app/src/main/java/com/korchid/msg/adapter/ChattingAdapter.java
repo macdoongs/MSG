@@ -5,7 +5,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +25,10 @@ import com.korchid.msg.R;
 import com.korchid.msg.activity.ChattingActivity;
 import com.korchid.msg.mqtt.service.MqttService;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import static android.content.Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT;
@@ -45,11 +52,13 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
     private String name = "";
     private String message = "";
     private String userPhoneNumber = "";
+    private String opponentProfile = "";
 
-    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userPhoneNumber) {
+    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userPhoneNumber, String opponentProfile) {
         this.MessagingActivity = activity;
         this.chattingArrayList = chattingArrayList;
         this.userPhoneNumber = userPhoneNumber;
+        this.opponentProfile = opponentProfile;
 
         mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -108,6 +117,8 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
             */
         }else{
             // Counterpart
+            final ImageView iv_yourProfile = (ImageView) convertView.findViewById(R.id.iv_yourProfile);
+
             TextView tv_yourName = (TextView) convertView.findViewById(R.id.tv_yourName);
             tv_yourMessage = (TextView) convertView.findViewById(R.id.tv_yourMessage);
             ll_container.setVisibility(View.INVISIBLE);
@@ -116,6 +127,36 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
             tv_yourMessage.setText(message);
 
             tv_yourMessage.setOnLongClickListener(this);
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        URL url = new URL(opponentProfile);
+                        InputStream is = url.openStream();
+                        URLConnection conn = url.openConnection();
+
+                        conn.connect();
+                        BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+
+                        final Bitmap bm = BitmapFactory.decodeStream(bis);
+                        Handler handler = new Handler();
+                        handler.post(new Runnable() {
+
+                            @Override
+                            public void run() {  // 화면에 그려줄 작업
+                                iv_yourProfile.setImageBitmap(bm);
+                            }
+                        });
+                        iv_yourProfile.setImageBitmap(bm); //비트맵 객체로 보여주기
+                    } catch(Exception e){
+
+                    }
+
+                }
+            });
+
+            thread.start();
         }
 
         return convertView;

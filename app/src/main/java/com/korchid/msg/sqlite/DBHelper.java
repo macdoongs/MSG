@@ -285,8 +285,12 @@ public class DBHelper extends SQLiteOpenHelper {
                         + cursor.getString(2)
                         + "\n";
             }
+
+            cursor.close();
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
+        }finally {
+
         }
         Log.d(TAG, result);
 
@@ -308,6 +312,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         + cursor.getString(1)
                         + "\n";
             }
+
+            cursor.close();
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }

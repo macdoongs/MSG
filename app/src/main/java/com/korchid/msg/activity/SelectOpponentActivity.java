@@ -82,6 +82,9 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private static String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
     private static String[] timeReserved = {"수요일 9시경", "목요일 5시경", "금요일 8시경"};
     private static String[] message = {"아빠 뭐해?", "엄마 뭐해?", "엄마 뭐해요?"};
+    private static String[] profile = {"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/black_rubber_shoes.png"
+                                        ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_logo.png"
+                                        ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_os_loading"};
     private static int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
 
 
@@ -168,10 +171,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
         httpGet.start();
-
-
-
-
+        
     }
 
     private void initView(){
@@ -404,12 +404,13 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(int sectionNumber, String userRole) {
             Log.d(TAG, "newInstance");
 
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putString(USER_ROLE, userRole);
             fragment.setArguments(args);
 
             return fragment;
@@ -421,25 +422,40 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             Log.d(TAG, "onCreateView");
 
             int idx = getArguments().getInt(ARG_SECTION_NUMBER);
+            String userRole = getArguments().getString(USER_ROLE);
 
             Log.d(TAG, "idx : " + idx);
 
-            View rootView = inflater.inflate(R.layout.fragment_select_opponent, container, false);
+            View rootView = null;
 
-            Button btn_call = (Button) rootView.findViewById(R.id.btn_call);
-            Button btn_chat = (Button) rootView.findViewById(R.id.btn_chat);
-            Button btn_chat_setting = (Button) rootView.findViewById(R.id.btn_chat_setting);
+            if(userRole.equals("parent")) {
+                rootView = inflater.inflate(R.layout.fragment_select_child, container, false);
 
-            TextView tv_timeTitle = (TextView) rootView.findViewById(R.id.tv_timeTitle);
-            tv_timeTitle.setText("발송 예정");
+                Button btn_call = (Button) rootView.findViewById(R.id.btn_call);
+                Button btn_chat = (Button) rootView.findViewById(R.id.btn_chat);
 
-            TextView tv_timeReserved = (TextView) rootView.findViewById(R.id.tv_timeReserved);
-            tv_timeReserved.setText(timeReserved[idx]);
+                buttonListener(btn_call, btn_chat, new Button(getActivity()), idx);
+            }else{
+                rootView = inflater.inflate(R.layout.fragment_select_parent, container, false);
+
+                Button btn_call = (Button) rootView.findViewById(R.id.btn_call);
+                Button btn_chat = (Button) rootView.findViewById(R.id.btn_chat);
+                Button btn_chat_setting = (Button) rootView.findViewById(R.id.btn_chat_setting);
+
+                buttonListener(btn_call, btn_chat, btn_chat_setting, idx);
+
+                TextView tv_timeTitle = (TextView) rootView.findViewById(R.id.tv_timeTitle);
+                tv_timeTitle.setText("발송 예정");
+
+                TextView tv_timeReserved = (TextView) rootView.findViewById(R.id.tv_timeReserved);
+                tv_timeReserved.setText(timeReserved[idx]);
 
 
 
-            TextView tv_messageReserved = (TextView) rootView.findViewById(R.id.tv_messageReserved);
-            tv_messageReserved.setText(message[idx]);
+                TextView tv_messageReserved = (TextView) rootView.findViewById(R.id.tv_messageReserved);
+                tv_messageReserved.setText(message[idx]);
+            }
+
 
             RoundedImageView circularImageView = (RoundedImageView) rootView.findViewById(R.id.riv_opponentProfile);
 
@@ -459,9 +475,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             circularImageView.setBorderWidth((float)2);
             circularImageView.setBorderColor(Color.DKGRAY);
             circularImageView.mutateBackground(true);
-
-            buttonListener(btn_call, btn_chat, btn_chat_setting, idx);
-
 
 
             return rootView;
@@ -490,6 +503,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                     intent.putExtra("topic", parentArrayList.get(idx));
                     intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                     intent.putExtra("parentName", parent[idx]);
+                    intent.putExtra("opponentProfile", profile[idx]);
                     startActivity(intent);
                 }
             });
@@ -524,7 +538,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position);
+            return PlaceholderFragment.newInstance(position, userRole);
         }
 
         @Override
