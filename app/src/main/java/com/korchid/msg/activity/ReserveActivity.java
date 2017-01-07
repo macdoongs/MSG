@@ -70,6 +70,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
 
+
         initView();
 
     }

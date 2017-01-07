@@ -1,9 +1,13 @@
 package com.korchid.msg.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -13,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -26,9 +31,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import static android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 
 // Modify and register profile image
 public class ProfileActivity  extends AppCompatActivity implements View.OnClickListener{
@@ -41,10 +48,14 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
     private ImageView iv_profile;
 
     private Button btn_upload;
+    private Button btn_register;
+
+
+    //private ImageReceiver imageReceiver;
 
     private int viewId;
     private String absolutePath;
-
+    private String profilePath;
 
 
     @Override
@@ -55,8 +66,18 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
         initView();
 
+        //IntentFilter intentFilter = new IntentFilter(ACTION_MEDIA_SCANNER_SCAN_FILE);
 
-        //iv_userPhoto.setImageBitmap(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name);
+        //imageReceiver = new ImageReceiver();
+        //registerReceiver(imageReceiver, intentFilter);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        //unregisterReceiver(imageReceiver);
+
+        super.onDestroy();
     }
 
     private void initView(){
@@ -68,104 +89,102 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         btn_upload = (Button) findViewById(R.id.btn_upload);
         btn_upload.setOnClickListener(this);
 
-    }
-
-    // Take pictures function
-    // http://jeongchul.tistory.com/287
-    public void takePictureAction(){
-        Log.d(TAG, "takePictureAction");
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // Temp path
-        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-        mImageCaptureUri =  Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
-
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-        startActivityForResult(intent, PICK_FROM_CAMERA);
-    }
-
-    public  void takeAlbumAction(){
-        Log.d(TAG, "takeAlbumAction");
-        // Call Album
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-
-        startActivityForResult(intent, PICK_FROM_ALBUM);
+        btn_register = (Button) findViewById(R.id.btn_register);
+        btn_register.setOnClickListener(this);
+        btn_register.setEnabled(false);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        Log.d(TAG, "onActivityResult / request code : " + requestCode + ", result code : " + resultCode);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode != RESULT_OK){
-            //Toast.makeText(ProfileActivity.this, "RESULT ERROR : " + resultCode, Toast.LENGTH_LONG).show();
+        if (resultCode != RESULT_OK)
             return;
-        }
 
-        switch (requestCode){
-            case PICK_FROM_ALBUM:
-            {
-                Log.d(TAG, "PICK_FROM_ALBUM case");
+        switch (requestCode) {
+            case PICK_FROM_ALBUM: {
+                Log.d(TAG, "PICK_FROM_ALBUM");
                 mImageCaptureUri = data.getData();
-                //Toast.makeText(ProfileActivity.this, mImageCaptureUri.getPath().toString(), Toast.LENGTH_LONG).show();
-                //iv_profile.setImageURI(mImageCaptureUri);
-                //Log.e("Album", mImageCaptureUri.getPath().toString());
+                Log.i("NR", mImageCaptureUri.getPath().toString());
+
+                // 이후의 처리가 카메라 부분과 같아 break 없이 진행
             }
-            case PICK_FROM_CAMERA:
-            {
-                Log.d(TAG, "PICK_FROM_CAMERA case");
-                // Resize image
-                // call crop application
+            case PICK_FROM_CAMERA: {
+                Log.d(TAG, "PICK_FROM_CAMERA");
                 Intent intent = new Intent("com.android.camera.action.CROP");
                 intent.setDataAndType(mImageCaptureUri, "image/*");
 
-                // Store cropping image 200*200
-                intent.putExtra("outputX", 200); // x size
-                intent.putExtra("outputY", 200); // y size
-                intent.putExtra("aspectX", 1); // x proportion
-                intent.putExtra("aspectY", 1); // y proportion
+                // crop한 이미지를 저장할때 200x200 크기로 저장
+                intent.putExtra("outputX", 200); // crop한 이미지의 x축 크기
+                intent.putExtra("outputY", 200); // crop한 이미지의 y축 크기
+                intent.putExtra("aspectX", 2); // crop 박스의 x축 비율
+                intent.putExtra("aspectY", 1); // crop 박스의 y축 비율
                 intent.putExtra("scale", true);
-                intent.putExtra("returnData", true);
-                //iv_userPhoto.setImageURI(mImageCaptureUri);
-                startActivityForResult(intent, CROP_IMAGE); // Move CROP_IMAGE case
+                intent.putExtra("return-data", true);
+                startActivityForResult(intent, CROP_IMAGE);
+
+                btn_register.setEnabled(true);
+                btn_register.setBackgroundResource(R.color.colorPrimary);
+
                 break;
             }
-            case CROP_IMAGE:
-            {
-                Log.d(TAG, "CROP_IMAGE case");
-                // Receive image cropped
-                // Additional work and delete temp file
-                if(resultCode != RESULT_OK){
-                    Toast.makeText(ProfileActivity.this, "CROP ERR : " + mImageCaptureUri.getPath().toString(), Toast.LENGTH_LONG).show();
-                    return;
-                }
-
+            case CROP_IMAGE: {
+                Log.d(TAG, "CROP_IMAGE");
                 final Bundle extras = data.getExtras();
+                // crop된 이미지를 저장하기 위한 파일 경로
+                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/temp/" + System.currentTimeMillis() + ".jpg";
 
-                // Save image cropped
-                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MSG/" + System.currentTimeMillis() + ".jpg";
-                Log.e("PATH", filePath);
 
-                if(extras != null){
-                    Bitmap photo = extras.getParcelable("data");
-                    iv_profile.setImageBitmap(photo);
-
+                if (extras != null) {
+                    Bitmap photo = extras.getParcelable("data"); // crop된 bitmap
                     storeCropImage(photo, filePath);
-                    absolutePath = filePath;
-                    break;
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + Environment.getExternalStorageDirectory()))); // 갤러리를 갱신하기 위해..
+
                 }
 
+                profilePath = filePath;
+                /*
                 File file = new File(mImageCaptureUri.getPath());
-
-                GlobalApplication.getGlobalApplicationContext().setProfileImage(mImageCaptureUri);
-
-                if(file.exists()){
-                    file.delete();
+                if (file.exists()) {
+                    Boolean isDeleted = file.delete();
+                    Log.d(TAG, "exist");
+                    if(isDeleted){
+                        Log.d(TAG, "delete");
+                    }
                 }
+                */
+
+                break;
+            }
+            default:{
+                Log.d(TAG, "default");
+                break;
             }
         }
+    }
 
+    private void storeCropImage(Bitmap bitmap, String filePath) {
+        Log.d(TAG, "storeCropImage");
+        File copyFile = new File(filePath);
+        BufferedOutputStream out = null;
+
+        try {
+            Boolean isCreated = copyFile.createNewFile();
+            if(isCreated){
+                Log.d(TAG, "create");
+            }
+
+            out = new BufferedOutputStream(new FileOutputStream(copyFile));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+            iv_profile.setImageBitmap(bitmap);
+
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Error : " +e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -177,30 +196,34 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
                 // Use Environmental variable 'SharedPreference'
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
+                editor.putString(USER_PROFILE, profilePath);
 
-                //DB query
-
-
-                //Intent intent = new Intent(ChattingSubActivity.this, LoginActivity.class);
-                //ChattingSubActivity.this.startActivity(intent);
-                //ChattingSubActivity.this.finish();
                 Toast.makeText(this, "Complete join", Toast.LENGTH_LONG).show();
 
+                iv_profile.buildDrawingCache();
+                Bitmap bitmap = iv_profile.getDrawingCache();
+
+                Intent intent = new Intent();
+                intent.putExtra("profilePath", profilePath);
+                setResult(RESULT_OK, intent);
+
+                this.finish();
                 break;
             }
             case R.id.btn_upload:{
                 DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        takePictureAction();
+                        getPhotoFromCamera();
                     }
                 };
 
                 DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        takeAlbumAction();
+                        getPhotoFromGallery();
                     }
                 };
 
@@ -241,6 +264,25 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         return true;
     }
 
+    private void getPhotoFromCamera() { // 카메라 촬영 후 이미지 가져오기
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // 임시로 사용할 파일의 경로를 생성
+        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
+
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+        startActivityForResult(intent, PICK_FROM_CAMERA);
+    }
+
+    private void getPhotoFromGallery() { // 갤러리에서 이미지 가져오기
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_ALBUM);
+    }
+
+
+    /*
     // Save Bitmap image
     private void storeCropImage(Bitmap bitmap, String filePath){
         Log.d(TAG, "storeCropImage");
@@ -248,20 +290,31 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
         String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MSG";
         File directoryMSG = new File(dirPath);
 
-        if(!directoryMSG.exists()){
-            directoryMSG.mkdir();
+        Log.d(TAG, "dirPath : " + dirPath);
+
+        boolean isDirectoryCreated= directoryMSG.exists();
+        if (!isDirectoryCreated) {
+            isDirectoryCreated= directoryMSG.mkdirs();
         }
 
         File copyFile = new File(filePath);
         BufferedOutputStream outputStream = null;
 
         try{
-            copyFile.createNewFile();
+            boolean isFileCreated= copyFile.exists();
+            if (!isFileCreated) {
+                isFileCreated= copyFile.createNewFile();
+            }
+
             outputStream = new BufferedOutputStream(new FileOutputStream(copyFile));
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
             // sendBroadcast - renew image cropped
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(copyFile)));
+            sendBroadcast(new Intent(ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(copyFile)));
+
+            Log.d(TAG, "Uri : " + Uri.fromFile(copyFile).toString());
+
+            iv_profile.setImageURI( Uri.fromFile(copyFile));
 
             outputStream.flush();
             outputStream.close();
@@ -275,4 +328,13 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
 
 
 
+    private class ImageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive");
+
+            iv_profile.setImageURI(intent.getData());
+        }
+    }
+*/
 }

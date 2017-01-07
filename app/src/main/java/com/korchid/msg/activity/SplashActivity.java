@@ -102,7 +102,6 @@ public class SplashActivity extends Activity {
 
 
                             Intent intent = new Intent();
-                            //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
                             setResult(RESULT_OK, intent);
                             finish();
 

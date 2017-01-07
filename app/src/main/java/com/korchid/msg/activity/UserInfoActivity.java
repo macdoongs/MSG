@@ -2,6 +2,8 @@ package com.korchid.msg.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
+import java.io.File;
 import java.util.HashMap;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
@@ -50,6 +53,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private String profile = "/";
     private String sex = "";
     private String nickname = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +154,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 httpPost.start();
 
                 Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 1);
 
             }
         });
@@ -221,6 +225,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     int btn_id = rbtnGroup.getCheckedRadioButtonId();
 
                     Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
+                    intent.putExtra(USER_PROFILE, profile);
 
                     switch (btn_id){
                         case R.id.rbtn_male:{
@@ -281,6 +286,19 @@ public class UserInfoActivity extends AppCompatActivity {
 
         switch (resultCode){
             case RESULT_OK:{
+                if(requestCode == 0){
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+
+                    profile = data.getStringExtra("profilePath");
+
+
+                    Bitmap bitmap = BitmapFactory.decodeFile(profile);
+
+                    iv_profile.setImageBitmap(bitmap);
+                    return;
+                }
+
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
