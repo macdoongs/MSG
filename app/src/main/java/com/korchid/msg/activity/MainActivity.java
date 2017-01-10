@@ -183,7 +183,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView(){
         // Modify UI
         StatusBar statusBar = new StatusBar(this);
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
+        
+        // Manifests - no action bar
+        //CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_main, getResources().getString(R.string.app_name));
 
         btn_next = (Button) findViewById(R.id.btn_next);
         btn_next.setOnClickListener(this);

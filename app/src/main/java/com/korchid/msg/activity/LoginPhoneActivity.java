@@ -1,10 +1,12 @@
 package com.korchid.msg.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -127,6 +129,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
         btn_login.setOnClickListener(this);
         btn_login.setEnabled(false);
+        btn_findPassword.setEnabled(false);
 
         // http://egloos.zum.com/killins/v/3008925
         TextWatcher textWatcher = new TextWatcher() {
@@ -148,8 +151,11 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 if(input.length() > 0 && input2.length() > 0){
                     btn_login.setEnabled(true);
                     btn_login.setBackgroundResource(R.color.colorPrimary);
+                    btn_findPassword.setEnabled(true);
+                    btn_findPassword.setBackgroundResource(R.color.colorPrimary);
                 }else{
                     btn_login.setEnabled(false);
+                    btn_findPassword.setEnabled(false);
                 }
             }
         };
@@ -215,15 +221,36 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
             }
             case R.id.btn_findPassword:{
                 phoneNumber = et_phoneNumber.getText().toString();
-                password = et_password.getText().toString();
+
+                if(phoneNumber.equals("")){
+                    Toast.makeText(getApplicationContext(), "Please input phone number!", Toast.LENGTH_LONG).show();
+                }else{
+                    internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginPhoneActivity.this);
+
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Please check your phone number.");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getApplicationContext(), FindPasswordActivity.class);
+                            intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
+                            Log.d(TAG, "internationalPhoneNumber : " + internationalPhoneNumber);
+                            startActivityForResult(intent, 0);
+                        }
+                    });
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
+
+                }
 
 
-                internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
-
-                Intent intent = new Intent(getApplicationContext(), FindPasswordActivity.class);
-                intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
-                Log.d(TAG, "internationalPhoneNumber : " + internationalPhoneNumber);
-                startActivityForResult(intent, 0);
                 break;
             }
             default:{

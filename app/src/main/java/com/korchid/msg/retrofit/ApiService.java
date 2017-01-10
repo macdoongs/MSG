@@ -29,25 +29,46 @@ public interface ApiService {
     //Call<List<Repos>> listRepos(@Path("userid") String userid);
     Call<Repos> Repos(@Path("userid") String userid);
 
-    @FormUrlEncoded
+
     @POST("/msg/user/signup")
-    Call<Response> userSignup(@Field("phoneNumber") String phoneNumber, @Field("password") String password);
-
     @FormUrlEncoded
+    Call<Response> userSignup(@Field("phoneNumber") String phoneNumber,
+                              @Field("password") String password);
+
+
     @POST("/msg/user/login")
-    Call<List<User>> userLogin(@Field("phoneNumber") String phoneNumber, @Field("password") String password);
-
     @FormUrlEncoded
+    Call<List<User>> userLogin(@Field("phoneNumber") String phoneNumber,
+                               @Field("password") String password);
+
+
     @POST("/msg/user/recovery/password")
+    @FormUrlEncoded
     Call<List<UserAuth>> listRecoveryPassword(@Field("phoneNumber") String phoneNumber);
 
-    @FormUrlEncoded
     @POST("/msg/user/load")
+    @FormUrlEncoded
     Call<List<UserData>> listLoadUserData(@Field("userId") int userId);
 
     @GET("/msg/user/{phoneNumber}/duplicate")
     @Headers("Accept-Encoding: application/json")
     Call<List<User>> listUserDuplicateCheck(@Path("phoneNumber") String phoneNumber);
 
+    @POST("/msg/user/setting")
+    @FormUrlEncoded
+    Call<Response> userSettingReponse(@Field("userId") int userId,
+                                      @Field("messageAlert") Boolean messageAlert,
+                                      @Field("reserveEnable") Boolean reserveEnable,
+                                      @Field("reserveAlert") Boolean reserveAlert,
+                                      @Field("weekNumber") int weekNumber,
+                                      @Field("reserveNumber") int reserveNumber);
+
+    @POST("/msg/user/info")
+    @FormUrlEncoded
+    Call<Response> userInfoResponse(@Field("userId") int userId,
+                                    @Field("nickname") String nickname,
+                                    @Field("sex") String sex,
+                                    @Field("birthday") String birthday,
+                                    @Field("profile") String profile);
 
 }

@@ -75,7 +75,8 @@
         </service>
         <!-- [END firebase_iid_service] -->
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
 
             <!-- android:configChanges="orientation|keyboardHidden" -->
             <intent-filter>
@@ -111,7 +112,7 @@
         <activity
             android:name=".activity.SelectOpponentActivity"
             android:label="@string/title_activity_select_opponent"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
