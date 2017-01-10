@@ -82,7 +82,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         IntentFilter intentFilter = new IntentFilter(SMS_RECEIVED);
         registerReceiver(smsReceiver, intentFilter);
 
-        String url = "https://www.korchid.com/sms-sender/";
+        String url = "https://www.korchid.com/msg/auth/sms/send/";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("phoneNumber", phoneNumber);
@@ -160,8 +160,9 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         switch (viewId){
             case R.id.btn_confirm:{
 
-                String url = "https://www.korchid.com/sms-check";
+                String url = "https://www.korchid.com/msg/auth/sms/check";
                 String authCode = et_authCode.getText().toString();
+
 
                 HashMap<String, String> params = new HashMap<>();
                 params.put("phoneNumber", phoneNumber);
@@ -220,7 +221,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                         btn_confirm.setBackgroundResource(R.color.colorPrimary);
                         btn_confirm.setOnClickListener(AuthPhoneWaitActivity.this);
 
-                        String url = "https://www.korchid.com/sms-sender/";
+                        String url = "https://www.korchid.com/msg/auth/sms/send/";
 
                         HashMap<String, String> params = new HashMap<>();
                         params.put("phoneNumber", phoneNumber);

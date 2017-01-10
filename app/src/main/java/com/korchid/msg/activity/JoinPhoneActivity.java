@@ -52,12 +52,10 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_phone);
 
-        phoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
-        tv_phoneNumber.setText(phoneNumber);
-
         initView();
 
-
+        phoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
+        tv_phoneNumber.setText(phoneNumber);
 
 
     }
@@ -147,7 +145,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onClick(final DialogInterface dialog, int which) {
 
-                            String url = "https://www.korchid.com/msg-signup/";
+                            String url = "https://www.korchid.com/msg/user/signup/";
 
                             HashMap<String, String> params = new HashMap<>();
                             params.put("phoneNumber", phoneNumber);

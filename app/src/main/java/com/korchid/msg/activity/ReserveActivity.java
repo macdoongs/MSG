@@ -174,7 +174,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
                 Log.d(TAG, "userId : " + userId);
 
-
+/*
                 String stringUrl = "https://www.korchid.com/msg-message-setting";
                 HashMap<String, String> params = new HashMap<>();
                 params.put("swEnable", swEnable);
@@ -217,14 +217,14 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
                             editor.commit(); // Apply file
 
-                            /*
+
                             // Delete preference value
                             // 1. Remove "key" data
-                            editor.remove("key");
+                            //editor.remove("key");
 
                             // 2. Remove xml data
-                            editor.clear();
-                            */
+                            //editor.clear();
+
 
                             // if sharedPreferences.getString value is 0, assign 2th parameter
                             Log.d(TAG, "SharedPreference");
@@ -245,7 +245,7 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
                 httpPost.start();
 
-
+*/
 
 
                 //GlobalApplication.getGlobalApplicationContext().setWeekNum(weekNum);

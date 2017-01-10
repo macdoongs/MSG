@@ -20,12 +20,20 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.korchid.msg.adapter.RestfulAdapter;
+import com.korchid.msg.retrofit.User;
+import com.korchid.msg.retrofit.UserAuth;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
 import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
@@ -166,35 +174,16 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                 //Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
-                String stringUrl = "https://www.korchid.com/msg-login";
-                HashMap<String, String> params = new HashMap<>();
-                params.put("phoneNumber", internationalPhoneNumber);
-                params.put("password", password);
+                Call<List<User>> userCall = RestfulAdapter.getInstance().userLogin(internationalPhoneNumber, password);
 
-                Handler httpHandler = new Handler(){
+                userCall.enqueue(new Callback<List<User>>() {
                     @Override
-                    public void handleMessage(Message msg) {
-                        String response = msg.getData().getString("response");
+                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                        User user = response.body().get(0);
 
-                        String[] line = response.split("\n");
-
-                        String[] partition = line[0].split("/");
-                        //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                        if(line[0].equals("Error")){
-                            Toast.makeText(getApplicationContext(), "No ID! please join.", Toast.LENGTH_LONG).show();
-                        }else if(line[0].equals("No")){
-                            Toast.makeText(getApplicationContext(), "Wrong password", Toast.LENGTH_LONG).show();
+                        if(user == null){
+                            Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
-
-                            for(int i=0; i<partition.length; i++){
-                                Log.d(TAG, "partition " + i + " : " + partition[i]);
-                            }
-
-
-
-
                             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -202,14 +191,9 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                             editor.putString(USER_LOGIN_STATE, "LOGIN");
                             editor.putString(USER_PHONE_NUMBER, internationalPhoneNumber);
                             editor.putString(USER_PASSWORD, password);
-                            editor.putString(USER_ID_NUMBER, partition[0]);
-                            editor.putString(USER_LOGIN_TOKEN, partition[1]);
+                            editor.putInt(USER_ID_NUMBER, user.getUser_id());
+                            editor.putString(USER_LOGIN_TOKEN, user.getLogin_token_ln());
                             editor.commit(); // Apply file
-
-                            Log.d(TAG, "SharedPreference");
-                            Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
-                            Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
-                            Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "123123"));
 
                             Intent intent = new Intent();
                             intent.putExtra(USER_LOGIN_STATE, "LOGIN");
@@ -218,11 +202,15 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                             finish();
                         }
 
-                    }
-                };
 
-                HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
-                httpPost.start();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<User>> call, Throwable t) {
+                        Log.d(TAG, "onFailure");
+                    }
+                });
+
                 break;
             }
             case R.id.btn_findPassword:{

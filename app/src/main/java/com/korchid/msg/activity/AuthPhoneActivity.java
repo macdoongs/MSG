@@ -13,6 +13,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,10 +23,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.korchid.msg.adapter.RestfulAdapter;
+import com.korchid.msg.retrofit.User;
+import com.korchid.msg.retrofit.UserData;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
@@ -162,27 +172,28 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
                     Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
-                    Handler httpHandler = new Handler(){
+                    Call<List<User>> userDataCall = RestfulAdapter.getInstance().listUserDuplicateCheck(internationalPhoneNumber);
+
+                    userDataCall.enqueue(new Callback<List<User>>() {
                         @Override
-                        public void handleMessage(Message msg) {
-                            String response = msg.getData().getString("response");
-
-                            String[] line = response.split("\n");
-
-                            //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                            if(line[0].equals("No")){
+                        public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                            if(response.body() == null){
                                 Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
                                 isDuplicate = false;
                             }else{
                                 Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
                                 isDuplicate = true;
+                                Log.d(TAG, "nickname : " + response.body().get(0).getPassword_sn());
                             }
-                        }
-                    };
 
-                    HttpGet httpGet = new HttpGet("https://www.korchid.com/msg-signup/" + internationalPhoneNumber, httpHandler);
-                    httpGet.start();
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<User>> call, Throwable t) {
+                            Log.d(TAG, "onFailure");
+                        }
+                    });
+
                 }
 
             }

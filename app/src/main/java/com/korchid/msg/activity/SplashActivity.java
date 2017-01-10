@@ -15,6 +15,7 @@ import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.R;
 import com.korchid.msg.retrofit.ApiService;
+import com.korchid.msg.retrofit.UserData;
 import com.korchid.msg.ui.StatusBar;
 
 import java.io.IOException;
@@ -52,19 +53,21 @@ public class SplashActivity extends Activity {
         duration = getIntent().getIntExtra("duration", duration);
 
 
-        Call<Repos> reposListCall = RestfulAdapter.getInstance().listRepos("2");
+        Call<List<UserData>> userDataCall = RestfulAdapter.getInstance().listLoadUserData(16);
 
-        reposListCall.enqueue(new Callback<Repos>() {
+        userDataCall.enqueue(new Callback<List<UserData>>() {
             @Override
-            public void onResponse(Call<Repos> call, Response<Repos> response) {
-                Log.d(TAG, "response : " + response.body());
+            public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
+                Log.d(TAG, "nickname : " + response.body().get(0).getNickname_sn());
             }
 
             @Override
-            public void onFailure(Call<Repos> call, Throwable t) {
+            public void onFailure(Call<List<UserData>> call, Throwable t) {
                 Log.d(TAG, "onFailure");
             }
         });
+
+
 
         SharedPreferences sharedPreferences = getSharedPreferences("MAPPING", 0);
 
@@ -75,7 +78,7 @@ public class SplashActivity extends Activity {
         // TODO if no sharedPreferences data, Load user data - web server
         if(topic.equals("")){
             String userId = "2";//getIntent().getStringExtra("USER_ID_NUM");
-
+/*
             String stringUrl = "https://www.korchid.com/msg-user/" + userId;
 
             Handler httpHandler = new Handler(){
@@ -115,7 +118,7 @@ public class SplashActivity extends Activity {
 
             HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
             httpGet.start();
-
+*/
         }else{
 
 

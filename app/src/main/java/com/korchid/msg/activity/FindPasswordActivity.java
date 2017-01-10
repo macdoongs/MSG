@@ -12,9 +12,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.korchid.msg.R;
+import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.http.HttpPost;
+import com.korchid.msg.retrofit.UserAuth;
+import com.korchid.msg.retrofit.UserData;
 
 import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
@@ -80,36 +88,20 @@ public class FindPasswordActivity extends AppCompatActivity {
 
         switch (resultCode){
             case RESULT_OK:{
-                String url = "https://www.korchid.com/msg-find-password";
+                Log.d(TAG, "onActivityResult: " + userPhoneNumber);
+                Call<List<UserAuth>> userDataCall = RestfulAdapter.getInstance().listRecoveryPassword(userPhoneNumber);
 
-                HashMap<String, String> params = new HashMap<>();
-                params.put("phoneNumber", userPhoneNumber);
-
-                final String userPassword = data.getStringExtra(USER_PASSWORD);
-
-                Handler httpHandler = new Handler(){
+                userDataCall.enqueue(new Callback<List<UserAuth>>() {
                     @Override
-                    public void handleMessage(Message msg) {
-                        String response = msg.getData().getString("response");
-
-                        //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                        String[] line = response.split("\n");
-
-                        if(line[0].equals("ERROR")){
-                            Toast.makeText(getApplicationContext(), "No ID!", Toast.LENGTH_LONG).show();
-                        }else{
-                            //Toast.makeText(getApplicationContext(), "Password : " + password, Toast.LENGTH_LONG).show();
-
-                            tv_phoneNumber.setText(userPhoneNumber);
-                            tv_password.setText(userPassword);
-
-                        }
+                    public void onResponse(Call<List<UserAuth>> call, Response<List<UserAuth>> response) {
+                        Log.d(TAG, "password : " + response.body().get(0).getPassword_sn());
                     }
-                };
 
-                HttpPost httpPost = new HttpPost(url, params, httpHandler);
-                httpPost.start();
+                    @Override
+                    public void onFailure(Call<List<UserAuth>> call, Throwable t) {
+                        Log.d(TAG, "onFailure");
+                    }
+                });
 
                 break;
             }
@@ -122,4 +114,5 @@ public class FindPasswordActivity extends AppCompatActivity {
             }
         }
     }
+
 }

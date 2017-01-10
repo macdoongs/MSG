@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_next.setVisibility(View.GONE);
 
         Intent intent = new Intent(this, SplashActivity.class);
-        intent.putExtra(USER_ID_NUMBER, sharedPreferences.getString(USER_ID_NUMBER , "0"));
+        intent.putExtra(USER_ID_NUMBER, sharedPreferences.getInt(USER_ID_NUMBER , 0));
         loginState = sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT");
         //Log.d(TAG, "Login state : " + loginState);
         if(loginState.equals("LOGIN")){
