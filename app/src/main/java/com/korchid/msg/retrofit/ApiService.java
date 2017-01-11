@@ -32,7 +32,7 @@ public interface ApiService {
 
     @POST("/msg/user/signup")
     @FormUrlEncoded
-    Call<Response> userSignup(@Field("phoneNumber") String phoneNumber,
+    Call<Res> userSignup(@Field("phoneNumber") String phoneNumber,
                               @Field("password") String password);
 
 
@@ -56,7 +56,7 @@ public interface ApiService {
 
     @POST("/msg/user/setting")
     @FormUrlEncoded
-    Call<Response> userSettingReponse(@Field("userId") int userId,
+    Call<Res> userSetting(@Field("userId") int userId,
                                       @Field("messageAlert") Boolean messageAlert,
                                       @Field("reserveEnable") Boolean reserveEnable,
                                       @Field("reserveAlert") Boolean reserveAlert,
@@ -65,7 +65,7 @@ public interface ApiService {
 
     @POST("/msg/user/info")
     @FormUrlEncoded
-    Call<Response> userInfoResponse(@Field("userId") int userId,
+    Call<Res> userInfo(@Field("userId") int userId,
                                     @Field("nickname") String nickname,
                                     @Field("sex") String sex,
                                     @Field("birthday") String birthday,

@@ -31,13 +31,19 @@
                 android:id="@+id/textView7" />
 
             <Switch
-                android:text="Enable plane"
+                android:text="Switch push enable"
+                android:layout_height="wrap_content"
+                android:id="@+id/sw_pushEnable"
+                android:layout_width="150dp" />
+
+            <Switch
+                android:text="Switch plane enable"
                 android:layout_height="wrap_content"
                 android:id="@+id/sw_enable"
                 android:layout_width="150dp" />
 
             <Switch
-                android:text="Enable alert"
+                android:text="Switch plane alert"
                 android:layout_height="wrap_content"
                 android:id="@+id/sw_alert"
                 android:layout_width="150dp" />

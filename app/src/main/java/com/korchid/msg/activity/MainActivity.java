@@ -210,14 +210,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_userInfo.setOnClickListener(this);
 
 
-/*
+
         // Develop mode
         // Clear SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.clear();
         editor.commit();
-*/
+
 
         userPhoneNumber = sharedPreferences.getString(USER_PHONE_NUMBER, "010-0000-0000");
         //Log.d(TAG, "USER phone number : " + userPhoneNumber);

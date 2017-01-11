@@ -2,8 +2,6 @@ package com.korchid.msg.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,28 +14,29 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.korchid.msg.adapter.RestfulAdapter;
+import com.korchid.msg.retrofit.Res;
+import com.korchid.msg.retrofit.UserData;
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.MessageSetting;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
-import java.util.HashMap;
+import java.util.List;
 
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_CHECK;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_MESSAGE;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_MESSAGE_ALERT;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
-import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 
 // Register reservation message and the number of sending
 public class ReserveActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     private static final String TAG = "ReserveActivity";
     public static final int TOTAL_WEEK = 7;
 
+    private Switch sw_pushEnable;
     private Switch sw_enable;
     private Switch sw_alert;
 
@@ -94,6 +93,11 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
         btn_reserve = (Button) findViewById(R.id.btn_reserve);
         btn_reserve.setOnClickListener(this);
+
+        sw_pushEnable = (Switch) findViewById(R.id.sw_pushEnable);
+        if(sw_pushEnable != null){
+            sw_pushEnable.setOnCheckedChangeListener(this);
+        }
 
         sw_enable = (Switch) findViewById(R.id.sw_enable);
         if (sw_enable != null) {
@@ -165,14 +169,29 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                final String weekNum = "" + np_week.getValue();
-                final String times = "" + np_number.getValue();
-                final String swEnable = "" + sw_enable.isChecked();
-                final String swAlert = "" + sw_alert.isChecked();
-                final String userId = sharedPreferences.getString("USER_ID_NUM", "");
+                final int userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
+                final Boolean messageAlert = sw_pushEnable.isChecked();
+                final Boolean reserveEnable = sw_enable.isChecked();
+                final Boolean reserveAlert = sw_alert.isChecked();
+                final int weekNumber = np_week.getValue();
+                final int reserveNumber = np_number.getValue();
                 final String message = " ";
 
                 Log.d(TAG, "userId : " + userId);
+
+                Call<Res> userSettingCall = RestfulAdapter.getInstance().userSetting(userId, messageAlert, reserveEnable, reserveAlert, weekNumber, reserveNumber);
+
+                userSettingCall.enqueue(new Callback<Res>() {
+                    @Override
+                    public void onResponse(Call<Res> call, Response<Res> response) {
+                        Log.d(TAG, "nickname : " + response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Res> call, Throwable t) {
+                        Log.d(TAG, "onFailure");
+                    }
+                });
 
 /*
                 String stringUrl = "https://www.korchid.com/msg-message-setting";
@@ -351,6 +370,17 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         int swId = buttonView.getId();
 
         switch (swId){
+            case R.id.sw_pushEnable:{
+
+                Toast.makeText(this, "sw_pushEnable " + (isSWOn ? "on" : "off"),
+                        Toast.LENGTH_SHORT).show();
+                if(isSWOn){
+
+                }else{
+
+                }
+                break;
+            }
             case R.id.sw_enable:{
                 this.isEnable = isSWOn;
                 Toast.makeText(this, "The sw_enable is " + (isSWOn ? "on" : "off"),

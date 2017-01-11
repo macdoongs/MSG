@@ -4,10 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by mac on 2017-01-10.
+ * Created by mac0314 on 2017-01-11.
  */
 
-public class Response {
+public class Res {
     @SerializedName("fieldCount")
     @Expose
     private int fieldCount;
