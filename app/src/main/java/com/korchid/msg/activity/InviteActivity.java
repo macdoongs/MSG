@@ -206,7 +206,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                         String inviteTime = getCurrentTimeStamp();
 
-                        String strUrl = "https://www.korchid.com/msg-wait-connection";
+                        String strUrl = "https://www.korchid.com/msg/user/invitation";
                         HashMap<String, String> params = new HashMap<>();
                         params.put("userId", userId);
                         params.put("receiverPhoneNumber", receiverPhoneNumber);

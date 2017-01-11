@@ -64,6 +64,7 @@ public class SplashActivity extends Activity {
             @Override
             public void onFailure(Call<List<UserData>> call, Throwable t) {
                 Log.d(TAG, "onFailure");
+                //Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 

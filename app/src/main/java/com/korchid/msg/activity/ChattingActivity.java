@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -54,7 +55,9 @@ import com.korchid.msg.mqtt.service.MqttService.ConnectionStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
 
@@ -88,7 +91,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     private String parentName;
     private String userPhoneNumber;
-    private String nickname;
+    private String userNickname;
     private String opponentProfile;
     private String title;
     private String userId;
@@ -113,11 +116,16 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         parentName = intent.getStringExtra("parentName");
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
         userId = intent.getStringExtra(USER_ID_NUMBER);
+        userNickname = intent.getStringExtra(USER_NICKNAME);
 
         pic = null;
         opponentProfile = intent.getStringExtra("opponentProfile");
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
+
+//        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+//        userNickname = sharedPreferences.getString(USER_NICKNAME, "");
+
 
         try {
             String storedMessage = dbHelper.getMessage();
@@ -128,7 +136,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 String userId = line[2];
                 String message = line[3];
 
-                m_arr.add(new Chatting(userPhoneNumber, userId + ": " + message));
+                m_arr.add(new Chatting("TestBot", userId + ": " + message));
             }
         }catch (Exception e){
             Log.d(TAG, "Error : " + e.getMessage());
@@ -142,7 +150,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
         // Register mqtt topic - Web server
-        String url = "https://www.korchid.com/msg/chatting/topic/subscription";
+        String url = "https://www.korchid.com/msg/user/chatting/topic/subscription";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("topic", title);
@@ -215,7 +223,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         et_message.addTextChangedListener(textWatcher);
 
-        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userPhoneNumber, opponentProfile);
+        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userNickname, opponentProfile);
         lv_message.setAdapter(adapter);
 
     }
@@ -236,7 +244,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 try {
                     obj.put("senderId", 16);
                     obj.put("receiverId", 17);
-                    obj.put("parentName", parentName);
+                    obj.put(USER_NICKNAME, userNickname);
                     obj.put("message", message);
 
                     System.out.println(obj.toString());
@@ -348,7 +356,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         unbindStatusReceiver();
 
         // Register mqtt topic - Web server
-        String url = "https://www.korchid.com/msg/chatting/topic/unsubscription";
+        String url = "https://www.korchid.com/msg/user/chatting/topic/unsubscription";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("topic", title);
@@ -416,6 +424,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         String data = new String(payload);
 
+
         int senderId = 0;
         int receiverId = 0;
         String message = "";
@@ -426,7 +435,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
             senderId = jsonObject.getInt("senderId");
             receiverId = jsonObject.getInt("receiverId");
             message = jsonObject.getString("message");
-            parentName = jsonObject.getString("parentName");
+            userNickname = jsonObject.getString(USER_NICKNAME);
         }catch (Exception e){
             e.getStackTrace();
         }
@@ -445,7 +454,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         if(data != null){
 
-            Log.d(TAG, "nickname : " + nickname + ", userPhoneNumber : " + userPhoneNumber);
 /*
             String[] strArr = message.split(":");
             if(!userPhoneNumber.equals(strArr[0])){
@@ -470,7 +478,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 nm.notify(222, mCompatBuilder.build());
             }
 */
-            m_arr.add(new Chatting(parentName, message));
+            m_arr.add(new Chatting(userNickname, message));
 
             lv_message.setSelection(adapter.getCount()-1);
         }

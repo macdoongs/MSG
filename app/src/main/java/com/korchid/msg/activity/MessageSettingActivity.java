@@ -97,7 +97,7 @@ public class MessageSettingActivity extends AppCompatActivity {
                 String response = null;
 
                 try {
-                    url = new URL("https://www.korchid.com/msg-reservation");
+                    url = new URL("https://www.korchid.com/msg/user/reservation");
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
 

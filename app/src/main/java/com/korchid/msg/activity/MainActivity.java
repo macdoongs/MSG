@@ -32,6 +32,7 @@ import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_temp;
     private Button btn_userInfo;
 
+    private String userNickname = "";
     private String userPhoneNumber = "";
     private String loginState = "";
     private String userRole = "";
@@ -304,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (viewId){
             case R.id.btn_next:{
                 Intent intent = new Intent(getApplicationContext(), SelectOpponentActivity.class);
+                intent.putExtra(USER_NICKNAME, userNickname);
                 intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                 intent.putExtra(USER_ROLE, userRole);
                 startActivity(intent);

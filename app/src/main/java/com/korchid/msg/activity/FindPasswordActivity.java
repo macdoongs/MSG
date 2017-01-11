@@ -24,6 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.korchid.msg.global.QuickstartPreferences.AUTH_MODE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
@@ -52,7 +53,7 @@ public class FindPasswordActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
-        intent.putExtra("mode", "find");
+        intent.putExtra(AUTH_MODE, "find");
         intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
 
         startActivityForResult(intent, 0);
@@ -89,6 +90,7 @@ public class FindPasswordActivity extends AppCompatActivity {
         switch (resultCode){
             case RESULT_OK:{
                 Log.d(TAG, "onActivityResult: " + userPhoneNumber);
+
                 Call<List<UserAuth>> userDataCall = RestfulAdapter.getInstance().listRecoveryPassword(userPhoneNumber);
 
                 userDataCall.enqueue(new Callback<List<UserAuth>>() {
@@ -100,6 +102,7 @@ public class FindPasswordActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<List<UserAuth>> call, Throwable t) {
                         Log.d(TAG, "onFailure");
+                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
 

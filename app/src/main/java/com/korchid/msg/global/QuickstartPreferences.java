@@ -14,6 +14,8 @@ public class QuickstartPreferences {
 
     // USER Infomation
     public static final String SHARED_PREF_USER_INFO = "USER_INFO";
+    public static final String USER_NICKNAME = "USER_NICKNAME";
+    public static final String USER_BIRTHDAY = "USER_BIRTHDAY";
     public static final String USER_PROFILE = "USER_PROFILE";
     public static final String USER_SEX = "USER_SEX";
     public static final String USER_ROLE = "USER_ROLE";
@@ -27,5 +29,6 @@ public class QuickstartPreferences {
     public static final String RESERVATION_ENABLE = "RESERVATION_ENABLE";
     public static final String RESERVATION_MESSAGE_ALERT = "RESERVATION_ALERT";
 
-
+    public static final String AUTH_MODE = "AUTH_MODE";
+    public static final String USER_SMS_TOKEN = "USER_SMS_TOKEN";
 }

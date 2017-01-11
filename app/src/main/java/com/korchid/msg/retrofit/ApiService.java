@@ -71,4 +71,53 @@ public interface ApiService {
                                     @Field("birthday") String birthday,
                                     @Field("profile") String profile);
 
+    @POST("/msg/user/invitation")
+    @FormUrlEncoded
+    Call<Res> userInvitation(@Field("userId") int userId,
+                             @Field("receiverPhoneNumber") String receiverPhoneNumber,
+                             @Field("roleName") String roleName);
+
+    @POST("/msg/user/reservation")
+    @FormUrlEncoded
+    Call<Res> userReservation(@Field("senderId") int senderId,
+                              @Field("receiverId") int receiverId,
+                              @Field("reservationMessageId") int reservationMessageId);
+
+
+    // TODO REQUEST LIST
+    /*
+    @POST("/msg/auth/sms/send")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/auth/sms/check")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/error")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/error/user")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/user/mapping")
+    @FormUrlEncoded
+    Call ;
+
+    @GET("/msg/user/chatting/sender/{senderId}/receiver/{receiverId}")
+    @Headers("Accept-Encoding: application/json")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/chatting/topic/subscription")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/chatting/topic/unsubscription")
+    @FormUrlEncoded
+    Call ;
+
+    */
 }

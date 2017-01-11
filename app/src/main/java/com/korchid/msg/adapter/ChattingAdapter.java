@@ -51,13 +51,13 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
 
     private String userName = "";
     private String message = "";
-    private String parentName = "";
+    private String nickname = "";
     private String opponentProfile = "";
 
-    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String parentName, String opponentProfile) {
+    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userName, String opponentProfile) {
         this.MessagingActivity = activity;
         this.chattingArrayList = chattingArrayList;
-        this.parentName = parentName;
+        this.userName = userName;
         this.opponentProfile = opponentProfile;
 
         mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -81,7 +81,7 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
     public View getView(final int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "getView");
 
-        userName = chattingArrayList.get(position).getUser();
+        nickname = chattingArrayList.get(position).getUserName();
         message = chattingArrayList.get(position).getMessage();
 
         if(convertView == null){
@@ -96,7 +96,7 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
 
 
 
-        if(parentName.equals(userName)){
+        if(nickname.equals(userName)){
             // Application user oneself
             tv_myMessage = (TextView) convertView.findViewById(R.id.tv_myMessage);
             ll_container.setVisibility(View.VISIBLE);
@@ -121,7 +121,7 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
             tv_yourMessage = (TextView) convertView.findViewById(R.id.tv_yourMessage);
             ll_container.setVisibility(View.INVISIBLE);
             gl_container.setVisibility(View.VISIBLE);
-            tv_yourName.setText(parentName);
+            tv_yourName.setText(nickname);
             tv_yourMessage.setText(message);
 
             tv_yourMessage.setOnLongClickListener(this);

@@ -206,7 +206,7 @@ public class ProfileActivity  extends AppCompatActivity implements View.OnClickL
                 Bitmap bitmap = iv_profile.getDrawingCache();
 
                 Intent intent = new Intent();
-                intent.putExtra("profilePath", profilePath);
+                intent.putExtra(USER_PROFILE, profilePath);
                 setResult(RESULT_OK, intent);
 
                 this.finish();

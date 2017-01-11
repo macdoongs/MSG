@@ -84,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/rbtn_etc"
                     android:layout_weight="1" />
+
             </RadioGroup>
 
         </LinearLayout>

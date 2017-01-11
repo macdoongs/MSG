@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -56,6 +57,8 @@ import okhttp3.OkHttpClient;
 
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.INTENTFILTER_BROADCAST_TIMER;
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.KEY_DEFAULT;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
@@ -93,6 +96,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private int profileHeight;
     private String userRole = "";
     private static String userPhoneNumber = "";
+    private static String userNickname = "";
     private int count;
 
 
@@ -125,6 +129,9 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
         parentArrayList = new ArrayList<>();
 
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+        userNickname = sharedPreferences.getString(USER_NICKNAME, "");
 
         initView();
 
@@ -502,6 +509,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                     Intent intent = new Intent(getActivity(), ChattingActivity.class);
                     //intent.putExtra("topic", parentArrayList.get(idx));
                     intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+                    intent.putExtra(USER_NICKNAME, userNickname);
                     intent.putExtra("topic", topic[idx]);
                     intent.putExtra("parentName", parent[idx]);
                     intent.putExtra("opponentProfile", profile[idx]);

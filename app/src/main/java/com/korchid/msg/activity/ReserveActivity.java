@@ -184,12 +184,13 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 userSettingCall.enqueue(new Callback<Res>() {
                     @Override
                     public void onResponse(Call<Res> call, Response<Res> response) {
-                        Log.d(TAG, "nickname : " + response);
+                        Log.d(TAG, "response " + response.body());
                     }
 
                     @Override
                     public void onFailure(Call<Res> call, Throwable t) {
                         Log.d(TAG, "onFailure");
+                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
 

@@ -5,20 +5,20 @@ package com.korchid.msg;
  */
 
 public class Chatting {
-    private String user;
+    private String userName;
     private String message;
 
-    public Chatting(String user, String message){
-        this.user = user;
+    public Chatting(String userName, String message){
+        this.userName = userName;
         this.message = message;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getMessage() {
