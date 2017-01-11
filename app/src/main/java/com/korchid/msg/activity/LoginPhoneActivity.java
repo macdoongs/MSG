@@ -1,15 +1,11 @@
 package com.korchid.msg.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,15 +18,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.retrofit.User;
-import com.korchid.msg.retrofit.UserAuth;
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.http.HttpPost;
-import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -150,9 +143,9 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                 if(input.length() > 0 && input2.length() > 0){
                     btn_login.setEnabled(true);
-                    btn_login.setBackgroundResource(R.color.colorPrimary);
+                    btn_login.setBackgroundResource(R.drawable.rounded_button_p);
                     btn_findPassword.setEnabled(true);
-                    btn_findPassword.setBackgroundResource(R.color.colorPrimary);
+                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p);
                 }else{
                     btn_login.setEnabled(false);
                     btn_findPassword.setEnabled(false);
