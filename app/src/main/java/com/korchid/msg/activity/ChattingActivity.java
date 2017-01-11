@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.google.gson.JsonObject;
 import com.korchid.msg.Chatting;
 import com.korchid.msg.adapter.ChattingAdapter;
 import com.korchid.msg.http.HttpPost;
@@ -50,6 +51,10 @@ import com.korchid.msg.ui.StatusBar;
 import com.korchid.msg.mqtt.service.MqttService;
 import com.korchid.msg.mqtt.service.MqttService.ConnectionStatus;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
 
@@ -86,6 +91,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private String nickname;
     private String opponentProfile;
     private String title;
+    private String userId;
     byte[] pic;
 
 
@@ -106,24 +112,27 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         Intent intent = getIntent();
         parentName = intent.getStringExtra("parentName");
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
+        userId = intent.getStringExtra(USER_ID_NUMBER);
 
         pic = null;
         opponentProfile = intent.getStringExtra("opponentProfile");
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
 
-        String storedMessage = dbHelper.getMessage();
-        String[] strArr = storedMessage.split("\n");
-        for(int i=0; i<strArr.length; i++){
-            String[] line = strArr[i].split("/");
+        try {
+            String storedMessage = dbHelper.getMessage();
+            String[] strArr = storedMessage.split("\n");
+            for (int i = 0; i < strArr.length; i++) {
+                String[] line = strArr[i].split("/");
 
-            String userId = line[2];
-            String message = line[3];
+                String userId = line[2];
+                String message = line[3];
 
-            m_arr.add(new Chatting(userPhoneNumber, userId + ": " + message));
+                m_arr.add(new Chatting(userPhoneNumber, userId + ": " + message));
+            }
+        }catch (Exception e){
+            Log.d(TAG, "Error : " + e.getMessage());
         }
-
-
 
         initView();
 
@@ -133,7 +142,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
         // Register mqtt topic - Web server
-        String url = "https://www.korchid.com/msg-mqtt";
+        String url = "https://www.korchid.com/msg/chatting/topic/subscription";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("topic", title);
@@ -153,6 +162,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
     }
+
+
 
     private void initView(){
         StatusBar statusBar = new StatusBar(this);
@@ -217,8 +228,22 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         switch (viewId){
             case R.id.btn_send:{
 
-                String message = userPhoneNumber + ": " + et_message.getText().toString();
+                String message = et_message.getText().toString();
 
+                // MQTT message - JSON format
+                // http://humble.tistory.com/20
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("senderId", 16);
+                    obj.put("receiverId", 17);
+                    obj.put("parentName", parentName);
+                    obj.put("message", message);
+
+                    System.out.println(obj.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 //TODO modify topic
                 String topic = title;
@@ -226,7 +251,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 MqttServiceDelegate.publish(
                         ChattingActivity.this,
                         topic,
-                        message.getBytes()
+                        //message.getBytes()
+                        obj.toString().getBytes()
                 );
 
                 et_message.setText("");
@@ -321,6 +347,17 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         unbindMessageReceiver();
         unbindStatusReceiver();
 
+        // Register mqtt topic - Web server
+        String url = "https://www.korchid.com/msg/chatting/topic/unsubscription";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("topic", title);
+
+
+        HttpPost httpPost = new HttpPost(url, params, new Handler());
+        httpPost.start();
+
+
         super.onDestroy();
     }
 
@@ -376,23 +413,40 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void handleMessage(String topic, byte[] payload) {
         Log.d(TAG, "handleMessage");
-        String message = new String(payload);
+
+        String data = new String(payload);
+
+        int senderId = 0;
+        int receiverId = 0;
+        String message = "";
+
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+
+            senderId = jsonObject.getInt("senderId");
+            receiverId = jsonObject.getInt("receiverId");
+            message = jsonObject.getString("message");
+            parentName = jsonObject.getString("parentName");
+        }catch (Exception e){
+            e.getStackTrace();
+        }
+
         String name = "";
 
         //TODO modify topic
         String roomTopic = title;
 
         Log.d(TAG, topic);
-        Log.d(TAG, message);
+        Log.d(TAG, data);
 
         if(!topic.equals(roomTopic)){
             return;
         }
 
-        if(message != null){
+        if(data != null){
 
             Log.d(TAG, "nickname : " + nickname + ", userPhoneNumber : " + userPhoneNumber);
-
+/*
             String[] strArr = message.split(":");
             if(!userPhoneNumber.equals(strArr[0])){
                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -415,8 +469,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
                 nm.notify(222, mCompatBuilder.build());
             }
-
-            m_arr.add(new Chatting(userPhoneNumber, message));
+*/
+            m_arr.add(new Chatting(parentName, message));
 
             lv_message.setSelection(adapter.getCount()-1);
         }

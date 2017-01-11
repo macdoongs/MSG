@@ -500,8 +500,9 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                 public void onClick(View view) {
                     //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), ChattingActivity.class);
-                    intent.putExtra("topic", parentArrayList.get(idx));
+                    //intent.putExtra("topic", parentArrayList.get(idx));
                     intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+                    intent.putExtra("topic", topic[idx]);
                     intent.putExtra("parentName", parent[idx]);
                     intent.putExtra("opponentProfile", profile[idx]);
                     startActivity(intent);
