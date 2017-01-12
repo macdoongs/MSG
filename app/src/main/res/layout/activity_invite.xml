@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_invite"
     android:layout_width="match_parent"
@@ -14,64 +15,66 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
 
         <Button
             android:text="부모님 초대"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="128dp"
+            android:layout_height="40dp"
             android:id="@+id/btn_inviteParent"
-            android:layout_weight="1"
             android:background="@color/colorPrimary" />
 
         <Button
             android:text="자녀 초대"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="128dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="8dp"
             android:id="@+id/btn_inviteChild"
-            android:layout_weight="1"
             android:background="@color/colorTransparent" />
     </LinearLayout>
 
     <TextView
         android:text="Invite parent"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/et_role" />
+        android:textSize="12sp"
+        android:id="@+id/et_role"
+        android:layout_marginTop="16dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
 
         <EditText
             android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:inputType="text"
             android:ems="10"
             android:id="@+id/et_nickname"
             android:hint="Name"
-            android:gravity="right"
-            android:layout_width="73dp" />
-
+            android:layout_weight="0.8"/>
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:ems="10"
             android:id="@+id/et_phoneNumber"
             android:hint="010-0000-0000"
-            android:gravity="right"
-            android:layout_weight="1" />
+            android:layout_weight="1.2"/>
+
 
         <Button
-            android:text="주소록에서추가"
-            android:layout_width="102dp"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:id="@+id/btn_contactList"
-            android:layout_above="@+id/mNumber"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:background="@color/colorPrimary" />
+            android:layout_weight="0.1"
+            android:background="@drawable/ic_group_add_black_24dp"/>
+
+
+
 
     </LinearLayout>
 
@@ -80,7 +83,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_send"
-        android:background="@color/colorTransparent" />
+        android:background="@color/colorTransparent"
+        android:layout_marginTop="24dp"/>
 
     <Space
         android:layout_width="match_parent"

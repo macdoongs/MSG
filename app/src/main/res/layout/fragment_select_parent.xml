@@ -14,28 +14,30 @@
     <com.makeramen.roundedimageview.RoundedImageView
         app:srcCompat="@drawable/kakao_default_profile_image"
         android:id="@+id/riv_opponentProfile"
-        android:layout_width="match_parent"
-        android:layout_height="320dp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
+        android:layout_width="248dp"
+        android:layout_height="272dp"
+        android:layout_gravity="center_horizontal"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:layout_height="80dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/colorPrimary"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="20dp"
             android:background="@color/colorPrimary">
 
             <TextView
-                android:text="TextView"
-                android:textSize="16dp"
+                android:text="발송 예정"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -44,6 +46,7 @@
 
             <TextView
                 android:text="TextView"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
@@ -52,56 +55,43 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <TextView
+            android:text="TextView"
+            android:textSize="16sp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:text="TextView"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorTransparent"
-                android:gravity="center"
-                android:layout_margin="6dp"
-                android:id="@+id/tv_messageReserved"
-                android:layout_weight="1" />
-
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:background="@color/colorTransparent"
+            android:gravity="center"
+            android:padding="8dp"
+            android:id="@+id/tv_messageReserved"/>
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="16dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:id="@+id/btn_call"
-            android:background="@drawable/call"
-            android:layout_weight="1" />
+            android:background="@drawable/call" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
             android:id="@+id/btn_chat"
             android:background="@drawable/message"
-            android:layout_weight="1" />
+            android:layout_height="48dp"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="72dp" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
             android:id="@+id/btn_chat_setting"
             android:background="@drawable/messagesetting"
-            android:layout_weight="1" />
+            android:layout_height="48dp" />
     </LinearLayout>
 
 

@@ -177,7 +177,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                                 Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
                                 isDuplicate = false;
                             }else{
-                                Toast.makeText(getApplicationContext(), "이미 가입된 번호입니다!", Toast.LENGTH_LONG).show();
+                                et_phoneNumber.setError("이미 가입된 번호입니다.");
                                 isDuplicate = true;
                                 Log.d(TAG, "nickname : " + response.body().get(0).getPassword_sn());
                             }

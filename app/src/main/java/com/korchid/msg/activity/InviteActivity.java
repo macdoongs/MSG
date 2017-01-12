@@ -3,14 +3,14 @@ package com.korchid.msg.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,18 +22,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kakao.kakaolink.KakaoLink;
+import com.korchid.msg.R;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
@@ -149,7 +147,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 // Invite parent
                 // User role : child
                 userRole = "child";
-                tv_role.setText("Invite Parent.");
+                tv_role.setText("함께 이용할 부모님을 초대해주세요.");
                 btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
                 btn_inviteChild.setBackgroundResource(R.color.colorTransparent);
                 break;
@@ -158,7 +156,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 // Invite child
                 // User role : parent
                 userRole = "parent";
-                tv_role.setText("Invite Child.");
+                tv_role.setText("함께 이용할 자녀분을 초대해주세요.");
                 btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
                 btn_inviteChild.setBackgroundResource(R.color.colorPrimary);
                 break;
