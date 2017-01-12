@@ -52,6 +52,9 @@ public class KakaoLinkActivity extends AppCompatActivity {
         String receiverPhoneNumber = getIntent().getStringExtra("receiverPhoneNumber");
 
         initView();
+
+
+
 /*
         String strUrl = "https://www.korchid.com/msg-wait-connection/" + choosingId + "/" + receiverPhoneNumber;
         Handler httpHandler = new Handler(){
@@ -187,7 +190,9 @@ public class KakaoLinkActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        inviteTimer.cancel();
+        if(inviteTimer != null){
+            inviteTimer.cancel();
+        }
         super.onDestroy();
     }
 }

@@ -21,19 +21,34 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.api.client.util.DateTime;
 import com.kakao.kakaolink.KakaoLink;
+import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.http.HttpPost;
+import com.korchid.msg.retrofit.response.Res;
+import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
@@ -172,14 +187,14 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 builder.setPositiveButton("네!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String nickname = et_nickname.getText().toString();
-                        String parentPhoneNumber = et_phoneNumber.getText().toString();
+                        String opponentUserName = et_nickname.getText().toString();
+                        String opponentUserPhoneNumber = et_phoneNumber.getText().toString();
                         String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
 
 
                         // Temp
                         // SMS Compose
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + parentPhoneNumber));
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + opponentUserPhoneNumber));
                         intent.putExtra("sms_body", message);
                         startActivity(intent);
 
@@ -198,14 +213,40 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                         editor.putString(USER_ROLE, userRole);
                         Log.d(TAG, "USER_ROLE : " + userRole);
 
-                        editor.commit();
+                        editor.apply();
 
 
-                        String userId = "2";
+
+
+                        int userId = 16;
                         String receiverPhoneNumber = "+821022222222";
-
                         String inviteTime = getCurrentTimeStamp();
 
+                        Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, receiverPhoneNumber, userRole);
+
+                        userCall.enqueue(new Callback<Res>() {
+                            @Override
+                            public void onResponse(Call<Res> call, Response<Res> response) {
+                                Res res = response.body();
+
+                                Log.d(TAG, "response : " + res.toString());
+
+                                if(res == null){
+                                }else{
+
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<Res> call, Throwable t) {
+                                Log.d(TAG, "onFailure");
+                            }
+                        });
+
+
+/*
                         String strUrl = "https://www.korchid.com/msg/user/invitation";
                         HashMap<String, String> params = new HashMap<>();
                         params.put("userId", userId);
@@ -232,7 +273,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                         HttpPost httpPost = new HttpPost(strUrl, params, httpHandler);
                         httpPost.start();
-
+*/
 
                         intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
                         intent.putExtra("receiverPhoneNumber", receiverPhoneNumber);

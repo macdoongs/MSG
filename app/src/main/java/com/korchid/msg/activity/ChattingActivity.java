@@ -350,8 +350,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStart() {
         Log.d(TAG, "onStart");
-        bindMessageReceiver();
-        bindStatusReceiver();
         super.onStart();
     }
 
@@ -364,8 +362,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         Log.d(TAG, "onPause");
-        unbindMessageReceiver();
-        unbindStatusReceiver();
         super.onPause();
     }
 
@@ -435,10 +431,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-
-        //Init Receivers
-        bindStatusReceiver();
-        bindMessageReceiver();
 
         //MqttServiceDelegate.topic = title;
 

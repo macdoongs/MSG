@@ -383,11 +383,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //Log.d(TAG, "Current state : Logout");
                     intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
                     requestCode = 0;
+
+                    startService(serviceIntent);
                 }else{
                     // If current state = login
                     //Log.d(TAG, "Current state : Login");
                     intent.putExtra(USER_LOGIN_STATE, "LOGIN");
                     requestCode = 1;
+                    try {
+                        stopService(serviceIntent);
+                    }catch (Exception e){
+                        e.getStackTrace();
+                    }
                 }
 /*
                 if(btn_login.getText().toString().equals("LOGIN")){
@@ -448,6 +455,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btn_reserve.setVisibility(View.VISIBLE);
                     btn_temp.setVisibility(View.VISIBLE);
                     btn_userInfo.setVisibility(View.VISIBLE);
+
+                    startService(serviceIntent);
                 }else if(requestCode == 1){
                     // LOGOUT success
                     btn_join.setVisibility(View.VISIBLE);
@@ -460,7 +469,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btn_temp.setVisibility(View.GONE);
                     btn_userInfo.setVisibility(View.GONE);
 
-                    stopService(serviceIntent);
+                    try {
+                        stopService(serviceIntent);
+                    }catch(Exception e){
+                        e.getStackTrace();
+                    }
                 }
 
                 break;
