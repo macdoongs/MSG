@@ -298,7 +298,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_userInfo.setVisibility(View.GONE);
 
             intent.putExtra("duration",  SPLASH_LOGOUT);
-            stopService(serviceIntent);
+            try {
+                stopService(serviceIntent);
+            }catch (Exception e){
+                e.getStackTrace();
+            }
         }
 
         // Loading screen

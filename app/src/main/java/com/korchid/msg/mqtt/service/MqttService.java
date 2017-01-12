@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -23,11 +24,14 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings.Secure;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.korchid.msg.activity.AuthPhoneActivity;
 import com.korchid.msg.activity.ChattingActivity;
 import com.korchid.msg.R;
+import com.korchid.msg.activity.MyAlert;
 import com.korchid.msg.mqtt.impl.MqttConnectOptions;
 import com.korchid.msg.mqtt.impl.MqttException;
 import com.korchid.msg.mqtt.impl.MqttMessage;
@@ -116,7 +120,7 @@ public class MqttService extends Service implements IMqttCallback {
     public static String mqttTopic = "";
     public static Boolean isEnableNotification = true;
 
-    Notification notification;
+    NotificationCompat.Builder builder;
     NotificationManager notificationManager;
     ServiceThread serviceThread;
     MyServiceHandler handler;
@@ -271,52 +275,17 @@ public class MqttService extends Service implements IMqttCallback {
             Log.d(TAG, "MqttService Topic "+ i + "th :" + topics.get(i).getName());
         }
 
+        handler = new MyServiceHandler();
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-    	doStart(intent, startId);
+
+        doStart(intent, startId);
 
         // return START_NOT_STICKY - we want this Service to be left running
         //  unless explicitly stopped, and it's process is killed, we want it to
         //  be restarted
         return START_STICKY;
     }
-
-    class MyServiceHandler extends Handler {
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            Log.d(TAG, "MyServiceHandler : handleMessage");
-            Intent intent = new Intent(MqttService.this, ChattingActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(MqttService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
-            Bundle bundle = msg.getData();
-
-            int senderId = bundle.getInt("senderId", 0);
-            int receiverId = bundle.getInt("receiverId", 0);
-            String userNickname = bundle.getString(USER_NICKNAME);
-            String message = bundle.getString("message");
-
-            notification = new Notification.Builder(getApplicationContext())
-                    .setContentTitle(userNickname)
-                    .setContentText(message)
-                    .setTicker("새로운 메시지가 도착했습니다.")
-                    .setSmallIcon(R.drawable.logo)
-                    .setContentIntent(pendingIntent)
-                    .build();
-
-            //소리추가
-            notification.defaults = Notification.DEFAULT_SOUND;
-
-            //알림 소리를 한번만 내도록
-            notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-
-            //확인하면 자동으로 알림이 제거 되도록
-            notification.flags = Notification.FLAG_AUTO_CANCEL;
-
-
-            notificationManager.notify( 777 , notification);
-
-            //토스트 띄우기
-            Toast.makeText(MqttService.this, "뜸?", Toast.LENGTH_LONG).show();
-        }
-    };
 
 
     private void doStart(final Intent intent, final int startId){
@@ -755,8 +724,6 @@ public class MqttService extends Service implements IMqttCallback {
             if(userId == receiverId){
                 Log.d(TAG, "noti");
 
-                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("senderId", senderId);
@@ -766,8 +733,6 @@ public class MqttService extends Service implements IMqttCallback {
 
                 Message msg = new Message();
                 msg.setData(bundle);
-
-                serviceThread = new ServiceThread(handler, msg);
 
                 handler.sendMessage(msg);
 
@@ -786,6 +751,71 @@ public class MqttService extends Service implements IMqttCallback {
         // we're finished - if the phone is switched off, it's okay for the CPU 
         //  to sleep now        
         wl.release();
+    }
+
+    public class MyServiceHandler extends Handler {
+        NotificationCompat notification;
+
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            Log.d(TAG, "MyServiceHandler : handleMessage");
+            Intent intent = new Intent(MqttService.this, ChattingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(MqttService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            Bundle bundle = msg.getData();
+
+            int senderId = bundle.getInt("senderId", 0);
+            int receiverId = bundle.getInt("receiverId", 0);
+            String userNickname = bundle.getString(USER_NICKNAME);
+            String message = bundle.getString("message");
+
+            // Notification
+            builder = new NotificationCompat.Builder(getApplicationContext())
+                    .setSmallIcon(R.drawable.logo)
+                    .setTicker("새로운 메시지가 도착했습니다.")
+                    .setContentTitle(userNickname)
+                    .setContentText(message)
+                    .setContentIntent(pendingIntent)
+                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
+                    .setAutoCancel(true);
+
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(123456, builder.build());
+
+            //TODO Modify AlertDialog
+/*
+            // AlertDialog
+            Intent alertIntent;
+            alertIntent = new Intent(getApplicationContext(), MyAlert.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(alertIntent);
+*/
+            /*
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+
+            builder.setTitle("New message");
+            builder.setMessage(message);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MqttService.this, ChattingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+*/
+            //토스트 띄우기
+            //Toast.makeText(MqttService.this, "New message?", Toast.LENGTH_LONG).show();
+        }
     }
 
     
