@@ -87,7 +87,7 @@
     </LinearLayout>
 
     <Button
-        android:text="Register"
+        android:text="다음"
         android:layout_width="match_parent"
         android:background="@color/colorTransparent"
         android:layout_gravity="center"

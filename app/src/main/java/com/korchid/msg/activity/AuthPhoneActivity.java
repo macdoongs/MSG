@@ -4,11 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -23,12 +21,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.retrofit.User;
-import com.korchid.msg.retrofit.UserData;
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.http.HttpGet;
-import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
 import java.util.List;
@@ -165,7 +161,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }else{
-                    btn_register.setBackgroundResource(R.color.colorPrimary);
+                    btn_register.setBackgroundResource(R.drawable.rounded_button_p);
                     btn_register.setEnabled(true);
 
                     internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
@@ -181,7 +177,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                                 Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
                                 isDuplicate = false;
                             }else{
-                                Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "이미 가입된 번호입니다!", Toast.LENGTH_LONG).show();
                                 isDuplicate = true;
                                 Log.d(TAG, "nickname : " + response.body().get(0).getPassword_sn());
                             }

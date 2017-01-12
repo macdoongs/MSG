@@ -17,7 +17,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:text="Invite parent"
+            android:text="부모님 초대"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btn_inviteParent"
@@ -25,7 +25,7 @@
             android:background="@color/colorPrimary" />
 
         <Button
-            android:text="Invite Child"
+            android:text="자녀 초대"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btn_inviteChild"
@@ -74,10 +74,6 @@
             android:background="@color/colorPrimary" />
 
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
 
     <Button
         android:text="send"
