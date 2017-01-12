@@ -165,8 +165,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         //MqttServiceDelegate.topic = title;
 
+
+
         //Start service if not started
-        MqttServiceDelegate.startService(this, title);
+        //MqttServiceDelegate.startService(this, title);
 
 
     }
@@ -350,7 +352,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     {
         Log.d(TAG, "onDestroy");
 
-        MqttServiceDelegate.stopService(this);
+        //MqttServiceDelegate.stopService(this);
 
         unbindMessageReceiver();
         unbindStatusReceiver();

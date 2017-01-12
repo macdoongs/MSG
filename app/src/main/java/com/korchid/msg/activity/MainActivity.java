@@ -2,6 +2,7 @@ package com.korchid.msg.activity;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,9 +19,11 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.firebase.fcm.MyFirebaseInstanceIDService;
 import com.korchid.msg.global.QuickstartPreferences;
 import com.korchid.msg.http.HttpPost;
+import com.korchid.msg.mqtt.service.MqttService;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.global.GlobalApplication;
 import com.korchid.msg.R;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static Activity activity;
 
+    Intent serviceIntent;
 
     enum REQUEST_CODE {LOGIN, LOGOUT}
 
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, msg);
         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
-
+/*
         final ServiceThread serviceThread = new ServiceThread(new Handler());
         //serviceThread.timer = "2016-12-13 14:55";
         serviceThread.start();
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //serviceThread.timer = "2016-12-16 19:15";
 
         //Log.d(TAG, "timer : " + serviceThread.timer);
-
+*/
         int id=0;
 
         Bundle extras = getIntent().getExtras();
@@ -278,6 +282,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_next.setVisibility(View.VISIBLE);
 
             intent.putExtra("duration",  SPLASH_LOGIN);
+
+            MqttService.mqttTopic = "Sajouiot03";
+            serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+
+            startService(serviceIntent);
+
         }else{
             // Current state : Logout
             btn_join.setVisibility(View.VISIBLE);
@@ -288,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_userInfo.setVisibility(View.GONE);
 
             intent.putExtra("duration",  SPLASH_LOGOUT);
+            stopService(serviceIntent);
         }
 
         // Loading screen
@@ -444,6 +455,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btn_reserve.setVisibility(View.GONE);
                     btn_temp.setVisibility(View.GONE);
                     btn_userInfo.setVisibility(View.GONE);
+
+                    stopService(serviceIntent);
                 }
 
                 break;

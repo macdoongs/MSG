@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
@@ -42,6 +43,9 @@ import com.korchid.msg.mqtt.interfaces.IMqttPersistence;
 import com.korchid.msg.mqtt.interfaces.IMqttTopic;
 import com.korchid.msg.service.ServiceThread;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
@@ -53,6 +57,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static android.content.Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 
 //import com.korchid.msg.logging.ConfigureLog4J;
 //import org.apache.log4j.Logger;
@@ -111,7 +118,8 @@ public class MqttService extends Service implements IMqttCallback {
 
     Notification notification;
     NotificationManager notificationManager;
-    ServiceThread thread;
+    ServiceThread serviceThread;
+    MyServiceHandler handler;
 
     // constants used to define MQTT connection status
     public enum ConnectionStatus 
@@ -199,8 +207,6 @@ public class MqttService extends Service implements IMqttCallback {
     
     private ExecutorService executor;
 
-    myServiceHandler handler;
-
     /************************************************************************/
     /*    METHODS - core Service lifecycle methods                          */
     /************************************************************************/
@@ -251,11 +257,6 @@ public class MqttService extends Service implements IMqttCallback {
     {
         Log.d(TAG, "onStartCommand : intent= "+ intent + ", flags = " + flags + ", startId = " + startId);
 
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        //myServiceHandler handler = new myServiceHandler();
-        //thread = new ServiceThread(handler);
-        //thread.start();
-
         mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
 
         MqttTopic topicArrayIdx = new MqttTopic(mqttTopic);
@@ -279,20 +280,23 @@ public class MqttService extends Service implements IMqttCallback {
         return START_STICKY;
     }
 
-    class myServiceHandler extends Handler {
+    class MyServiceHandler extends Handler {
         @Override
         public void handleMessage(android.os.Message msg) {
-            Log.d(TAG, "myServiceHandler : handleMessage");
+            Log.d(TAG, "MyServiceHandler : handleMessage");
             Intent intent = new Intent(MqttService.this, ChattingActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(MqttService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
             Bundle bundle = msg.getData();
 
-            String message = bundle.getString("payload", "Error");
+            int senderId = bundle.getInt("senderId", 0);
+            int receiverId = bundle.getInt("receiverId", 0);
+            String userNickname = bundle.getString(USER_NICKNAME);
+            String message = bundle.getString("message");
 
             notification = new Notification.Builder(getApplicationContext())
-                    .setContentTitle("Notification")
+                    .setContentTitle(userNickname)
                     .setContentText(message)
-                    .setTicker("알림!!!")
+                    .setTicker("새로운 메시지가 도착했습니다.")
                     .setSmallIcon(R.drawable.logo)
                     .setContentIntent(pendingIntent)
                     .build();
@@ -728,22 +732,46 @@ public class MqttService extends Service implements IMqttCallback {
         //   received message so the app UI can be updated with the new data        
         try 
         {
-            String strMessage = message.getPayload().toString();
+            String strMessage = new String(message.getPayload());
 
 			broadcastReceivedMessage(topic.getName(), message.getPayload());
             Log.d(TAG, "messageArrived: topic = "+ topic.getName() + ", message = " + new String(message.getPayload()));
 
 
-            handler = new myServiceHandler();
 
 
-            Bundle bundle = new Bundle();
-            bundle.putString("payload", new String(message.getPayload()));
+            JSONObject mainObject = new JSONObject(strMessage);
+            String messageReceived = mainObject.getString("message");
+            int receiverId = mainObject.getInt("receiverId");
+            int senderId = mainObject.getInt("senderId");
+            String userNickname = mainObject.getString(USER_NICKNAME);
 
-            Message msg = new Message();
-            msg.setData(bundle);
 
-            handler.handleMessage(msg);
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+            int userId = 17;//sharedPreferences.getInt(USER_ID_NUMBER, 0);
+
+
+            // Notification
+            if(userId == receiverId){
+                Log.d(TAG, "noti");
+
+                notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("senderId", senderId);
+                bundle.putInt("receiverId", receiverId);
+                bundle.putString(USER_NICKNAME, userNickname);
+                bundle.putString("message", messageReceived);
+
+                Message msg = new Message();
+                msg.setData(bundle);
+
+                serviceThread = new ServiceThread(handler, msg);
+
+                handler.sendMessage(msg);
+
+            }
 		} 
         catch (MqttException e) 
 		{
