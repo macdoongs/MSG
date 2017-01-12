@@ -1,35 +1,21 @@
 package com.korchid.msg.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-import com.korchid.msg.Repos;
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.R;
-import com.korchid.msg.retrofit.ApiService;
-import com.korchid.msg.retrofit.UserData;
+import com.korchid.msg.retrofit.response.UserData;
 import com.korchid.msg.ui.StatusBar;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.korchid.msg.retrofit.ApiService.API_URL;
 
 /**
  * Created by mac0314 on 2016-11-28.

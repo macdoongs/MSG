@@ -1,12 +1,14 @@
 package com.korchid.msg.retrofit;
 
-import com.google.gson.JsonObject;
 import com.korchid.msg.Repos;
+import com.korchid.msg.retrofit.response.Res;
+import com.korchid.msg.retrofit.response.User;
+import com.korchid.msg.retrofit.response.UserAuth;
+import com.korchid.msg.retrofit.response.UserData;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,7 +35,7 @@ public interface ApiService {
     @POST("/msg/user/signup")
     @FormUrlEncoded
     Call<Res> userSignup(@Field("phoneNumber") String phoneNumber,
-                              @Field("password") String password);
+                         @Field("password") String password);
 
 
     @POST("/msg/user/login")
@@ -83,9 +85,13 @@ public interface ApiService {
                               @Field("receiverId") int receiverId,
                               @Field("reservationMessageId") int reservationMessageId);
 
+/*
+    @POST("/msg/firebase")
+    @FormUrlEncoded
+    Call<Res>
 
     // TODO REQUEST LIST
-    /*
+
     @POST("/msg/auth/sms/send")
     @FormUrlEncoded
     Call ;

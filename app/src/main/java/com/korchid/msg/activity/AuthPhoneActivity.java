@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,10 +22,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.User;
-import com.korchid.msg.retrofit.UserData;
+import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 

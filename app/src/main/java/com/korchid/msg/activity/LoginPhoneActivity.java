@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.User;
+import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.ui.StatusBar;
 

@@ -1,8 +1,6 @@
 package com.korchid.msg.activity;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +11,8 @@ import android.widget.Toast;
 
 import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.http.HttpPost;
-import com.korchid.msg.retrofit.UserAuth;
-import com.korchid.msg.retrofit.UserData;
+import com.korchid.msg.retrofit.response.UserAuth;
 
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;

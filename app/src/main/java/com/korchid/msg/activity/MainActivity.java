@@ -18,6 +18,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.korchid.msg.firebase.fcm.MyFirebaseInstanceIDService;
 import com.korchid.msg.global.QuickstartPreferences;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.ui.CustomActionbar;

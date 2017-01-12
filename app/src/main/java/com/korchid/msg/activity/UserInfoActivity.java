@@ -20,16 +20,13 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.Res;
-import com.korchid.msg.retrofit.User;
+import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
-import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,11 +35,7 @@ import retrofit2.Response;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
-import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
-import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 

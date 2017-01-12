@@ -15,14 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.Res;
-import com.korchid.msg.retrofit.UserData;
+import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.MessageSetting;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
