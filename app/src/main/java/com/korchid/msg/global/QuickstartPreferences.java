@@ -11,6 +11,7 @@ public class QuickstartPreferences {
     public static final String USER_PASSWORD = "USER_PASSWORD";
     public static final String USER_ID_NUMBER = "USER_ID_NUM";
     public static final String USER_LOGIN_TOKEN = "USER_TOKEN";
+    public static final String USER_DEVICE_TOKEN = "USER_DEVICE_TOKEN";
 
     // USER Infomation
     public static final String SHARED_PREF_USER_INFO = "USER_INFO";

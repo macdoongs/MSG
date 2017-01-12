@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import com.korchid.msg.R;
 import com.korchid.msg.alarm.AlarmBroadCastReciever;
+import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.alarm.AlarmUtil;
 import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.ui.StatusBar;
@@ -136,6 +137,8 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         initView();
 
 
+
+/*
         String stringUrl = "https://www.korchid.com/msg-mapping/" + userPhoneNumber;
 
         Handler httpHandler = new Handler(){
@@ -178,7 +181,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
         httpGet.start();
-        
+  */
     }
 
     private void initView(){
@@ -265,7 +268,15 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         initPageMark();
 
         if (!AlarmBroadCastReciever.isLaunched) {
-            AlarmUtil.getInstance().startFiveSecondAlarm(this);
+            AlarmUtil.setSenderId(16);
+            AlarmUtil.setReceiverId(17);
+            AlarmUtil.setUserNickname(userNickname);
+            AlarmUtil.setMessage("Test message dump");
+            AlarmUtil.setTopic("Sajouiot02");
+
+            AlarmUtil.getInstance().startMatchingAlarm(this);
+        }else{
+
         }
     }
 

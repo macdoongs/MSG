@@ -85,11 +85,21 @@ public interface ApiService {
                               @Field("receiverId") int receiverId,
                               @Field("reservationMessageId") int reservationMessageId);
 
-/*
-    @POST("/msg/firebase")
-    @FormUrlEncoded
-    Call<Res>
 
+    @POST("/msg/user/mapping")
+    @FormUrlEncoded
+    Call<Res> userMapping(@Field("parentId") int parentId,
+                          @Field("childId") int childId,
+                          @Field("deviceToken") String deviceToken) ;
+
+    @POST("/msg/firebase/register")
+    @FormUrlEncoded
+    Call<Res> firebaseRegister(@Field("userId") int userId,
+                               @Field("deviceToken") String deviceToken);
+
+
+
+/*
     // TODO REQUEST LIST
 
     @POST("/msg/auth/sms/send")
@@ -108,9 +118,7 @@ public interface ApiService {
     @FormUrlEncoded
     Call ;
 
-    @POST("/msg/user/mapping")
-    @FormUrlEncoded
-    Call ;
+
 
     @GET("/msg/user/chatting/sender/{senderId}/receiver/{receiverId}")
     @Headers("Accept-Encoding: application/json")

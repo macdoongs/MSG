@@ -30,7 +30,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name=".alarm.AlarmFiveSecondBroadcastReceiver"
+
+        <receiver android:name=".alarm.AlarmMatchingBroadCastReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

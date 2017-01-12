@@ -27,10 +27,12 @@ import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 import com.korchid.msg.service.ServiceThread;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_DEVICE_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
@@ -96,8 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 
-        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
-        FirebaseCrash.log("Error report test");
+        // Crash test
+        //FirebaseCrash.report(new Exception("MSG Android non-fatal error"));
+        //FirebaseCrash.log("Error report test");
 
         // If a notification message is tapped, any data accompanying the notification
         // message is available in the intent extras. In this sample the launcher
@@ -125,8 +128,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, msg);
         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
-        // Get token
+        MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
+
+
+        try {
+            FirebaseInstanceId.getInstance().deleteInstanceId();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+
+        Log.d(TAG, "1. Device Token : " + deviceToken);
+
+        deviceToken = sharedPreferences.getString(USER_DEVICE_TOKEN, "");
+
+        if(deviceToken.equals("")){
+
+        }else{
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            Log.d(TAG, "2. Device Token : " + deviceToken);
+        }
+
+        // Get token
+        deviceToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "3. Device Token : " + deviceToken);
 /*
         // Mapping test
         String url = "https://www.korchid.com/msg-mapping";
@@ -213,14 +245,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_userInfo.setOnClickListener(this);
 
 
-
+/*
         // Develop mode
         // Clear SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.clear();
         editor.commit();
-
+*/
 
         userPhoneNumber = sharedPreferences.getString(USER_PHONE_NUMBER, "010-0000-0000");
         //Log.d(TAG, "USER phone number : " + userPhoneNumber);
@@ -323,6 +355,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.btn_login:{
+                // crash test
+                //FirebaseCrash.logcat(Log.ERROR, TAG, "crash caused");
+                //causeCrash();
+
                 Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
                 intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                 int requestCode;
@@ -417,5 +453,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
         }
+    }
+
+    // Crash test
+    private void causeCrash() {
+        throw new NullPointerException("Fake null pointer exception");
     }
 }
