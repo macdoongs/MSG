@@ -163,7 +163,6 @@ public class MqttService extends Service implements IMqttCallback {
     //    topic we want to receive messages about
     //    can include wildcards - e.g.  '#' matches anything
     private List<IMqttTopic> topics            	 = new ArrayList<IMqttTopic>();
-
     
     // defaults - this sample uses very basic defaults for it's interactions 
     //   with message brokers
@@ -261,14 +260,33 @@ public class MqttService extends Service implements IMqttCallback {
     {
         Log.d(TAG, "onStartCommand : intent= "+ intent + ", flags = " + flags + ", startId = " + startId);
 
-        mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
+        //mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
 
+        // 토픽이 여러 개
+        //ArrayList<MqttTopic> topic = intent.getParcelableArrayListExtra("topic");
+
+        //topics = topic;
+
+        ArrayList<String> topicArray = intent.getStringArrayListExtra("topic");
+
+        for(int i=0 ;i<topicArray.size(); i++){
+            String topic = topicArray.get(i);
+
+            MqttTopic topicArrayIdx = new MqttTopic(topic);
+
+            if(!topics.contains(topicArrayIdx) && topic != null){
+                topics.add(topicArrayIdx);
+            }
+        }
+
+        /* 토픽을 하나만 받았을 때
         MqttTopic topicArrayIdx = new MqttTopic(mqttTopic);
 
         // Duplicate check
         if(!topics.contains(topicArrayIdx) && mqttTopic != null){
             topics.add(topicArrayIdx);
         }
+        */
 
         Log.d(TAG, "onStartCommand: " + mqttTopic );
         for(int i=0; i<topics.size(); i++){

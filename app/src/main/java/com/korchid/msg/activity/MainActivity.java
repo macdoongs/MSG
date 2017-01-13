@@ -23,6 +23,8 @@ import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.firebase.fcm.MyFirebaseInstanceIDService;
 import com.korchid.msg.global.QuickstartPreferences;
 import com.korchid.msg.http.HttpPost;
+import com.korchid.msg.mqtt.impl.MqttTopic;
+import com.korchid.msg.mqtt.interfaces.IMqttTopic;
 import com.korchid.msg.mqtt.service.MqttService;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.global.GlobalApplication;
@@ -31,7 +33,9 @@ import com.korchid.msg.ui.StatusBar;
 import com.korchid.msg.service.ServiceThread;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
@@ -78,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int viewId;
     private int duration = 0;
 
+    private ArrayList<MqttTopic> topics = new ArrayList<MqttTopic>();
+
     SharedPreferences sharedPreferences;
 
 
@@ -90,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Save for terminating in next page
         activity = this;
 
+        // TODO
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         // Use Environmental variable 'SharedPreference'
         sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
@@ -97,9 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
 
 
-        // TODO
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 
         // Crash test
@@ -283,8 +289,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             intent.putExtra("duration",  SPLASH_LOGIN);
 
-            MqttService.mqttTopic = "Sajouiot03";
-            serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+            // 객체를 parcel을 통해 전달 - 미구현, ArrayList로 임시 구현
+            MqttTopic topic = new MqttTopic("Sajouiot03");
+            topics.add(topic);
+            topic = new MqttTopic("Sajouiot02");
+            topics.add(topic);
+            topic = new MqttTopic("Sajouiot01");
+            topics.add(topic);
+
+
+
+            ArrayList<String> topicArrayList = new ArrayList<>();
+
+            topicArrayList.add("Sajouiot03");
+            topicArrayList.add("Sajouiot02");
+            topicArrayList.add("Sajouiot01");
+
+
+           serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+            serviceIntent.putExtra("topic", topicArrayList);
+            //serviceIntent.putStringArrayListExtra("topic", topicArrayList);
+
 
             startService(serviceIntent);
 
@@ -384,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
                     requestCode = 0;
 
-                    startService(serviceIntent);
+                    //startService(serviceIntent);
                 }else{
                     // If current state = login
                     //Log.d(TAG, "Current state : Login");
@@ -455,6 +480,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btn_reserve.setVisibility(View.VISIBLE);
                     btn_temp.setVisibility(View.VISIBLE);
                     btn_userInfo.setVisibility(View.VISIBLE);
+
+                    //MqttService.mqttTopic = "Sajouiot03";
+                    ArrayList<String> arrayList = new ArrayList<>();
+
+                    arrayList.add("Sajouiot03");
+                    arrayList.add("Sajouiot02");
+                    arrayList.add("Sajouiot01");
+
+                    serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+                    serviceIntent.putStringArrayListExtra("topic", arrayList);
+
 
                     startService(serviceIntent);
                 }else if(requestCode == 1){
