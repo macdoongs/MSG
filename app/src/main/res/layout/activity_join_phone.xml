@@ -20,25 +20,23 @@
             android:id="@+id/layout_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
                 android:text="전화번호"
+                android:layout_weight="4"
                 android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:id="@+id/tell" />
 
             <TextView
                 android:id="@+id/tv_phoneNumber"
-                android:layout_width="220dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+                android:layout_weight="5"
                 android:text="010-0000-0000"
                 android:textSize="20sp" />
     </LinearLayout>
@@ -47,7 +45,7 @@
             android:id="@+id/layout_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:layout_below="@+id/layout_phone_number">
 
@@ -55,18 +53,16 @@
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
                 android:text="비밀번호"
+                android:layout_weight="4"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/et_password"
-                android:layout_width="220dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
+                android:layout_weight="5"
                 android:textSize="20sp"
                 android:inputType="textPassword"
                 android:ems="10"
@@ -78,40 +74,36 @@
         android:id="@+id/layout_password_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         android:layout_below="@+id/layout_password">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
+            android:layout_weight="4"
             android:text="비밀번호확인"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/et_passwordConfirm"
-            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
+            android:layout_weight="5"
             android:textSize="20sp"
             android:inputType="textPassword"
             android:ems="10"
-            android:hint="*******" />
+            android:hint="*******"
+            android:layout_width="wrap_content" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Register"
+        android:layout_width="256dp"
+        android:layout_height="40dp"
+        android:text="회원가입"
         android:layout_marginTop="24dp"
-        android:background="@color/colorTransparent"
-        android:layout_centerHorizontal="true" />
-
+        android:background="@drawable/rounded_button_t_2r"
+        android:layout_gravity="center_horizontal"/>
 </LinearLayout>

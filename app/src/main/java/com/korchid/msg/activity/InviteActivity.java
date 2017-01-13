@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -148,8 +149,10 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 // User role : child
                 userRole = "child";
                 tv_role.setText("함께 이용할 부모님을 초대해주세요.");
-                btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
-                btn_inviteChild.setBackgroundResource(R.color.colorTransparent);
+                btn_inviteParent.setBackgroundResource(R.drawable.rounded_button_p_2r);
+                btn_inviteParent.setTextColor(Color.parseColor("#e6000000"));
+                btn_inviteChild.setBackgroundResource(R.drawable.rounded_button_t_2r);
+                btn_inviteChild.setTextColor(Color.parseColor("#40000000"));
                 break;
             }
             case R.id.btn_inviteChild:{
@@ -157,8 +160,10 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 // User role : parent
                 userRole = "parent";
                 tv_role.setText("함께 이용할 자녀분을 초대해주세요.");
-                btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
-                btn_inviteChild.setBackgroundResource(R.color.colorPrimary);
+                btn_inviteParent.setBackgroundResource(R.drawable.rounded_button_t_2r);
+                btn_inviteParent.setTextColor(Color.parseColor("#40000000"));
+                btn_inviteChild.setBackgroundResource(R.drawable.rounded_button_p_2r);
+                btn_inviteChild.setTextColor(Color.parseColor("#e6000000"));
                 break;
             }
             case R.id.btn_send:{

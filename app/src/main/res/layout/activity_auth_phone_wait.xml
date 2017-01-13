@@ -11,6 +11,7 @@
     tools:context="com.korchid.msg.activity.AuthPhoneWaitActivity"
     android:orientation="vertical">
 
+
     <TextView
         android:text="다음 번호로 인증코드를 보냈습니다."
         android:layout_width="wrap_content"
@@ -18,62 +19,27 @@
         android:id="@+id/textView11"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
-
-        <TextView
-            android:text="전화번호"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView6"
-            android:textSize="20sp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:text="Text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/textView10"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
-
-        <TextView
-            android:text="인증코드"
-            android:layout_width="0dp"
-            android:id="@+id/textView9"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_weight="1" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/et_authCode"
-            android:hint="코드입력"
-            android:layout_weight="1" />
-    </LinearLayout>
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/et_authCode"
+        android:hint="코드입력"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="48dp" />
 
     <Button
-        android:text="제출"
+        android:text="제 출"
         android:layout_width="256dp"
         android:layout_height="40dp"
-        android:background="@color/colorTransparent"
+        android:background="@drawable/rounded_button_t_2r"
         android:id="@+id/btn_confirm"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
         android:layout_gravity="center_horizontal"/>
 
     <TextView
@@ -89,8 +55,8 @@
         android:layout_width="256dp"
         android:layout_height="40dp"
         android:id="@+id/btn_reSend"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/rounded_button_p_2r"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="120dp" />
 
 </LinearLayout>

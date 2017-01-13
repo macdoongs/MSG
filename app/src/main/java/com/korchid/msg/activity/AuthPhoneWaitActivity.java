@@ -132,7 +132,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
                 if(input.length() > 0){
                     btn_confirm.setEnabled(true);
-                    btn_confirm.setBackgroundResource(R.color.colorPrimary);
+                    btn_confirm.setBackgroundResource(R.drawable.rounded_button_p_2r);
                 }else{
                     btn_confirm.setEnabled(false);
                 }

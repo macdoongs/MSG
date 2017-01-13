@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:paddingBottom="8dp"
-        android:background="@drawable/round_button_p_2r">
+        android:background="@drawable/rounded_button_p_2r">
 
         <LinearLayout
             android:orientation="horizontal"

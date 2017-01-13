@@ -60,6 +60,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
         android:id="@+id/btn_kakaoLink"
-        android:background="@color/colorPrimary" />
+        android:background="@drawable/rounded_button_p_2r" />
 
 </LinearLayout>

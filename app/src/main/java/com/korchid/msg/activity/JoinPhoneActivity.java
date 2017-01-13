@@ -91,7 +91,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
                 if(input.length() > 0 && input2.length() > 0){
                     btn_register.setEnabled(true);
-                    btn_register.setBackgroundResource(R.color.colorPrimary);
+                    btn_register.setBackgroundResource(R.drawable.rounded_button_p_2r);
                 }else{
                     btn_register.setEnabled(false);
                 }

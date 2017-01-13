@@ -29,41 +29,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="전화번호"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_weight="1"/>
-
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:inputType="phone"
             android:ems="10"
             android:id="@+id/et_phoneNumber"
-            android:hint="010-0000-0000"
-            android:layout_weight="1.5" />
+            android:hint="전화번호"
+            android:layout_weight="1.5"
+            android:layout_marginRight="8dp" />
 
         <Button
             android:text="중복확인"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:id="@+id/btn_dupCheck"
-            android:layout_weight="0.8"
-            android:background="@drawable/round_button_p_2r" />
+            android:layout_weight="0.6"
+            android:background="@drawable/rounded_button_t_2r"
+            android:layout_marginLeft="8dp" />
 
     </LinearLayout>
 
     <Button
-        android:text="인증코드 보내기"
+        android:text="다 음"
         android:layout_height="40dp"
         android:id="@+id/btn_sendSMS"
         android:layout_width="256dp"
-        android:background="@drawable/rounded_button_t_50r"
+        android:background="@drawable/rounded_button_t_2r"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="36dp" />
 
 </LinearLayout>

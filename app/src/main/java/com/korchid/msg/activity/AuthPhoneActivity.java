@@ -115,7 +115,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
                 if(input.length() > 0){
                     btn_dupCheck.setEnabled(true);
-                    btn_dupCheck.setBackgroundResource(R.drawable.round_button_p_2r);
+                    btn_dupCheck.setBackgroundResource(R.drawable.rounded_button_p_2r);
                 }else{
                     btn_dupCheck.setEnabled(false);
                     btn_register.setEnabled(false);
@@ -161,7 +161,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }else{
-                    btn_register.setBackgroundResource(R.drawable.rounded_button_p_50r);
+                    btn_register.setBackgroundResource(R.drawable.rounded_button_p_2r);
                     btn_register.setEnabled(true);
 
                     internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
