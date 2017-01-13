@@ -1,6 +1,7 @@
 package com.korchid.msg.activity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -34,18 +35,27 @@ import com.korchid.msg.service.ServiceThread;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_BIRTHDAY;
 import static com.korchid.msg.global.QuickstartPreferences.USER_DEVICE_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 /**
  * Created by mac0314 on 2016-11-28.
@@ -53,8 +63,6 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{//implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MainActivity";
-    private static final int SPLASH_LOGIN = 1000;
-    private static final int SPLASH_LOGOUT = 1500;
 
     public static Activity activity;
 
@@ -75,11 +83,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_temp;
     private Button btn_userInfo;
 
-    private String userNickname = "";
     private String userPhoneNumber = "";
-    private String loginState = "";
-    private String userRole = "";
+
+    private int userId;
+    private String userNickname;
+    private String userSex;
+    private Date userBirthday = new Date();
+    private String userProfile;
+    private String userRole;
+    private int userMessageAlert;
+    private int userReserveEnable;
+    private int userReserveAlert;
+    private int userWeekNumber;
+    private int userReserveNumber;
+
+    private static String loginState = "LOGOUT";
+
     private int viewId;
+
     private int duration = 0;
 
     private ArrayList<MqttTopic> topics = new ArrayList<MqttTopic>();
@@ -104,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
         initView();
-
-
 
 
         // Crash test
@@ -141,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
 
 
+        // Test - Modify instanceId
         try {
             FirebaseInstanceId.getInstance().deleteInstanceId();
         } catch (IOException e) {
@@ -217,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 */
         sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
-        userRole = sharedPreferences.getString(USER_ROLE, "");
+        userRole = sharedPreferences.getString(USER_ROLE, "child");
 
         Log.d(TAG, "USER_ROLE : " + userRole);
 
@@ -273,9 +293,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_next.setVisibility(View.GONE);
 
         Intent intent = new Intent(this, SplashActivity.class);
-        intent.putExtra(USER_ID_NUMBER, sharedPreferences.getInt(USER_ID_NUMBER , 0));
+
+
         loginState = sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT");
-        //Log.d(TAG, "Login state : " + loginState);
+        int requestCode = 0;
+
+
+        userId = sharedPreferences.getInt(USER_ID_NUMBER , 0);
+
+        intent.putExtra(USER_ID_NUMBER, userId);
+        intent.putExtra(USER_LOGIN_STATE, loginState);
+
+
+        Log.d(TAG, "Login state : " + loginState);
         if(loginState.equals("LOGIN")){
             // Current state : Login
             btn_join.setVisibility(View.GONE);
@@ -287,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             btn_next.setVisibility(View.VISIBLE);
 
-            intent.putExtra("duration",  SPLASH_LOGIN);
+            requestCode = 1;
 
             // 객체를 parcel을 통해 전달 - 미구현, ArrayList로 임시 구현
             MqttTopic topic = new MqttTopic("Sajouiot03");
@@ -305,9 +335,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             topicArrayList.add("Sajouiot02");
             topicArrayList.add("Sajouiot01");
 
-
-           serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+            serviceIntent = new Intent(getApplicationContext(), MqttService.class);
             serviceIntent.putExtra("topic", topicArrayList);
+            Boolean isExected = true;
+            serviceIntent.putExtra("mode", isExected);
             //serviceIntent.putStringArrayListExtra("topic", topicArrayList);
 
 
@@ -322,7 +353,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_temp.setVisibility(View.GONE);
             btn_userInfo.setVisibility(View.GONE);
 
-            intent.putExtra("duration",  SPLASH_LOGOUT);
+            requestCode = 0;
+
             try {
                 stopService(serviceIntent);
             }catch (Exception e){
@@ -331,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Loading screen
-        startActivity(intent);
+        startActivityForResult(intent, requestCode);
 
     }
 
@@ -379,9 +411,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (viewId){
             case R.id.btn_next:{
                 Intent intent = new Intent(getApplicationContext(), SelectOpponentActivity.class);
+
+                intent.putExtra(USER_ID_NUMBER, userId);
                 intent.putExtra(USER_NICKNAME, userNickname);
-                intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+                intent.putExtra(USER_SEX, userSex);
+                intent.putExtra(USER_BIRTHDAY, userBirthday.getTime());
+                intent.putExtra(USER_PROFILE, userProfile);
                 intent.putExtra(USER_ROLE, userRole);
+                intent.putExtra(MESSAGE_ALERT, userMessageAlert);
+                intent.putExtra(RESERVATION_ENABLE, userReserveEnable);
+                intent.putExtra(RESERVATION_ALERT, userMessageAlert);
+                intent.putExtra(RESERVATION_WEEK_NUMBER, userWeekNumber);
+                intent.putExtra(RESERVATION_TIMES, userReserveNumber);
+                intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+
                 startActivity(intent);
                 break;
             }
@@ -400,21 +443,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //causeCrash();
 
                 Intent intent = new Intent(getApplicationContext(), LoginPhoneActivity.class);
-                intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                 int requestCode;
 
                 if(loginState.equals("LOGOUT")){
                     // If current state = logout
                     //Log.d(TAG, "Current state : Logout");
-                    intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
-                    requestCode = 0;
 
-                    //startService(serviceIntent);
+                    intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+                    intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
+                    requestCode = 2;
+
+                    ArrayList<String> topicArrayList = new ArrayList<>();
+
+                    topicArrayList.add("Sajouiot03");
+                    topicArrayList.add("Sajouiot02");
+                    topicArrayList.add("Sajouiot01");
+
+                    Boolean isExected = true;
+
+                    serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+                    serviceIntent.putExtra("topic", topicArrayList);
+                    serviceIntent.putExtra("mode", isExected);
+                    //serviceIntent.putStringArrayListExtra("topic", topicArrayList);
+
+
+                    startService(serviceIntent);
                 }else{
                     // If current state = login
                     //Log.d(TAG, "Current state : Login");
                     intent.putExtra(USER_LOGIN_STATE, "LOGIN");
-                    requestCode = 1;
+                    requestCode = 3;
                     try {
                         stopService(serviceIntent);
                     }catch (Exception e){
@@ -426,12 +484,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // If current state = logout
                     //Log.d(TAG, "Current state : Logout");
                     intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
-                    requestCode = 0;
+                    requestCode = 2;
                 }else{
                     // If current state = login
                     //Log.d(TAG, "Current state : Login");
                     intent.putExtra(USER_LOGIN_STATE, "LOGIN");
-                    requestCode = 1;
+                    requestCode = 3;
                 }
 */
                 startActivityForResult(intent, requestCode);
@@ -464,61 +522,131 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (resultCode){
             case RESULT_OK:{
 
-                loginState = data.getStringExtra(USER_LOGIN_STATE);
+                switch (requestCode){
+                    // SplashActivity
+                    case 0:{
+                        // Current state : logout
 
-                if(requestCode == 0){
-                    // LOGIN success
-                    userPhoneNumber = data.getStringExtra(USER_PHONE_NUMBER);
-
-                    btn_join.setVisibility(View.GONE);
-                    btn_next.setVisibility(View.VISIBLE);
-                    btn_login.setText("LOGOUT");
-
-                    Log.d(TAG, "loginState : " + loginState);
-
-                    btn_invite.setVisibility(View.VISIBLE);
-                    btn_reserve.setVisibility(View.VISIBLE);
-                    btn_temp.setVisibility(View.VISIBLE);
-                    btn_userInfo.setVisibility(View.VISIBLE);
-
-                    //MqttService.mqttTopic = "Sajouiot03";
-                    ArrayList<String> arrayList = new ArrayList<>();
-
-                    arrayList.add("Sajouiot03");
-                    arrayList.add("Sajouiot02");
-                    arrayList.add("Sajouiot01");
-
-                    serviceIntent = new Intent(getApplicationContext(), MqttService.class);
-                    serviceIntent.putStringArrayListExtra("topic", arrayList);
-
-
-                    startService(serviceIntent);
-                }else if(requestCode == 1){
-                    // LOGOUT success
-                    btn_join.setVisibility(View.VISIBLE);
-                    btn_next.setVisibility(View.GONE);
-                    btn_login.setText("LOGIN");
-                    Log.d(TAG, "loginState : " + loginState);
-
-                    btn_invite.setVisibility(View.GONE);
-                    btn_reserve.setVisibility(View.GONE);
-                    btn_temp.setVisibility(View.GONE);
-                    btn_userInfo.setVisibility(View.GONE);
-
-                    try {
-                        stopService(serviceIntent);
-                    }catch(Exception e){
-                        e.getStackTrace();
+                        break;
                     }
-                }
+                    // SplashActivity
+                    case 1:{
+                        // Current state : login
+
+                        userId = data.getIntExtra(USER_ID_NUMBER, 0);
+                        userNickname = data.getStringExtra(USER_NICKNAME);
+                        userSex = data.getStringExtra(USER_SEX);
+                        userBirthday.setTime(data.getLongExtra(USER_NICKNAME, 0));
+                        userProfile = data.getStringExtra(USER_PROFILE);
+                        userRole = data.getStringExtra(USER_ROLE);
+                        userMessageAlert = data.getIntExtra(MESSAGE_ALERT, 0);
+                        userReserveEnable = data.getIntExtra(RESERVATION_ENABLE, 0);
+                        userReserveAlert= data.getIntExtra(RESERVATION_ALERT, 0);
+                        userWeekNumber = data.getIntExtra(RESERVATION_WEEK_NUMBER, 0);
+                        userReserveNumber = data.getIntExtra(RESERVATION_TIMES, 0);
+
+
+                        // Check variables
+                        Log.d(TAG, "userId : " + userId);
+                        Log.d(TAG, "userNickname : " + userNickname);
+                        Log.d(TAG, "userSex : " + userSex);
+                        Log.d(TAG, "userBirthday : " + userBirthday);
+                        Log.d(TAG, "userProfile : " + userProfile);
+                        Log.d(TAG, "userRole : " + userRole);
+                        Log.d(TAG, "userMessageAlert : " + userMessageAlert);
+                        Log.d(TAG, "userReserveEnable : " + userReserveEnable);
+                        Log.d(TAG, "userReserveAlert : " + userReserveAlert);
+                        Log.d(TAG, "userWeekNumber : " + userWeekNumber);
+                        Log.d(TAG, "userReserveNumber : " + userReserveNumber);
+
+
+                        break;
+                    }
+                    // LoginPhoneActivity
+                    case 2:{
+                        // LOGIN success
+
+                        loginState = data.getStringExtra(USER_LOGIN_STATE);
+
+                        userPhoneNumber = data.getStringExtra(USER_PHONE_NUMBER);
+
+                        btn_join.setVisibility(View.GONE);
+                        btn_next.setVisibility(View.VISIBLE);
+                        btn_login.setText("LOGOUT");
+
+                        Log.d(TAG, "loginState : " + loginState);
+
+                        btn_invite.setVisibility(View.VISIBLE);
+                        btn_reserve.setVisibility(View.VISIBLE);
+                        btn_temp.setVisibility(View.VISIBLE);
+                        btn_userInfo.setVisibility(View.VISIBLE);
+
+                        //MqttService.mqttTopic = "Sajouiot03";
+                        ArrayList<String> arrayList = new ArrayList<>();
+
+                        arrayList.add("Sajouiot03");
+                        arrayList.add("Sajouiot02");
+                        arrayList.add("Sajouiot01");
+
+                        serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+                        serviceIntent.putStringArrayListExtra("topic", arrayList);
+
+                        Boolean isExected = true;
+                        serviceIntent.putExtra("mode", isExected);
+                        startService(serviceIntent);
+
+                        break;
+                    }
+                    // LoginPhoneActivity
+                    case 3:{
+                        // LOGOUT success
+
+                        loginState = data.getStringExtra(USER_LOGIN_STATE);
+
+                        btn_join.setVisibility(View.VISIBLE);
+                        btn_next.setVisibility(View.GONE);
+                        btn_login.setText("LOGIN");
+                        Log.d(TAG, "loginState : " + loginState);
+
+                        btn_invite.setVisibility(View.GONE);
+                        btn_reserve.setVisibility(View.GONE);
+                        btn_temp.setVisibility(View.GONE);
+                        btn_userInfo.setVisibility(View.GONE);
+
+                        try {
+                            if(isServiceRunningCheck()){
+                                Log.d(TAG, "Current state : Running service");
+                                stopService(serviceIntent);
+                            }
+                        }catch(Exception e){
+                            e.getStackTrace();
+                        }
+
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+
+                } // End request code switch
 
                 break;
-            }
+            } // End Result_OK
             default:{
 
                 break;
             }
+        } // End result code switch
+    }
+
+    public boolean isServiceRunningCheck() {
+        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if ("com.korchid.msg.mqtt.service.MqttService".equals(service.service.getClassName())) {
+                return true;
+            }
         }
+        return false;
     }
 
     // Crash test

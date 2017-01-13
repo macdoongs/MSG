@@ -49,15 +49,18 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
     private TextView tv_myMessage;
     private TextView tv_yourMessage;
 
-    private String userName = "";
+    private int senderId;
+    private int receiverId;
+    private int userId = 0;
+    private Chatting.Type messageType = Chatting.Type.MESSAGE;
     private String message = "";
-    private String nickname = "";
+    private String senderNickname = "";
     private String opponentProfile = "";
 
-    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, String userName, String opponentProfile) {
+    public ChattingAdapter (Activity activity, ArrayList<Chatting> chattingArrayList, int userId, String opponentProfile) {
         this.MessagingActivity = activity;
         this.chattingArrayList = chattingArrayList;
-        this.userName = userName;
+        this.userId = userId;
         this.opponentProfile = opponentProfile;
 
         mInflater = (LayoutInflater)MessagingActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -81,7 +84,10 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
     public View getView(final int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "getView");
 
-        nickname = chattingArrayList.get(position).getUserName();
+        senderId = chattingArrayList.get(position).getSenderId();
+        receiverId = chattingArrayList.get(position).getReceiverId();
+        messageType = chattingArrayList.get(position).getMessageType();
+        senderNickname = chattingArrayList.get(position).getSenderNickname();
         message = chattingArrayList.get(position).getMessage();
 
         if(convertView == null){
@@ -96,7 +102,7 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
 
 
 
-        if(nickname.equals(userName)){
+        if(senderId == userId){
             // Application user oneself
             tv_myMessage = (TextView) convertView.findViewById(R.id.tv_myMessage);
             ll_container.setVisibility(View.VISIBLE);
@@ -121,7 +127,7 @@ public class ChattingAdapter extends BaseAdapter implements View.OnLongClickList
             tv_yourMessage = (TextView) convertView.findViewById(R.id.tv_yourMessage);
             ll_container.setVisibility(View.INVISIBLE);
             gl_container.setVisibility(View.VISIBLE);
-            tv_yourName.setText(nickname);
+            tv_yourName.setText(senderNickname);
             tv_yourMessage.setText(message);
 
             tv_yourMessage.setOnLongClickListener(this);

@@ -5,20 +5,53 @@ package com.korchid.msg;
  */
 
 public class Chatting {
-    private String userName;
+    public enum Type {MESSAGE, IMAGE}
+
+
+    private int senderId;
+    private int receiverId;
+    private String senderNickname;
+    private Type messageType;
     private String message;
 
-    public Chatting(String userName, String message){
-        this.userName = userName;
+    public Chatting(int senderId, int receiverId, String senderNickname, Type messageType, String message){
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.senderNickname = senderNickname;
+        this.messageType = messageType;
         this.message = message;
     }
 
-    public String getUserName() {
-        return userName;
+    public int getSenderId() {
+        return senderId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
+    public int getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public String getSenderNickname() {
+        return senderNickname;
+    }
+
+    public void setSenderNickname(String senderNickname) {
+        this.senderNickname = senderNickname;
+    }
+
+    public Type getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(Type messageType) {
+        this.messageType = messageType;
     }
 
     public String getMessage() {

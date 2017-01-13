@@ -267,18 +267,22 @@ public class MqttService extends Service implements IMqttCallback {
 
         //topics = topic;
 
-        ArrayList<String> topicArray = intent.getStringArrayListExtra("topic");
 
-        for(int i=0 ;i<topicArray.size(); i++){
-            String topic = topicArray.get(i);
+        Boolean isExected = intent.getBooleanExtra("mode", false);
 
-            MqttTopic topicArrayIdx = new MqttTopic(topic);
+        if(isExected) {
+            ArrayList<String> topicArray = intent.getStringArrayListExtra("topic");
 
-            if(!topics.contains(topicArrayIdx) && topic != null){
-                topics.add(topicArrayIdx);
+            for (int i = 0; i < topicArray.size(); i++) {
+                String topic = topicArray.get(i);
+
+                MqttTopic topicArrayIdx = new MqttTopic(topic);
+
+                if (!topics.contains(topicArrayIdx) && topic != null) {
+                    topics.add(topicArrayIdx);
+                }
             }
         }
-
         /* 토픽을 하나만 받았을 때
         MqttTopic topicArrayIdx = new MqttTopic(mqttTopic);
 
@@ -731,11 +735,12 @@ public class MqttService extends Service implements IMqttCallback {
             String messageReceived = mainObject.getString("message");
             int receiverId = mainObject.getInt("receiverId");
             int senderId = mainObject.getInt("senderId");
-            String userNickname = mainObject.getString(USER_NICKNAME);
+            String senderNickname = mainObject.getString(USER_NICKNAME);
 
 
             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
-            int userId = 17;//sharedPreferences.getInt(USER_ID_NUMBER, 0);
+            int userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
+            Log.d(TAG, "userId : " + userId);
 
 
             // Notification
@@ -746,7 +751,7 @@ public class MqttService extends Service implements IMqttCallback {
                 Bundle bundle = new Bundle();
                 bundle.putInt("senderId", senderId);
                 bundle.putInt("receiverId", receiverId);
-                bundle.putString(USER_NICKNAME, userNickname);
+                bundle.putString(USER_NICKNAME, senderNickname);
                 bundle.putString("message", messageReceived);
 
                 Message msg = new Message();

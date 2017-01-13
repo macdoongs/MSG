@@ -55,10 +55,18 @@ import com.korchid.msg.mqtt.service.MqttService.ConnectionStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 
 /**
@@ -68,6 +76,7 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 // Chatting between parent and child
 public class ChattingActivity extends AppCompatActivity implements View.OnClickListener, MessageHandler, StatusHandler {
     private static final String TAG = "ChattingActivity";
+
 
     private Button btn_setting;
     private Button btn_menu;
@@ -89,13 +98,24 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private StatusReceiver statusReceiver;
 
 
-    private String parentName;
     private String userPhoneNumber;
+
+    private int userId;
     private String userNickname;
+    private String userSex;
+    private Date userBirthday = new Date();
+    private String userProfile;
+    private String userRole;
+    private int userMessageAlert;
+    private int userReserveEnable;
+    private int userReserveAlert;
+    private int userWeekNumber;
+    private int userReserveNumber;
+
+
+    private String parentName;
     private String opponentProfile;
     private String title;
-    private String userId;
-    byte[] pic;
 
 
     private Boolean expandedState = false;
@@ -113,12 +133,25 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Intent intent = getIntent();
+
+        userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+        userNickname = getIntent().getStringExtra(USER_NICKNAME);
+        userSex = getIntent().getStringExtra(USER_SEX);
+        userBirthday.setTime(getIntent().getLongExtra(USER_NICKNAME, 0));
+        userProfile = getIntent().getStringExtra(USER_PROFILE);
+        userRole = getIntent().getStringExtra(USER_ROLE);
+        userMessageAlert = getIntent().getIntExtra(MESSAGE_ALERT, 0);
+        userReserveEnable = getIntent().getIntExtra(RESERVATION_ENABLE, 0);
+        userReserveAlert= getIntent().getIntExtra(RESERVATION_ALERT, 0);
+        userWeekNumber = getIntent().getIntExtra(RESERVATION_WEEK_NUMBER, 0);
+        userReserveNumber = getIntent().getIntExtra(RESERVATION_TIMES, 0);
+
+
         parentName = intent.getStringExtra("parentName");
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
-        userId = intent.getStringExtra(USER_ID_NUMBER);
-        userNickname = intent.getStringExtra(USER_NICKNAME);
 
-        pic = null;
+
+        userProfile = null;
         opponentProfile = intent.getStringExtra("opponentProfile");
         title = intent.getStringExtra("topic");
         m_arr = new ArrayList<Chatting>();
@@ -133,10 +166,13 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
             for (int i = 0; i < strArr.length; i++) {
                 String[] line = strArr[i].split("/");
 
-                String userId = line[2];
+                int senderId = 44;
+                int receiverId = 16;
+                String senderNickname = "TestBot";
+                Chatting.Type type = Chatting.Type.MESSAGE;
                 String message = line[3];
 
-                m_arr.add(new Chatting("TestBot", userId + ": " + message));
+                m_arr.add(new Chatting(senderId, receiverId, senderNickname, type, message));
             }
         }catch (Exception e){
             Log.d(TAG, "Error : " + e.getMessage());
@@ -225,7 +261,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         et_message.addTextChangedListener(textWatcher);
 
-        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userNickname, opponentProfile);
+        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userId, opponentProfile);
         lv_message.setAdapter(adapter);
 
     }
@@ -242,11 +278,20 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
                 // MQTT message - JSON format
                 // http://humble.tistory.com/20
+
+                Log.d(TAG, "btn_send");
+
+
+                //Test data
+                int receiverId = 18;
+                String messageType = "message";
+
                 JSONObject obj = new JSONObject();
                 try {
-                    obj.put("senderId", 16);
-                    obj.put("receiverId", 17);
-                    obj.put(USER_NICKNAME, userNickname);
+                    obj.put("senderId", userId);
+                    obj.put("receiverId", receiverId);
+                    obj.put("senderNickname", userNickname);
+                    obj.put("messageType", messageType);
                     obj.put("message", message);
 
                     System.out.println(obj.toString());
@@ -435,7 +480,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         //MqttServiceDelegate.topic = title;
 
         //Start service if not started
-        MqttServiceDelegate.startService(this, title);
+        //MqttServiceDelegate.startService(this, title);
     }
 
     @Override
@@ -447,6 +492,9 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         int senderId = 0;
         int receiverId = 0;
+        String senderNickname = "";
+        String messageType = "";
+        Chatting.Type type;
         String message = "";
 
         try {
@@ -454,8 +502,16 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
             senderId = jsonObject.getInt("senderId");
             receiverId = jsonObject.getInt("receiverId");
+            senderNickname = jsonObject.getString("senderNickname");
+            messageType = jsonObject.getString("messageType");
             message = jsonObject.getString("message");
-            userNickname = jsonObject.getString(USER_NICKNAME);
+
+            if(messageType.equals("message")){
+                type = Chatting.Type.MESSAGE;
+            }else{
+                type = Chatting.Type.IMAGE;
+            }
+
         }catch (Exception e){
             e.getStackTrace();
         }
@@ -473,32 +529,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if(data != null){
+            // Test data
+            type = Chatting.Type.MESSAGE;
 
-/*
-            String[] strArr = message.split(":");
-            if(!userPhoneNumber.equals(strArr[0])){
-                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                Intent intent = new Intent(this, ChattingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                NotificationCompat.Builder mCompatBuilder = new NotificationCompat.Builder(this);
-                mCompatBuilder.setSmallIcon(R.drawable.ic_logo);
-                mCompatBuilder.setTicker(message);
-                mCompatBuilder.setWhen(System.currentTimeMillis());
-                mCompatBuilder.setNumber(10);
-                mCompatBuilder.setContentTitle("New message");
-                mCompatBuilder.setContentText(message);
-                mCompatBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-                mCompatBuilder.setContentIntent(pendingIntent);
-                mCompatBuilder.setAutoCancel(true);
-
-                nm.notify(222, mCompatBuilder.build());
-            }
-*/
-            m_arr.add(new Chatting(userNickname, message));
+            m_arr.add(new Chatting(senderId, receiverId,  senderNickname, type, message));
 
             lv_message.setSelection(adapter.getCount()-1);
         }
