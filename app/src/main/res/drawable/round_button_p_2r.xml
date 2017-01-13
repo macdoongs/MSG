@@ -4,7 +4,7 @@
     <item android:state_pressed="true">
         <shape>
             <padding android:bottom="4dp" android:left="8dp" android:right="8dp" android:top="4dp" />
-            <gradient android:angle="270" android:endColor="#cdcdcd" android:startColor="#eeeeee" />
+            <gradient android:angle="270" android:endColor="#c46c41" android:startColor="@color/colorPrimary" />
 
             <corners android:bottomLeftRadius="2dp" android:bottomRightRadius="2dp" android:topLeftRadius="2dp" android:topRightRadius="2dp" />
         </shape>
@@ -12,7 +12,7 @@
     <item android:state_pressed="false">
         <shape>
             <padding android:bottom="4dp" android:left="8dp" android:right="8dp" android:top="4dp" />
-            <solid android:color="#eeeeee" />
+            <solid android:color="@color/colorPrimary" />
             <corners android:bottomLeftRadius="2dp" android:bottomRightRadius="2dp" android:topLeftRadius="2dp" android:topRightRadius="2dp" />
         </shape>
     </item>

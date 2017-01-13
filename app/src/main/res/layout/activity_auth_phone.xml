@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_dupCheck"
             android:layout_weight="0.8"
-            android:background="@color/colorTransparent" />
+            android:background="@drawable/round_button_p_2r" />
 
     </LinearLayout>
 
@@ -62,7 +62,7 @@
         android:layout_height="40dp"
         android:id="@+id/btn_sendSMS"
         android:layout_width="256dp"
-        android:background="@drawable/rounded_button_t"
+        android:background="@drawable/rounded_button_t_50r"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp" />
 

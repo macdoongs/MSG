@@ -16,23 +16,21 @@
         android:id="@+id/riv_opponentProfile"
         android:layout_width="248dp"
         android:layout_height="272dp"
+        android:layout_marginBottom="16dp"
         android:layout_gravity="center_horizontal"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/colorPrimary"
-        android:paddingTop="4dp"
         android:paddingBottom="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:background="@drawable/round_button_p_2r">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="20dp"
+            android:layout_margin="4dp"
             android:background="@color/colorPrimary">
 
             <TextView
@@ -40,7 +38,6 @@
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:id="@+id/tv_timeTitle"
                 android:layout_weight="1" />
 
@@ -60,9 +57,8 @@
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorTransparent"
+            android:background="#ffffff"
             android:gravity="center"
-            android:padding="8dp"
             android:id="@+id/tv_messageReserved"/>
     </LinearLayout>
 
@@ -70,7 +66,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:gravity="center_horizontal">
 
         <Button
