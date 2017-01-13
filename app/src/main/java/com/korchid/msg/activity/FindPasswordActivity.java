@@ -91,7 +91,12 @@ public class FindPasswordActivity extends AppCompatActivity {
                 userDataCall.enqueue(new Callback<List<UserAuth>>() {
                     @Override
                     public void onResponse(Call<List<UserAuth>> call, Response<List<UserAuth>> response) {
-                        Log.d(TAG, "password : " + response.body().get(0).getPassword_sn());
+                        password = response.body().get(0).getPassword_sn();
+
+                        Log.d(TAG, "password : " + password);
+
+                        tv_phoneNumber.setText(userPhoneNumber);
+                        tv_password.setText(password);
                     }
 
                     @Override

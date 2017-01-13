@@ -146,7 +146,33 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         btn_findPassword.setEnabled(false);
 
         // http://egloos.zum.com/killins/v/3008925
-        TextWatcher textWatcher = new TextWatcher() {
+        TextWatcher et_phoneWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if(input.length() > 0){
+                    btn_findPassword.setEnabled(true);
+                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p);
+                }else{
+                    btn_findPassword.setEnabled(false);
+                }
+            }
+        };
+        et_phoneNumber.addTextChangedListener(et_phoneWatcher);
+
+
+        TextWatcher et_Watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -173,7 +199,9 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         };
-        et_password.addTextChangedListener(textWatcher);
+        et_password.addTextChangedListener(et_Watcher);
+
+
 
         btn_findPassword.setOnClickListener(this);
 
@@ -312,22 +340,8 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                     // Login success
                     Log.d(TAG, "Login success");
 
-                    Intent intent = new Intent();
 
-                    userId = data.getIntExtra(USER_ID_NUMBER, 0);
-                    userNickname = data.getStringExtra(USER_NICKNAME);
-                    userSex = data.getStringExtra(USER_SEX);
-                    userBirthday.setTime(data.getLongExtra(USER_NICKNAME, 0));
-                    userProfile = data.getStringExtra(USER_PROFILE);
-                    userRole = data.getStringExtra(USER_ROLE);
-                    userMessageAlert = data.getIntExtra(MESSAGE_ALERT, 0);
-                    userReserveEnable = data.getIntExtra(RESERVATION_ENABLE, 0);
-                    userReserveAlert= data.getIntExtra(RESERVATION_ALERT, 0);
-                    userWeekNumber = data.getIntExtra(RESERVATION_WEEK_NUMBER, 0);
-                    userReserveNumber = data.getIntExtra(RESERVATION_TIMES, 0);
-
-
-                    setResult(RESULT_OK, intent);
+                    setResult(RESULT_OK, data);
                     finish();
                 }else if(requestCode == 1){
                     // find password activity

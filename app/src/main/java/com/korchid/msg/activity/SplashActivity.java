@@ -214,6 +214,9 @@ public class SplashActivity extends Activity {
                 Intent intent = new Intent();
 
                 if(loginState.equals("LOGIN")){
+
+                    intent.putExtra(USER_LOGIN_STATE, loginState);
+
                     intent.putExtra(USER_ID_NUMBER, userId);
                     intent.putExtra(USER_NICKNAME, userNickname);
                     intent.putExtra(USER_SEX, userSex);
@@ -225,6 +228,7 @@ public class SplashActivity extends Activity {
                     intent.putExtra(RESERVATION_ALERT, userMessageAlert);
                     intent.putExtra(RESERVATION_WEEK_NUMBER, userWeekNumber);
                     intent.putExtra(RESERVATION_TIMES, userReserveNumber);
+
                 }
 
 

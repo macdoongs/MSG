@@ -107,7 +107,6 @@ public class MessageSettingActivity extends AppCompatActivity {
                     BufferedReader reader = new BufferedReader(isr);
                     StringBuilder sb = new StringBuilder();
 
-                    int i = 0;
 
                     while ((line = reader.readLine()) != null) {
                         sb.append(line + "\n");
@@ -119,8 +118,6 @@ public class MessageSettingActivity extends AppCompatActivity {
                         message.setData(data);
                         messageSettingHandler.sendMessage(message);
 
-
-                        //Log.d(TAG, line);
                     }
                     isr.close();
                     reader.close();

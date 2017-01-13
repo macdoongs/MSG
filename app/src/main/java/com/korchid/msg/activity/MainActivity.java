@@ -533,6 +533,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case 1:{
                         // Current state : login
 
+                        loginState = data.getStringExtra(USER_LOGIN_STATE);
+
                         userId = data.getIntExtra(USER_ID_NUMBER, 0);
                         userNickname = data.getStringExtra(USER_NICKNAME);
                         userSex = data.getStringExtra(USER_SEX);
@@ -544,9 +546,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         userReserveAlert= data.getIntExtra(RESERVATION_ALERT, 0);
                         userWeekNumber = data.getIntExtra(RESERVATION_WEEK_NUMBER, 0);
                         userReserveNumber = data.getIntExtra(RESERVATION_TIMES, 0);
-
+/*
 
                         // Check variables
+                        Log.d(TAG, "loginState : " + loginState);
+
                         Log.d(TAG, "userId : " + userId);
                         Log.d(TAG, "userNickname : " + userNickname);
                         Log.d(TAG, "userSex : " + userSex);
@@ -558,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.d(TAG, "userReserveAlert : " + userReserveAlert);
                         Log.d(TAG, "userWeekNumber : " + userWeekNumber);
                         Log.d(TAG, "userReserveNumber : " + userReserveNumber);
-
+*/
 
                         break;
                     }
