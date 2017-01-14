@@ -31,10 +31,11 @@ import static com.korchid.msg.retrofit.ApiService.API_URL;
 
 // http://tiii.tistory.com/11
 public class RestfulAdapter {
+    private static final String TAG = "RestfulAdapter";
     public static final int CONNECT_TIMEOUT = 15;
     public static final int WRITE_TIMEOUT = 15;
     public static final int READ_TIMEOUT = 15;
-    private static final String SERVER_URL = "https://api.server.net/";//2부터 url뒤에 /를 입력해야 합니다.
+    private static final String SERVER_URL = "https://www.korchid.com/"; // Retrofit 2부터 url뒤에 /를 입력
     private static OkHttpClient client;
     private static ApiService apiService;
 

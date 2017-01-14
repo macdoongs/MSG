@@ -215,6 +215,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
     private void initView(){
          /*
+         // TODO Modify Drawer code
         getLayoutInflater().inflate(R.layout.nav_header_main, null);
 
         iv_profile = (ImageView) findViewById(R.id.iv_profile);

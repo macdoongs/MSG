@@ -20,6 +20,8 @@ import com.korchid.msg.sqlite.DBHelper;
 // 로그인 기반 샘플앱에서 사용한다.
 // kakao-open-android-sdk-sample
 public class GlobalApplication extends Application {
+    // 현재 사용하지 않음
+
     private static final String TAG = "GlobalApplication";
     private static volatile GlobalApplication instance = null;
     private ImageLoader imageLoader;

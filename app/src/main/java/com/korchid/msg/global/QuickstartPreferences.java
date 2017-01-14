@@ -4,6 +4,8 @@ package com.korchid.msg.global;
  * Created by Mac on 2016-12-07.
  */
 public class QuickstartPreferences {
+    // SharedPreferences와 Intent의 데이터를 담는 이름을 정의함
+
     // USER Login state
     public static final String SHARED_PREF_USER_LOGIN = "LOGIN";
     public static final String USER_LOGIN_STATE = "USER_LOGIN";

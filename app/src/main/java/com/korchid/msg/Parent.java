@@ -7,6 +7,8 @@ import java.util.Date;
  */
 
 public class Parent {
+    // 현재 사용하지 않음
+
     private String nickname;
     private String phoneNumber;
     private int userId;

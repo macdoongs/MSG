@@ -15,6 +15,8 @@ import com.korchid.msg.R;
 
 // For checkbox - listview interworking
 public class CheckableLinearLayout extends LinearLayout implements Checkable{
+    // TODO Complete code - combining Checkbox and Linearlayout is not working
+
     private static final String TAG = "CheckableLinearLayout";
 
     // 만약 CheckBox가 아닌 View를 추가한다면 아래의 변수 사용 가능.

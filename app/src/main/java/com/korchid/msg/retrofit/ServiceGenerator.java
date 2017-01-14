@@ -9,6 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ServiceGenerator {
+    // TODO complete code - priority low
+
     public static final String API_BASE_URL = "https://www.korchid.com/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

@@ -13,7 +13,7 @@ import com.korchid.msg.R;
  * Created by mac0314 on 2016-12-17.
  */
 
-
+// Modify actionbar
 public class CustomActionbar {
 
     public CustomActionbar (AppCompatActivity appCompatActivity, @LayoutRes int resource, String title){

@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Res {
+    // TODO Modify Res to contain object
+
     @SerializedName("fieldCount")
     @Expose
     private int fieldCount;

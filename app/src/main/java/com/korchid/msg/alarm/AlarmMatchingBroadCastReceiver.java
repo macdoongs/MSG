@@ -18,6 +18,7 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
  */
 
 public class AlarmMatchingBroadCastReceiver extends AlarmBroadCastReciever{
+    // TODO complete code - Setting reservation time
 
     private static Boolean isExecute = false;
 

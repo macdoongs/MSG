@@ -13,6 +13,8 @@ import retrofit2.http.Part;
  */
 
 public interface FileUploadService {
+    // TODO complete code - priority low
+
     @Multipart
     @POST("upload")
     Call<ResponseBody> upload(@Part("description") RequestBody description,
