@@ -37,6 +37,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.korchid.msg.global.QuickstartPreferences.INVITATION_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_CONNECTION;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
@@ -204,6 +206,13 @@ public class KakaoLinkActivity extends AppCompatActivity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_CONNECTION, 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putBoolean(INVITATION_CHECK, true);
+
+                editor.apply();
+
                 Intent intent = new Intent();
 
                 intent.putExtra(USER_ROLE, userRole);

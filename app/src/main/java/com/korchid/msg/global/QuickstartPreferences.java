@@ -27,13 +27,18 @@ public class QuickstartPreferences {
     // USER Message setting
     public static final String SHARED_PREF_USER_RESERVATION_SETTING = "USER_RESERVATION_SETTING";
     public static final String RESERVATION_CHECK = "RESERVATION_CHECK";
-    public static final String RESERVATION_MESSAGE = "RESERVATION_MESSAGE";
     public static final String MESSAGE_ALERT = "MESSAGE_ALERT";
     public static final String RESERVATION_ENABLE = "RESERVATION_ENABLE";
     public static final String RESERVATION_ALERT = "RESERVATION_ALERT";
     public static final String RESERVATION_WEEK_NUMBER = "RESERVATION_WEEK_NUMBER";
     public static final String RESERVATION_TIMES = "RESERVATION_TIMES";
+    public static final String RESERVATION_MESSAGE = "RESERVATION_MESSAGE";
 
     public static final String AUTH_MODE = "AUTH_MODE";
     public static final String USER_SMS_TOKEN = "USER_SMS_TOKEN";
+
+
+    public static final String SHARED_PREF_CONNECTION = "SHARED_PREF_CONNECTION";
+    public static final String INVITATION_CHECK = "INVITATION_CHECK";
+    public static final String MAPPING_CHECK = "MAPPING_CHECK";
 }
