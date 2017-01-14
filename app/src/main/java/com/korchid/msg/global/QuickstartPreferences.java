@@ -15,6 +15,7 @@ public class QuickstartPreferences {
 
     // USER Infomation
     public static final String SHARED_PREF_USER_INFO = "USER_INFO";
+    public static final String USER_INFO_CHECK = "USER_INFO_CHECK";
     public static final String USER_NICKNAME = "USER_NICKNAME";
     public static final String USER_BIRTHDAY = "USER_BIRTHDAY";
     public static final String USER_PROFILE = "USER_PROFILE";

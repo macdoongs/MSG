@@ -26,6 +26,7 @@ import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -35,6 +36,7 @@ import retrofit2.Response;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_INFO_CHECK;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
@@ -147,17 +149,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
                 userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
 
-                String stringUrl = "https://www.korchid.com/msg-user-info";
-                HashMap<String, String> params = new HashMap<>();
-                params.put("userId", "" + userId);
-                params.put("profile", profile);
-                params.put("sex", sex);
-                params.put("nickname", nickname);
-
-                Handler httpHandler = new Handler();
-
-                HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
-                httpPost.start();
+                registerUserInfo(userId, nickname, null, profile);
 
                 Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
                 startActivityForResult(intent, 1);
@@ -165,46 +157,6 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    class httpHandler extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            String response = msg.getData().getString("response");
-
-            String[] line = response.split("\n");
-
-            Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-            if(line[0].equals("Error")){
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-            }else if(line[0].equals("No")){
-                Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
-
-
-
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putString(USER_NICKNAME, nickname);
-                editor.putString(USER_PROFILE, profile);
-                editor.putString(USER_SEX, sex);
-                editor.commit(); // Apply file
-
-                Log.d(TAG, "SharedPreference");
-                Log.d(TAG, "USER_PROFILE : " + sharedPreferences.getString(USER_PROFILE, ""));
-                Log.d(TAG, "USER_SEX : " + sharedPreferences.getString(USER_SEX, "Etc"));
-
-                Intent intent = new Intent();
-                //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-
-        }
     }
 
 
@@ -266,53 +218,13 @@ public class UserInfoActivity extends AppCompatActivity {
 
                     userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
 
-                    Call<Res> userCall = RestfulAdapter.getInstance().userInfo(userId, nickname, sex, null, profile);
+                    registerUserInfo(userId, nickname, null, profile);
 
-                    userCall.enqueue(new Callback<Res>() {
-                        @Override
-                        public void onResponse(Call<Res> call, Response<Res> response) {
-                            Res res = response.body();
-
-                            Log.d(TAG, "res : " + res);
-
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
-
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            editor.putString(USER_NICKNAME, nickname);
-                            editor.putString(USER_SEX, sex);
-                            //editor.putString(USER_BIRTHDAY, null);
-                            editor.putString(USER_PROFILE, profile);
-
-                            editor.apply();
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<Res> call, Throwable t) {
-                            Log.d(TAG, "onFailure");
-                        }
-                    });
-
-
-                    /*
-                    String stringUrl = "https://www.korchid.com/msg/user-info";
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("userId", "" + userId);
-                    params.put("profile", profile);
-                    params.put("sex", sex);
-
-                    Handler httpHandler = new Handler();
-
-                    HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
-                    httpPost.start();
-                    */
-
-                    startActivityForResult(intent, 0);
+                    startActivityForResult(intent, 1);
                 }else{
                     Toast.makeText(this.getApplicationContext(), "Check radio button", Toast.LENGTH_SHORT).show();
                 }
-                //
+
 
                 break;
             }
@@ -341,6 +253,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
                     iv_profile.setImageBitmap(bitmap);
                     return;
+                }else if(requestCode == 1){
+                    finish();
                 }
 
                 Intent intent = new Intent();
@@ -353,6 +267,39 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void registerUserInfo(final int userId, final String nickname, final Date birthday, final String profile){
+        Call<Res> userCall = RestfulAdapter.getInstance().userInfo(userId, nickname, sex, null, profile);
+
+        userCall.enqueue(new Callback<Res>() {
+            @Override
+            public void onResponse(Call<Res> call, Response<Res> response) {
+                Res res = response.body();
+
+                Log.d(TAG, "res : " + res);
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putBoolean(USER_INFO_CHECK, true);
+
+                editor.putString(USER_NICKNAME, nickname);
+                editor.putString(USER_SEX, sex);
+                //editor.putString(USER_BIRTHDAY, null);
+                editor.putString(USER_PROFILE, profile);
+
+                editor.apply();
+
+            }
+
+            @Override
+            public void onFailure(Call<Res> call, Throwable t) {
+                Log.d(TAG, "onFailure");
+            }
+        });
     }
 }
 

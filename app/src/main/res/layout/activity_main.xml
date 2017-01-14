@@ -14,13 +14,11 @@
 
 
     <Button
-        android:text="Button"
+        android:text="temp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_userInfo"
-        android:background="@color/colorPrimary"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/btn_temp"
+        android:background="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/userName"
@@ -45,20 +43,6 @@
             android:background="@color/colorPrimary" />
 
         <Button
-            android:text="temp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_temp"
-            android:background="@color/colorPrimary" />
-
-        <Button
-            android:text="reserve"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_reserve"
-            android:background="@color/colorPrimary" />
-
-        <Button
             android:text="Invite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,6 +50,15 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary"/>
+
+        <Button
+            android:text="REGISTER INFORMATION"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_userInfo"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <!--
 

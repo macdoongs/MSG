@@ -36,7 +36,9 @@ import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
@@ -95,6 +97,18 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         if (state.equals("LOGIN")) {
             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.clear();
+            editor.apply();
+
+            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+            editor = sharedPreferences.edit();
+
+            editor.clear();
+            editor.apply();
+
+            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+            editor = sharedPreferences.edit();
 
             editor.clear();
             editor.apply();
@@ -248,7 +262,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                             editor.putString(USER_PASSWORD, password);
                             editor.putInt(USER_ID_NUMBER, user.getUser_id());
                             editor.putString(USER_LOGIN_TOKEN, user.getLogin_token_ln());
-                            editor.commit(); // Apply file
+                            editor.apply(); // Apply file
 
                             Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
 
@@ -264,6 +278,8 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onFailure(Call<List<User>> call, Throwable t) {
                         Log.d(TAG, "onFailure");
+
+                        Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
                     }
                 });
 

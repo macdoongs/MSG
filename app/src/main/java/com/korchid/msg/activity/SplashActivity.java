@@ -22,6 +22,7 @@ import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_CHECK;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
@@ -30,6 +31,7 @@ import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGI
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
 import static com.korchid.msg.global.QuickstartPreferences.USER_BIRTHDAY;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_INFO_CHECK;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
@@ -89,46 +91,50 @@ public class SplashActivity extends Activity {
                 public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
                     //Log.d(TAG, "onResponse");
 
-                    UserData userData = response.body().get(0);
+                    if(response.body().isEmpty()){
+                        return;
+                    }else{
+                        UserData userData = response.body().get(0);
 
-                    if(userData != null) {
+                        if(userData != null) {
 
-                        userNickname = userData.getNickname_sn();
-                        userSex = userData.getSex_sn();
-                        userBirthday = userData.getBirthday_dt();
-                        userProfile = userData.getProfile_ln();
-                        userRole = userData.getRole_name_sn();
-                        userMessageAlert = userData.getMessage_alert();
-                        userReserveEnable = userData.getReserve_enable();
-                        userReserveAlert = userData.getReserve_alert();
-                        userWeekNumber = userData.getWeek_number();
-                        userReserveNumber = userData.getReserve_number();
+                            userNickname = userData.getNickname_sn();
+                            userSex = userData.getSex_sn();
+                            userBirthday = userData.getBirthday_dt();
+                            userProfile = userData.getProfile_ln();
+                            userRole = userData.getRole_name_sn();
+                            userMessageAlert = userData.getMessage_alert();
+                            userReserveEnable = userData.getReserve_enable();
+                            userReserveAlert = userData.getReserve_alert();
+                            userWeekNumber = userData.getWeek_number();
+                            userReserveNumber = userData.getReserve_number();
 
-                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                        Date date = new Date();
+                            editor.putString(USER_NICKNAME, userNickname);
+                            editor.putLong(USER_BIRTHDAY, userBirthday.getTime());
+                            editor.putString(USER_PROFILE, userProfile);
+                            editor.putString(USER_SEX, userSex);
+                            editor.putString(USER_ROLE, userRole);
 
-                        editor.putString(USER_NICKNAME, userNickname);
-                        editor.putLong(USER_BIRTHDAY, userBirthday.getTime());
-                        editor.putString(USER_PROFILE, userProfile);
-                        editor.putString(USER_SEX, userSex);
-                        editor.putString(USER_ROLE, userRole);
+                            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
 
-                        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+                            editor = sharedPreferences.edit();
 
-                        editor = sharedPreferences.edit();
-
-                        editor.putInt(MESSAGE_ALERT, userMessageAlert);
-                        editor.putInt(RESERVATION_ENABLE, userReserveEnable);
-                        editor.putInt(RESERVATION_ALERT, userReserveAlert);
-                        editor.putInt(RESERVATION_WEEK_NUMBER, userWeekNumber);
-                        editor.putInt(RESERVATION_TIMES, userReserveNumber);
+                            editor.putInt(MESSAGE_ALERT, userMessageAlert);
+                            editor.putInt(RESERVATION_ENABLE, userReserveEnable);
+                            editor.putInt(RESERVATION_ALERT, userReserveAlert);
+                            editor.putInt(RESERVATION_WEEK_NUMBER, userWeekNumber);
+                            editor.putInt(RESERVATION_TIMES, userReserveNumber);
 
 
-                        editor.apply();
+                            editor.apply();
+                        }
                     }
+
+
                 }
 
                 @Override
@@ -217,17 +223,30 @@ public class SplashActivity extends Activity {
 
                     intent.putExtra(USER_LOGIN_STATE, loginState);
 
-                    intent.putExtra(USER_ID_NUMBER, userId);
-                    intent.putExtra(USER_NICKNAME, userNickname);
-                    intent.putExtra(USER_SEX, userSex);
-                    intent.putExtra(USER_BIRTHDAY, userBirthday.getTime());
-                    intent.putExtra(USER_PROFILE, userProfile);
-                    intent.putExtra(USER_ROLE, userRole);
-                    intent.putExtra(MESSAGE_ALERT, userMessageAlert);
-                    intent.putExtra(RESERVATION_ENABLE, userReserveEnable);
-                    intent.putExtra(RESERVATION_ALERT, userMessageAlert);
-                    intent.putExtra(RESERVATION_WEEK_NUMBER, userWeekNumber);
-                    intent.putExtra(RESERVATION_TIMES, userReserveNumber);
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+                    Boolean isSetUserInfo = sharedPreferences.getBoolean(USER_INFO_CHECK, false);
+
+                    if(isSetUserInfo){
+                        intent.putExtra(USER_ID_NUMBER, userId);
+                        intent.putExtra(USER_NICKNAME, userNickname);
+                        intent.putExtra(USER_SEX, userSex);
+                        //intent.putExtra(USER_BIRTHDAY, userBirthday.getTime());
+                        intent.putExtra(USER_PROFILE, userProfile);
+                        intent.putExtra(USER_ROLE, userRole);
+                    }
+
+                    sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+
+                    Boolean isSetUserSetting = sharedPreferences.getBoolean(RESERVATION_CHECK, false);
+
+                    if(isSetUserSetting){
+                        intent.putExtra(MESSAGE_ALERT, userMessageAlert);
+                        intent.putExtra(RESERVATION_ENABLE, userReserveEnable);
+                        intent.putExtra(RESERVATION_ALERT, userMessageAlert);
+                        intent.putExtra(RESERVATION_WEEK_NUMBER, userWeekNumber);
+                        intent.putExtra(RESERVATION_TIMES, userReserveNumber);
+                    }
+
 
                 }
 

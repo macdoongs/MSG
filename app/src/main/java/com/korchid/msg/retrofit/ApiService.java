@@ -98,25 +98,27 @@ public interface ApiService {
                                @Field("deviceToken") String deviceToken);
 
 
+    @POST("/msg/error")
+    @FormUrlEncoded
+    Call<Res> error();
 
-/*
+    @POST("/msg/error/user")
+    @FormUrlEncoded
+    Call<Res> userError(@Field("userId") int userId);
+
+
+
     // TODO REQUEST LIST
-
+/*
     @POST("/msg/auth/sms/send")
     @FormUrlEncoded
-    Call ;
+    Call<Response> ;
 
     @POST("/msg/auth/sms/check")
     @FormUrlEncoded
     Call ;
 
-    @POST("/msg/error")
-    @FormUrlEncoded
-    Call ;
 
-    @POST("/msg/error/user")
-    @FormUrlEncoded
-    Call ;
 
 
 

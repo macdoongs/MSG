@@ -90,6 +90,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     // Temp Data Array
     private static ArrayList<String> parentArrayList;
 
+    // Temp data
     private static String[] opponentNickname = {"Father", "Mother", "StepMother"};
     private static String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
     private static String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};

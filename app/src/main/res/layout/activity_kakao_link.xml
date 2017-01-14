@@ -63,4 +63,16 @@
         android:id="@+id/btn_kakaoLink"
         android:background="@color/colorPrimary" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <Button
+        android:text="확인"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btn_confirm"
+        android:background="@color/colorPrimary" />
+
 </LinearLayout>

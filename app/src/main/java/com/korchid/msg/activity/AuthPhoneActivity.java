@@ -174,13 +174,8 @@ public class AuthPhoneActivity extends AppCompatActivity{
                     userDuplicateCheck.enqueue(new Callback<List<User>>() {
                         @Override
                         public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                            try{
-
-                            }catch (Exception e){
-
-                            }
-                            Log.d(TAG, "response : " + response.body().get(0).toString());
-                            if(response.body() == null){
+                            Log.d(TAG, "response : " + response.body());
+                            if(response.body().isEmpty()){
                                 Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
                                 isDuplicate = false;
                             }else{
