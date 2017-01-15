@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -79,6 +80,9 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     private KakaoLink kakaoLink;
 
+    private Boolean isChangedEtNickname = false;
+    private Boolean isChangedEtPhoneNumber = false;
+
     private int userId;
     private String userRole = "child";
     private String nationCode = "";
@@ -137,7 +141,8 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         // if EditText is Blank, it doesn't work.
         btn_send.setEnabled(false);
-        TextWatcher textWatcher = new TextWatcher() {
+
+        TextWatcher etNicknameWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -151,9 +156,15 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void afterTextChanged(Editable editable) {
                 String input = editable.toString();
-                String input2 = et_nickname.getText().toString();
+                isChangedEtNickname = true;
 
-                if(input.length() > 0 && input2.length() > 0){
+                if(input.length() > 0){
+                    isChangedEtNickname = true;
+                }else{
+                    isChangedEtNickname = false;
+                }
+
+                if(isChangedEtNickname && isChangedEtPhoneNumber){
                     btn_send.setEnabled(true);
                     btn_send.setBackgroundResource(R.color.colorPrimary);
                 }else{
@@ -163,7 +174,40 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             }
         };
 
-        et_phoneNumber.addTextChangedListener(textWatcher);
+        et_nickname.addTextChangedListener(etNicknameWatcher);
+
+        TextWatcher etPhoneWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if(input.length() > 0){
+                    isChangedEtPhoneNumber = true;
+                }else{
+                    isChangedEtPhoneNumber = false;
+                }
+
+                if(isChangedEtNickname && isChangedEtPhoneNumber){
+                    btn_send.setEnabled(true);
+                    btn_send.setBackgroundResource(R.color.colorPrimary);
+                }else{
+                    btn_send.setEnabled(false);
+                    btn_send.setBackgroundResource(R.color.colorTransparent);
+                }
+            }
+        };
+
+        et_phoneNumber.addTextChangedListener(etPhoneWatcher);
 
         // Setting nation code spinner
         final String[] option = getResources().getStringArray(R.array.spinnerNationCode);

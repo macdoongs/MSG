@@ -56,11 +56,12 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
     private GridLayout expandedMenu;
 
     private TextView tv_waitTime;
-    private TextView tv_parentName;
-    private TextView tv_parentPhoneNumber;
+    private TextView tv_opponentNickname;
+    private TextView tv_opponentPhoneNumber;
 
     private Button btn_sendSMS;
     private Button btn_kakaoLink;
+    private Button btn_send;
     private Button btn_confirm;
 
     private Timer inviteTimer;
@@ -89,6 +90,9 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
         strInviteTime = getIntent().getStringExtra("waitTime");
 
         initView();
+
+        tv_opponentNickname.setText(receiverNickname);
+        tv_opponentPhoneNumber.setText(receiverPhoneNumber);
 
         Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, receiverPhoneNumber, userRole);
 
@@ -166,10 +170,13 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "초대 기다리기");
 
         tv_waitTime = (TextView) findViewById(R.id.tv_waitTime);
-        tv_parentName = (TextView) findViewById(R.id.tv_parentName);
-        tv_parentPhoneNumber = (TextView) findViewById(R.id.tv_parentPhoneNumber);
+        tv_opponentNickname = (TextView) findViewById(R.id.tv_parentName);
+        tv_opponentPhoneNumber = (TextView) findViewById(R.id.tv_parentPhoneNumber);
 
         expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
+
+        btn_send = (Button) findViewById(R.id.btn_send);
+        btn_send.setOnClickListener(this);
 
         btn_sendSMS = (Button) findViewById(R.id.btn_sendSMS);
         btn_sendSMS.setOnClickListener(this);
@@ -195,6 +202,19 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
         int viewId = v.getId();
 
         switch (viewId){
+            case R.id.btn_send:{
+                if(expandedState){
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.GONE);
+                    expandedState = false;
+                }else{
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.VISIBLE);
+                    expandedState = true;
+                }
+
+                break;
+            }
             case R.id.btn_sendSMS:{
                 String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
 
@@ -250,16 +270,6 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
             case R.id.btn_confirm:{
-                if(expandedState){
-                    expandedMenu.bringToFront();
-                    expandedMenu.setVisibility(View.GONE);
-                    expandedState = false;
-                }else{
-                    expandedMenu.bringToFront();
-                    expandedMenu.setVisibility(View.VISIBLE);
-                    expandedState = true;
-                }
-                /*
                 Intent intent = new Intent();
 
                 intent.putExtra(USER_ROLE, userRole);
@@ -269,7 +279,7 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
                 setResult(RESULT_OK, intent);
 
                 finish();
-                */
+
                 break;
             }
             default:{
