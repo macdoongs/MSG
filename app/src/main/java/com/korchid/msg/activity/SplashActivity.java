@@ -151,67 +151,6 @@ public class SplashActivity extends Activity {
         }
 
 
-
-
-
-        SharedPreferences sharedPreferences = getSharedPreferences("MAPPING", 0);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        String topic = sharedPreferences.getString("TOPIC", "");
-
-        // TODO if no sharedPreferences data, Load user data - web server
-        if(topic.equals("")){
-            String userId = "2";//getIntent().getStringExtra("USER_ID_NUM");
-/*
-            String stringUrl = "https://www.korchid.com/msg-user/" + userId;
-
-            Handler httpHandler = new Handler(){
-                @Override
-                public void handleMessage(Message msg) {
-                    String response = msg.getData().getString("response");
-
-                    Log.d(TAG, "response : " + response);
-
-                    String[] line = response.split("\n");
-
-                        String[] partition = line[0].split(" / ");
-                        //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                        if(line[0].equals("Error")){
-                            Toast.makeText(getApplicationContext(), "No ID! please join.", Toast.LENGTH_LONG).show();
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
-
-                            for(int i=0; i<partition.length; i++){
-                                Log.d(TAG, "partition " + i + " : " + partition[i]);
-                            }
-
-
-
-                            Intent intent = new Intent();
-                            setResult(RESULT_OK, intent);
-                            finish();
-
-
-                        }
-
-                } // Handler End
-            };
-
-
-
-            HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
-            httpGet.start();
-*/
-        }else{
-
-
-
-
-        }
-
-
         Handler handler = new Handler();
         // Loading page Duration : 2 second
         handler.postDelayed(new Runnable() {

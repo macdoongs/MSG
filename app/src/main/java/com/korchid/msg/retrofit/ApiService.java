@@ -5,6 +5,7 @@ import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.retrofit.response.UserAuth;
 import com.korchid.msg.retrofit.response.UserData;
+import com.korchid.msg.retrofit.response.UserMap;
 
 import java.util.List;
 
@@ -91,6 +92,12 @@ public interface ApiService {
     Call<Res> userMapping(@Field("parentId") int parentId,
                           @Field("childId") int childId,
                           @Field("deviceToken") String deviceToken) ;
+
+    @GET("/msg/user/mapping/me/{userId}/myRole/{userRole}")
+    @Headers("Accept-Encoding: application/json")
+    Call<List<UserMap>> userMapping(@Path("userId") int userId,
+                              @Path("userRole") String userRole);
+
 
     @POST("/msg/firebase/register")
     @FormUrlEncoded
