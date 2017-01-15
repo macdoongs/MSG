@@ -14,6 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.korchid.msg.adapter.RestfulAdapter;
+import com.korchid.msg.retrofit.response.Res;
+import com.korchid.msg.retrofit.response.ReservationMessage;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.MessageSetting;
 import com.korchid.msg.R;
@@ -26,6 +29,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.USER_INFO_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 /**
  * Created by mac0314 on 2016-11-30.
@@ -49,8 +63,6 @@ public class MessageSettingActivity extends AppCompatActivity {
     static int num = 0;
 
     Handler handler = null;
-
-    MessageSettingHandler messageSettingHandler = null;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -87,55 +99,13 @@ public class MessageSettingActivity extends AppCompatActivity {
 
         settingArrayList = new ArrayList<>();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "thread");
-                HttpURLConnection connection;
+        int contentType;
+        if(type == MessageSetting.Type.IN_PERSON){
 
-                URL url = null;
-                String response = null;
+        }else{
+            loadReservationMessage(type);
+        }
 
-                try {
-                    url = new URL("https://www.korchid.com/msg/user/reservation");
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-
-                    String line = "";
-
-                    InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-                    BufferedReader reader = new BufferedReader(isr);
-                    StringBuilder sb = new StringBuilder();
-
-
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
-
-                        // From Thread to Activity
-                        Message message = Message.obtain(messageSettingHandler);
-                        Bundle data = new Bundle();
-                        data.putString("line", line);
-                        message.setData(data);
-                        messageSettingHandler.sendMessage(message);
-
-                    }
-                    isr.close();
-                    reader.close();
-
-                    //Log.d(TAG, sb.toString());
-
-                } catch (IOException e) {
-                    // Error
-                    Log.e(TAG, "IOException : " + e.getMessage());
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception : " + e.getMessage());
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-        thread.start();
 
         ListView lv_setting = (ListView)findViewById(R.id.lv_setting);
         lv_setting.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -170,10 +140,6 @@ public class MessageSettingActivity extends AppCompatActivity {
 
         num = 0;
 
-        messageSettingHandler = new MessageSettingHandler();
-
-
-
 
         settingAdapter = new SettingAdapter(MessageSettingActivity.this,  settingArrayList, SettingAdapter.Type.MESSAGE_SETTING);
 
@@ -181,6 +147,40 @@ public class MessageSettingActivity extends AppCompatActivity {
         lv_setting.setAdapter(settingAdapter);
 
 
+    }
+
+
+    private void loadReservationMessage(final MessageSetting.Type type){
+        int reservationMessageType = 0;
+        if(type == MessageSetting.Type.POLITE){
+            reservationMessageType = 1;
+        }else if(type == MessageSetting.Type.IMPOLITE){
+            reservationMessageType = 2;
+        }
+        Call<List<ReservationMessage>> reservationMessageCall = RestfulAdapter.getInstance().reservationMessage(reservationMessageType);
+
+        reservationMessageCall.enqueue(new Callback<List<ReservationMessage>>() {
+            @Override
+            public void onResponse(Call<List<ReservationMessage>> call, Response<List<ReservationMessage>> response) {
+                List<ReservationMessage> reservationMessageList = response.body();
+
+                for(int i=0; i<reservationMessageList.size(); i++){
+                    int reservationMessageId = reservationMessageList.get(i).getReservation_message_id();
+                    int reservationMessageTypeId = reservationMessageList.get(i).getReservation_message_type_id();
+                    String content = reservationMessageList.get(i).getContent_txt();
+
+                    MessageSetting messageSetting = new MessageSetting(reservationMessageId, "", type, content,"", false);
+
+                    settingArrayList.add(messageSetting);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<ReservationMessage>> call, Throwable t) {
+                Log.d(TAG, "onFailure");
+            }
+        });
     }
 
 
@@ -237,55 +237,6 @@ public class MessageSettingActivity extends AppCompatActivity {
     }
 
 
-    class MessageSettingHandler extends Handler{
-        ArrayList messageSettingArrayList;
-
-        public MessageSettingHandler() {
-            super();
-            settingArrayList = new ArrayList();
-        }
-
-        public void handleMessage (Message message){
-            Log.d(TAG, "handleMessage");
-
-            String line = message.getData().getString("line");
-            Log.d(TAG, line);
-
-            String[] ReturnList = line.split(",");
-            String typeNum = ReturnList[0];
-            String time = ReturnList[1];
-            String title = ReturnList[2];
-
-
-            Log.d(TAG, "" + settingArrayList.size());
-            switch (type){
-                case POLITE:{
-                    if(typeNum.equals("0")){
-                        Log.d(TAG, "Add typeNum 0");
-                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time, false));
-                        Log.d(TAG, "" + settingArrayList.size());
-                    }
-                    break;
-                }
-                case IMPOLITE:{
-                    if(typeNum.equals("1")){
-                        Log.d(TAG, "Add typeNum 1");
-                        settingArrayList.add(new MessageSetting(num, "@drawable/plane", type, title, time, false));
-                    }
-                    break;
-                }
-                case IN_PERSON:{
-                    break;
-                }
-            }
-
-
-            num++;
-
-            listUpdate();
-        }
-
-    }
 
     public void listUpdate(){
         Log.d(TAG, "listUpdate");

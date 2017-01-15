@@ -56,6 +56,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_NICKNAME;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PHONENUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_TOPICS;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
@@ -113,9 +117,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private int userReserveNumber;
 
 
-    private String parentName;
-    private String opponentProfile;
-    private String title;
+    private String opponentUserNickname;
+    private String opponentUserPhoneNumber;
+    private String opponentUserProfile;
+    private String mqttTopic;
 
 
     private Boolean expandedState = false;
@@ -146,14 +151,21 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         userWeekNumber = getIntent().getIntExtra(RESERVATION_WEEK_NUMBER, 0);
         userReserveNumber = getIntent().getIntExtra(RESERVATION_TIMES, 0);
 
-
-        parentName = intent.getStringExtra("parentName");
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
 
 
         userProfile = null;
-        opponentProfile = intent.getStringExtra("opponentProfile");
-        title = intent.getStringExtra("topic");
+
+
+        //opponentUserNickname = intent.getStringExtra("parentName");
+        opponentUserNickname = intent.getStringExtra(OPPONENT_USER_NICKNAME);
+        opponentUserPhoneNumber = intent.getStringExtra(OPPONENT_USER_PHONENUMBER);
+        opponentUserProfile = intent.getStringExtra(OPPONENT_USER_PROFILE);
+        mqttTopic = intent.getStringExtra(OPPONENT_USER_TOPICS);
+
+        // Temp data
+        opponentUserProfile = intent.getStringExtra("opponentProfile");
+
         m_arr = new ArrayList<Chatting>();
 
 //        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
@@ -180,16 +192,15 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         initView();
 
-        Log.d(TAG, "Topic : " + title);
+        Log.d(TAG, "Topic : " + mqttTopic);
 
-        //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
 
 
         // Register mqtt topic - Web server
         String url = "https://www.korchid.com/msg/user/chatting/topic/subscription";
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("topic", title);
+        params.put("topic", mqttTopic);
 
 
         HttpPost httpPost = new HttpPost(url, params, new Handler());
@@ -199,12 +210,12 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         bindStatusReceiver();
         bindMessageReceiver();
 
-        //MqttServiceDelegate.topic = title;
+        //MqttServiceDelegate.topic = mqttTopic;
 
 
 
         //Start service if not started
-        //MqttServiceDelegate.startService(this, title);
+        //MqttServiceDelegate.startService(this, mqttTopic);
 
 
     }
@@ -214,7 +225,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, parentName);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, opponentUserNickname);
 
         btn_plus = (Button)findViewById(R.id.btn_plus);
 
@@ -261,7 +272,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         et_message.addTextChangedListener(textWatcher);
 
-        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userId, opponentProfile);
+        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userId, opponentUserProfile);
         lv_message.setAdapter(adapter);
 
     }
@@ -301,7 +312,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 }
 
                 //TODO modify topic
-                String topic = title;
+                String topic = mqttTopic;
 
                 MqttServiceDelegate.publish(
                         ChattingActivity.this,
@@ -424,7 +435,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         String url = "https://www.korchid.com/msg/user/chatting/topic/unsubscription";
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("topic", title);
+        params.put("topic", mqttTopic);
 
 
         HttpPost httpPost = new HttpPost(url, params, new Handler());
@@ -477,10 +488,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         super.onResume();
         Log.d(TAG, "onResume");
 
-        //MqttServiceDelegate.topic = title;
+        //MqttServiceDelegate.topic = mqttTopic;
 
         //Start service if not started
-        //MqttServiceDelegate.startService(this, title);
+        //MqttServiceDelegate.startService(this, mqttTopic);
     }
 
     @Override
@@ -519,7 +530,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         String name = "";
 
         //TODO modify topic
-        String roomTopic = title;
+        String roomTopic = mqttTopic;
 
         Log.d(TAG, topic);
         Log.d(TAG, data);

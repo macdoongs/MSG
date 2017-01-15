@@ -36,6 +36,7 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 /**
@@ -84,16 +85,27 @@ public class SplashActivity extends Activity {
         if(loginState.equals("LOGIN")){
             duration = SPLASH_LOGIN;
 
-            Call<List<UserData>> userDataCall = RestfulAdapter.getInstance().listLoadUserData(userId);
+            Call<List<UserData>> userDataCall = RestfulAdapter.getInstance().listLoadUserData(16);
 
             userDataCall.enqueue(new Callback<List<UserData>>() {
                 @Override
                 public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
-                    //Log.d(TAG, "onResponse");
+                    Log.d(TAG, "onResponse");
 
                     if(response.body().isEmpty()){
                         return;
                     }else{
+                        int userRoleNumber = response.body().size();
+                        Log.d(TAG, "roleNumber : " + userRoleNumber);
+
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putInt(USER_ROLE_NUMBER, userRoleNumber);
+
+                        editor.apply();
+
                         UserData userData = response.body().get(0);
 
                         if(userData != null) {
@@ -109,15 +121,17 @@ public class SplashActivity extends Activity {
                             userWeekNumber = userData.getWeek_number();
                             userReserveNumber = userData.getReserve_number();
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+                            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor = sharedPreferences.edit();
 
                             editor.putString(USER_NICKNAME, userNickname);
                             editor.putLong(USER_BIRTHDAY, userBirthday.getTime());
                             editor.putString(USER_PROFILE, userProfile);
                             editor.putString(USER_SEX, userSex);
                             editor.putString(USER_ROLE, userRole);
+
+                            editor.apply();
 
                             sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
 
@@ -128,7 +142,6 @@ public class SplashActivity extends Activity {
                             editor.putInt(RESERVATION_ALERT, userReserveAlert);
                             editor.putInt(RESERVATION_WEEK_NUMBER, userWeekNumber);
                             editor.putInt(RESERVATION_TIMES, userReserveNumber);
-
 
                             editor.apply();
                         }
