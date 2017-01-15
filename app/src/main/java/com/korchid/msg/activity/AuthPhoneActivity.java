@@ -4,9 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -21,10 +21,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
+
 import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
+
 import com.korchid.msg.ui.StatusBar;
 
 import java.util.List;
@@ -116,7 +119,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
                 if(input.length() > 0){
                     btn_dupCheck.setEnabled(true);
-                    btn_dupCheck.setBackgroundResource(R.color.colorPrimary);
+                    btn_dupCheck.setBackgroundResource(R.drawable.rounded_button_p_2r);
                 }else{
                     btn_dupCheck.setEnabled(false);
                     btn_register.setEnabled(false);
@@ -162,7 +165,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }else{
-                    btn_register.setBackgroundResource(R.color.colorPrimary);
+                    btn_register.setBackgroundResource(R.drawable.rounded_button_p_2r);
                     btn_register.setEnabled(true);
 
                     internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
@@ -179,7 +182,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                                 Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
                                 isDuplicate = false;
                             }else{
-                                Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
+                                et_phoneNumber.setError("이미 가입된 번호입니다.");
                                 isDuplicate = true;
                                 Log.d(TAG, "nickname : " + response.body().get(0).getPassword_sn());
                             }

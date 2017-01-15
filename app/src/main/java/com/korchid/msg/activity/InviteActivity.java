@@ -3,7 +3,10 @@ package com.korchid.msg.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
@@ -32,7 +35,6 @@ import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
 import java.sql.Timestamp;
@@ -49,12 +51,14 @@ import retrofit2.Response;
 import static com.korchid.msg.global.QuickstartPreferences.INVITATION_CHECK;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_CONNECTION;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
@@ -209,18 +213,22 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 // Invite parent
                 // User role : child
                 userRole = "child";
-                tv_role.setText("Invite Parent.");
-                btn_inviteParent.setBackgroundResource(R.color.colorPrimary);
-                btn_inviteChild.setBackgroundResource(R.color.colorTransparent);
+                tv_role.setText("함께 이용할 부모님을 초대해주세요.");
+                btn_inviteParent.setBackgroundResource(R.drawable.rounded_button_p_2r);
+                btn_inviteParent.setTextColor(Color.parseColor("#e6000000"));
+                btn_inviteChild.setBackgroundResource(R.drawable.rounded_button_t_2r);
+                btn_inviteChild.setTextColor(Color.parseColor("#40000000"));
                 break;
             }
             case R.id.btn_inviteChild:{
                 // Invite child
                 // User role : parent
                 userRole = "parent";
-                tv_role.setText("Invite Child.");
-                btn_inviteParent.setBackgroundResource(R.color.colorTransparent);
-                btn_inviteChild.setBackgroundResource(R.color.colorPrimary);
+                tv_role.setText("함께 이용할 자녀분을 초대해주세요.");
+                btn_inviteParent.setBackgroundResource(R.drawable.rounded_button_t_2r);
+                btn_inviteParent.setTextColor(Color.parseColor("#40000000"));
+                btn_inviteChild.setBackgroundResource(R.drawable.rounded_button_p_2r);
+                btn_inviteChild.setTextColor(Color.parseColor("#e6000000"));
                 break;
             }
             case R.id.btn_send:{

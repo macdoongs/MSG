@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_auth_phone_wait"
     android:layout_width="match_parent"
@@ -8,57 +8,55 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    tools:context="com.korchid.msg.activity.AuthPhoneWaitActivity">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+    tools:context="com.korchid.msg.activity.AuthPhoneWaitActivity"
+    android:orientation="vertical">
 
 
-        <TextView
-            android:text="Input auth code"
-            android:layout_width="match_parent"
-            android:id="@+id/textView9"
-            android:layout_height="wrap_content"
-            android:textSize="50sp"/>
+    <TextView
+        android:text="다음 번호로 인증코드를 보냈습니다."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView11"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/et_authCode"
-            android:hint="000000" />
 
-        <Button
-            android:text="Confirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/colorTransparent"
-            android:id="@+id/btn_confirm" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/et_authCode"
+        android:hint="코드입력"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="48dp" />
 
-        <TextView
-            android:text="Auth time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_authTime" />
+    <Button
+        android:text="제 출"
+        android:layout_width="256dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button_t_2r"
+        android:id="@+id/btn_confirm"
+        android:layout_marginTop="36dp"
+        android:layout_gravity="center_horizontal"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="100dp" />
+    <TextView
+        android:text="Auth time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_authTime"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center_horizontal"/>
 
-        <Button
-            android:text="Re-send"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_reSend"
-            android:background="@color/colorPrimary" />
-    </LinearLayout>
-</RelativeLayout>
+    <Button
+        android:text="인증 코드 다시 전송"
+        android:layout_width="256dp"
+        android:layout_height="40dp"
+        android:id="@+id/btn_reSend"
+        android:background="@drawable/rounded_button_p_2r"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="120dp" />
+
+</LinearLayout>
