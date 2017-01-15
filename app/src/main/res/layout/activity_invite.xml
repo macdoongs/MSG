@@ -38,6 +38,7 @@
             android:background="@drawable/rounded_button_t_2r" />
     </LinearLayout>
 
+
     <TextView
         android:text="Invite parent"
         android:layout_width="wrap_content"
@@ -46,6 +47,10 @@
         android:id="@+id/et_role"
         android:layout_marginTop="16dp"/>
 
+    <Spinner
+        android:layout_height="40dp"
+        android:id="@+id/sp_nationCode"
+        android:layout_width="128dp"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

@@ -7,9 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,18 +50,23 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 // Wait connecting parent and send kakao link
-public class KakaoLinkActivity extends AppCompatActivity {
+public class KakaoLinkActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "KakaoLinkActivity";
+
+    private GridLayout expandedMenu;
 
     private TextView tv_waitTime;
     private TextView tv_parentName;
     private TextView tv_parentPhoneNumber;
 
+    private Button btn_sendSMS;
     private Button btn_kakaoLink;
     private Button btn_confirm;
 
     private Timer inviteTimer;
     private TimerTask inviteTask;
+
+    private Boolean expandedState = false;
 
     int userId;
     String userRole = "";
@@ -162,10 +169,52 @@ public class KakaoLinkActivity extends AppCompatActivity {
         tv_parentName = (TextView) findViewById(R.id.tv_parentName);
         tv_parentPhoneNumber = (TextView) findViewById(R.id.tv_parentPhoneNumber);
 
+        expandedMenu = (GridLayout) findViewById(R.id.expandedMenu);
+
+        btn_sendSMS = (Button) findViewById(R.id.btn_sendSMS);
+        btn_sendSMS.setOnClickListener(this);
+
         btn_kakaoLink = (Button) findViewById(R.id.btn_kakaoLink);
-        btn_kakaoLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btn_kakaoLink.setOnClickListener(this);
+
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+        btn_confirm.setOnClickListener(this);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(inviteTimer != null){
+            inviteTimer.cancel();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int viewId = v.getId();
+
+        switch (viewId){
+            case R.id.btn_sendSMS:{
+                String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
+
+                /*
+                // Temp
+                // SMS Compose
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + opponentUserPhoneNumber));
+                intent.putExtra("sms_body", message);
+                startActivityForResult(intent, 1);
+                */
+
+                // TODO convert function
+                // SMS Auto-sender
+                //Intent intent;
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(receiverPhoneNumber, null, message, null, null);
+
+                break;
+            }
+            case R.id.btn_kakaoLink:{
                 try{
                     // https://developers.kakao.com/docs/android#Kakao-계정-로그인이-필요없는-앱설정
 
@@ -198,21 +247,19 @@ public class KakaoLinkActivity extends AppCompatActivity {
                 }catch (Exception e){
                     Log.e(TAG, "kakaoLink Err : " + e.getMessage());
                 }
-
+                break;
             }
-        });
-
-        btn_confirm = (Button) findViewById(R.id.btn_confirm);
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_CONNECTION, 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putBoolean(INVITATION_CHECK, true);
-
-                editor.apply();
-
+            case R.id.btn_confirm:{
+                if(expandedState){
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.GONE);
+                    expandedState = false;
+                }else{
+                    expandedMenu.bringToFront();
+                    expandedMenu.setVisibility(View.VISIBLE);
+                    expandedState = true;
+                }
+                /*
                 Intent intent = new Intent();
 
                 intent.putExtra(USER_ROLE, userRole);
@@ -222,15 +269,12 @@ public class KakaoLinkActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
 
                 finish();
+                */
+                break;
             }
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        if(inviteTimer != null){
-            inviteTimer.cancel();
+            default:{
+                break;
+            }
         }
-        super.onDestroy();
     }
 }

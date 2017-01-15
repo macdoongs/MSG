@@ -52,6 +52,15 @@
         android:layout_marginTop="8dp"
         android:id="@+id/tv_parentPhoneNumber"
         android:textColor="#26000000" />
+<!--
+    <Button
+        android:text="문자메시지 보내기"
+        android:layout_width="256dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:id="@+id/btn_sendSMS"
+        android:background="@drawable/rounded_button_p_2r" />
 
     <Button
         android:text="다운로드 링크 보내기"
@@ -61,10 +70,10 @@
         android:layout_marginTop="32dp"
         android:id="@+id/btn_kakaoLink"
         android:background="@drawable/rounded_button_p_2r" />
-
+-->
     <Space
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="20dp" />
 
     <Button
         android:text="확인"
@@ -73,5 +82,19 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/btn_confirm"
         android:background="@color/colorPrimary" />
+
+    <GridLayout
+        android:id="@+id/expandedMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="3"
+        android:rowCount="1"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <Button android:text="문자"
+            android:id="@+id/btn_sendSMS"/>
+        <Button android:text="카카오링크"
+            android:id="@+id/btn_kakaoLink"/>
+    </GridLayout>
 
 </LinearLayout>

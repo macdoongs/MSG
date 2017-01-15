@@ -177,7 +177,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                 if(input.length() > 0){
                     btn_findPassword.setEnabled(true);
-                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p);
+                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p_50r);
                 }else{
                     btn_findPassword.setEnabled(false);
                 }

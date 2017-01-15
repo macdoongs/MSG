@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.google.api.client.util.DateTime;
 import com.kakao.kakaolink.KakaoLink;
+import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.retrofit.response.Res;
@@ -244,21 +245,6 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                         opponentUserPhoneNumber = et_phoneNumber.getText().toString();
                         String opponentInternationalPhoneNumber = nationCode + opponentUserPhoneNumber.substring(1); // Remove phoneNumber idx 0;
 
-                        String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
-
-/*
-                        // Temp
-                        // SMS Compose
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + opponentUserPhoneNumber));
-                        intent.putExtra("sms_body", message);
-                        startActivityForResult(intent, 1);
-*/
-
-                        // TODO convert function
-                        // SMS Auto-sender
-                        //Intent intent;
-                        SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(opponentInternationalPhoneNumber, null, message, null, null);
 
                         String inviteTime = getCurrentTimeStamp();
 
@@ -295,6 +281,13 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                         intent.putExtra("receiverNickname", opponentUserName);
                         intent.putExtra("receiverPhoneNumber", opponentInternationalPhoneNumber);
                         intent.putExtra("waitTime", inviteTime);
+
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_CONNECTION, 0);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putBoolean(INVITATION_CHECK, true);
+
+                        editor.apply();
 
                         startActivityForResult(intent, 2);
 
@@ -383,49 +376,8 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                         break;
                     }
-                    // Send SMS message
                     case 1:{
-                        /*
-                        String inviteTime = getCurrentTimeStamp();
 
-                        Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, opponentUserPhoneNumber, userRole);
-
-                        userCall.enqueue(new Callback<Res>() {
-                            @Override
-                            public void onResponse(Call<Res> call, Response<Res> response) {
-                                Res res = response.body();
-
-                                Log.d(TAG, "response : " + res.toString());
-
-                                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
-
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                                editor.putString(USER_ROLE, userRole);
-                                Log.d(TAG, "USER_ROLE : " + userRole);
-
-                                editor.apply();
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<Res> call, Throwable t) {
-                                Log.d(TAG, "onFailure");
-                            }
-                        });
-
-
-                        Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
-
-                        intent.putExtra(USER_ROLE, userRole);
-                        intent.putExtra("receiverNickname", opponentUserName);
-                        intent.putExtra("receiverPhoneNumber", opponentUserPhoneNumber);
-                        intent.putExtra("waitTime", inviteTime);
-
-                        startActivityForResult(intent, 2);
-
-                        break;
-                        */
                     }
                     case 2:{
                         setResult(RESULT_OK, data);
