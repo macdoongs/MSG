@@ -18,7 +18,7 @@
         android:transcriptMode="alwaysScroll"
         android:divider="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_height="515dp" />
+        android:layout_height="400dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
