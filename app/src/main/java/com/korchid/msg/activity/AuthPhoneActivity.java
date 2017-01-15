@@ -23,8 +23,11 @@ import android.widget.Toast;
 
 import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.User;
+
+import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
+import com.korchid.msg.R;
+
 import com.korchid.msg.ui.StatusBar;
 
 import java.util.List;
@@ -33,6 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.korchid.msg.global.QuickstartPreferences.AUTH_MODE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
@@ -168,12 +172,13 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
                     Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
-                    Call<List<User>> userDataCall = RestfulAdapter.getInstance().listUserDuplicateCheck(internationalPhoneNumber);
+                    Call<List<User>> userDuplicateCheck = RestfulAdapter.getInstance().listUserDuplicateCheck(internationalPhoneNumber);
 
-                    userDataCall.enqueue(new Callback<List<User>>() {
+                    userDuplicateCheck.enqueue(new Callback<List<User>>() {
                         @Override
                         public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                            if(response.body() == null){
+                            Log.d(TAG, "response : " + response.body());
+                            if(response.body().isEmpty()){
                                 Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
                                 isDuplicate = false;
                             }else{
@@ -227,7 +232,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                                 //Toast.makeText(getApplicationContext(), "Phone Number : " + phoneNumber + " Password : " + password, Toast.LENGTH_LONG).show();
 
                                 Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
-                                intent.putExtra("mode", "join");
+                                intent.putExtra(AUTH_MODE, "join");
                                 intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
 
                                 startActivityForResult(intent, 0);

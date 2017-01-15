@@ -1,12 +1,14 @@
 package com.korchid.msg.retrofit;
 
-import com.google.gson.JsonObject;
 import com.korchid.msg.Repos;
+import com.korchid.msg.retrofit.response.Res;
+import com.korchid.msg.retrofit.response.User;
+import com.korchid.msg.retrofit.response.UserAuth;
+import com.korchid.msg.retrofit.response.UserData;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,7 +35,7 @@ public interface ApiService {
     @POST("/msg/user/signup")
     @FormUrlEncoded
     Call<Res> userSignup(@Field("phoneNumber") String phoneNumber,
-                              @Field("password") String password);
+                         @Field("password") String password);
 
 
     @POST("/msg/user/login")
@@ -71,4 +73,67 @@ public interface ApiService {
                                     @Field("birthday") String birthday,
                                     @Field("profile") String profile);
 
+    @POST("/msg/user/invitation")
+    @FormUrlEncoded
+    Call<Res> userInvitation(@Field("userId") int userId,
+                             @Field("receiverPhoneNumber") String receiverPhoneNumber,
+                             @Field("roleName") String roleName);
+
+    @POST("/msg/user/reservation")
+    @FormUrlEncoded
+    Call<Res> userReservation(@Field("senderId") int senderId,
+                              @Field("receiverId") int receiverId,
+                              @Field("reservationMessageId") int reservationMessageId);
+
+
+    @POST("/msg/user/mapping")
+    @FormUrlEncoded
+    Call<Res> userMapping(@Field("parentId") int parentId,
+                          @Field("childId") int childId,
+                          @Field("deviceToken") String deviceToken) ;
+
+    @POST("/msg/firebase/register")
+    @FormUrlEncoded
+    Call<Res> firebaseRegister(@Field("userId") int userId,
+                               @Field("deviceToken") String deviceToken);
+
+
+    @POST("/msg/error")
+    @FormUrlEncoded
+    Call<Res> error();
+
+    @POST("/msg/error/user")
+    @FormUrlEncoded
+    Call<Res> userError(@Field("userId") int userId);
+
+
+
+    // TODO REQUEST LIST
+/*
+    @POST("/msg/auth/sms/send")
+    @FormUrlEncoded
+    Call<Response> ;
+
+    @POST("/msg/auth/sms/check")
+    @FormUrlEncoded
+    Call ;
+
+
+
+
+
+    @GET("/msg/user/chatting/sender/{senderId}/receiver/{receiverId}")
+    @Headers("Accept-Encoding: application/json")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/chatting/topic/subscription")
+    @FormUrlEncoded
+    Call ;
+
+    @POST("/msg/chatting/topic/unsubscription")
+    @FormUrlEncoded
+    Call ;
+
+    */
 }

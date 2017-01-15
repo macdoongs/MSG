@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -44,6 +45,7 @@ import android.widget.Toast;
 
 import com.korchid.msg.R;
 import com.korchid.msg.alarm.AlarmBroadCastReciever;
+import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.alarm.AlarmUtil;
 import com.korchid.msg.http.HttpGet;
 import com.korchid.msg.ui.StatusBar;
@@ -56,8 +58,19 @@ import okhttp3.OkHttpClient;
 
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.INTENTFILTER_BROADCAST_TIMER;
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.KEY_DEFAULT;
+import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+import static com.korchid.msg.global.QuickstartPreferences.USER_BIRTHDAY;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 public class SelectOpponentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "SelectOpponentActivity";
@@ -77,7 +90,8 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     // Temp Data Array
     private static ArrayList<String> parentArrayList;
 
-    private static String[] parent = {"Father", "Mother", "StepMother"};
+    // Temp data
+    private static String[] opponentNickname = {"Father", "Mother", "StepMother"};
     private static String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
     private static String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
     private static String[] timeReserved = {"수요일 9시경", "목요일 5시경", "금요일 8시경"};
@@ -91,8 +105,21 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private int viewId;
     private int profileWidth;
     private int profileHeight;
-    private String userRole = "";
+
     private static String userPhoneNumber = "";
+
+    private static int userId;
+    private static String userNickname;
+    private static String userSex;
+    private static Date userBirthday = new Date();
+    private static String userProfile;
+    private static String userRole;
+    private static int userMessageAlert;
+    private static int userReserveEnable;
+    private static int userReserveAlert;
+    private static int userWeekNumber;
+    private static int userReserveNumber;
+
     private int count;
 
 
@@ -121,14 +148,26 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         MainActivity mainActivity = (MainActivity) MainActivity.activity;
         mainActivity.finish();
 
+        userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+        userNickname = getIntent().getStringExtra(USER_NICKNAME);
+        userSex = getIntent().getStringExtra(USER_SEX);
+        userBirthday.setTime(getIntent().getLongExtra(USER_NICKNAME, 0));
+        userProfile = getIntent().getStringExtra(USER_PROFILE);
         userRole = getIntent().getStringExtra(USER_ROLE);
+        userMessageAlert = getIntent().getIntExtra(MESSAGE_ALERT, 0);
+        userReserveEnable = getIntent().getIntExtra(RESERVATION_ENABLE, 0);
+        userReserveAlert= getIntent().getIntExtra(RESERVATION_ALERT, 0);
+        userWeekNumber = getIntent().getIntExtra(RESERVATION_WEEK_NUMBER, 0);
+        userReserveNumber = getIntent().getIntExtra(RESERVATION_TIMES, 0);
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
-        parentArrayList = new ArrayList<>();
 
+        parentArrayList = new ArrayList<>();
 
         initView();
 
 
+
+/*
         String stringUrl = "https://www.korchid.com/msg-mapping/" + userPhoneNumber;
 
         Handler httpHandler = new Handler(){
@@ -171,11 +210,12 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
         httpGet.start();
-        
+  */
     }
 
     private void initView(){
          /*
+         // TODO Modify Drawer code
         getLayoutInflater().inflate(R.layout.nav_header_main, null);
 
         iv_profile = (ImageView) findViewById(R.id.iv_profile);
@@ -223,7 +263,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(parent[0]);
+        actionBar.setTitle(opponentNickname[0]);
 
         mViewPager.setCurrentItem(0);
 
@@ -237,7 +277,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             @Override
             public void onPageSelected(final int position) {
                 ActionBar actionBar = getSupportActionBar();
-                actionBar.setTitle(parent[position]);
+                actionBar.setTitle(opponentNickname[position]);
 
                 // http://www.hardcopyworld.com/ngine/android/index.php/archives/164
                 //이전 페이지에 해당하는 페이지 표시 이미지 변경
@@ -258,14 +298,22 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         initPageMark();
 
         if (!AlarmBroadCastReciever.isLaunched) {
-            AlarmUtil.getInstance().startFiveSecondAlarm(this);
+            AlarmUtil.setSenderId(16);
+            AlarmUtil.setReceiverId(17);
+            AlarmUtil.setUserNickname(userNickname);
+            AlarmUtil.setMessage("Test message dump");
+            AlarmUtil.setTopic("Sajouiot02");
+
+            AlarmUtil.getInstance().startMatchingAlarm(this);
+        }else{
+
         }
     }
 
     private void initPageMark(){
         mPageMark = (LinearLayout)findViewById(R.id.page_mark);
 
-        for(int i=0; i < parent.length; i++)
+        for(int i=0; i < opponentNickname.length; i++)
         {
             ImageView iv = new ImageView(getApplicationContext());
             iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -305,6 +353,12 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     protected void onResume() {
         registerReceiver(mTimeReceiver,new IntentFilter(INTENTFILTER_BROADCAST_TIMER));
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
     }
 
     @Override
@@ -498,12 +552,32 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             b2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d(TAG, "Chatting btn");
+                    Log.d(TAG, "userPhoneNumber : " + userPhoneNumber);
+                    Log.d(TAG, "userId : " + userId);
+                    Log.d(TAG, "userNickname : " + userNickname);
+
                     //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), ChattingActivity.class);
-                    intent.putExtra("topic", parentArrayList.get(idx));
+
+                    intent.putExtra(USER_ID_NUMBER, userId);
+                    intent.putExtra(USER_NICKNAME, userNickname);
+                    intent.putExtra(USER_SEX, userSex);
+                    intent.putExtra(USER_BIRTHDAY, userBirthday.getTime());
+                    intent.putExtra(USER_PROFILE, userProfile);
+                    intent.putExtra(USER_ROLE, userRole);
+                    intent.putExtra(MESSAGE_ALERT, userMessageAlert);
+                    intent.putExtra(RESERVATION_ENABLE, userReserveEnable);
+                    intent.putExtra(RESERVATION_ALERT, userMessageAlert);
+                    intent.putExtra(RESERVATION_WEEK_NUMBER, userWeekNumber);
+                    intent.putExtra(RESERVATION_TIMES, userReserveNumber);
                     intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
-                    intent.putExtra("parentName", parent[idx]);
+
+                    //intent.putExtra("topic", parentArrayList.get(idx));
+                    intent.putExtra("topic", topic[idx]);
+                    intent.putExtra("parentName", opponentNickname[idx]);
                     intent.putExtra("opponentProfile", profile[idx]);
+
                     startActivity(intent);
                 }
             });
@@ -543,13 +617,13 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         @Override
         public int getCount() {
-            return parent.length;
+            return opponentNickname.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             Log.d(TAG, "getPageTitle");
-            return parent[position];
+            return opponentNickname[position];
         }
 
         @Override

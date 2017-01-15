@@ -1,8 +1,6 @@
 package com.korchid.msg.activity;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,17 +11,15 @@ import android.widget.Toast;
 
 import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.http.HttpPost;
-import com.korchid.msg.retrofit.UserAuth;
-import com.korchid.msg.retrofit.UserData;
+import com.korchid.msg.retrofit.response.UserAuth;
 
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.korchid.msg.global.QuickstartPreferences.AUTH_MODE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
@@ -52,7 +48,7 @@ public class FindPasswordActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(getApplicationContext(), AuthPhoneWaitActivity.class);
-        intent.putExtra("mode", "find");
+        intent.putExtra(AUTH_MODE, "find");
         intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
 
         startActivityForResult(intent, 0);
@@ -89,17 +85,24 @@ public class FindPasswordActivity extends AppCompatActivity {
         switch (resultCode){
             case RESULT_OK:{
                 Log.d(TAG, "onActivityResult: " + userPhoneNumber);
+
                 Call<List<UserAuth>> userDataCall = RestfulAdapter.getInstance().listRecoveryPassword(userPhoneNumber);
 
                 userDataCall.enqueue(new Callback<List<UserAuth>>() {
                     @Override
                     public void onResponse(Call<List<UserAuth>> call, Response<List<UserAuth>> response) {
-                        Log.d(TAG, "password : " + response.body().get(0).getPassword_sn());
+                        password = response.body().get(0).getPassword_sn();
+
+                        Log.d(TAG, "password : " + password);
+
+                        tv_phoneNumber.setText(userPhoneNumber);
+                        tv_password.setText(password);
                     }
 
                     @Override
                     public void onFailure(Call<List<UserAuth>> call, Throwable t) {
                         Log.d(TAG, "onFailure");
+                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
 

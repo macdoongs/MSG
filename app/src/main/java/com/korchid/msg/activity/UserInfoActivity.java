@@ -19,17 +19,25 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.korchid.msg.adapter.RestfulAdapter;
+import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
-import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_INFO_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
@@ -49,7 +57,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private Button btn_register;
 
-    private String userId = "";
+    private int userId = 0;
     private String profile = "/";
     private String sex = "";
     private String nickname = "";
@@ -139,19 +147,9 @@ public class UserInfoActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN , 0);
 
-                userId = sharedPreferences.getString(USER_ID_NUMBER, "");
+                userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
 
-                String stringUrl = "https://www.korchid.com/msg-user-info";
-                HashMap<String, String> params = new HashMap<>();
-                params.put("userId", userId);
-                params.put("profile", profile);
-                params.put("sex", sex);
-                params.put("nickname", nickname);
-
-                Handler httpHandler = new Handler();
-
-                HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
-                httpPost.start();
+                registerUserInfo(userId, nickname, null, profile);
 
                 Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
                 startActivityForResult(intent, 1);
@@ -159,45 +157,6 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    class httpHandler extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            String response = msg.getData().getString("response");
-
-            String[] line = response.split("\n");
-
-            Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-            if(line[0].equals("Error")){
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-            }else if(line[0].equals("No")){
-                Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
-
-
-
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putString(USER_PROFILE, profile);
-                editor.putString(USER_SEX, sex);
-                editor.commit(); // Apply file
-
-                Log.d(TAG, "SharedPreference");
-                Log.d(TAG, "USER_PROFILE : " + sharedPreferences.getString(USER_PROFILE, ""));
-                Log.d(TAG, "USER_SEX : " + sharedPreferences.getString(USER_SEX, "Etc"));
-
-                Intent intent = new Intent();
-                //intent.putExtra("result_msg", "결과가 넘어간다 얍!");
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-
-        }
     }
 
 
@@ -224,6 +183,10 @@ public class UserInfoActivity extends AppCompatActivity {
                 if(btn_register.isEnabled()){
                     int btn_id = rbtnGroup.getCheckedRadioButtonId();
 
+                    nickname = et_nickname.getText().toString();
+
+
+
                     Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
                     intent.putExtra(USER_PROFILE, profile);
 
@@ -231,19 +194,19 @@ public class UserInfoActivity extends AppCompatActivity {
                         case R.id.rbtn_male:{
                             Toast.makeText(getApplicationContext(), "Male", Toast.LENGTH_SHORT).show();
 
-                            intent.putExtra("Sex", "Male");
+                            intent.putExtra(USER_SEX, "Male");
                             break;
                         }
                         case R.id.rbtn_female:{
                             Toast.makeText(getApplicationContext(), "Female", Toast.LENGTH_SHORT).show();
 
-                            intent.putExtra("Sex", "Female");
+                            intent.putExtra(USER_SEX, "Female");
                             break;
                         }
                         case R.id.rbtn_etc:{
                             Toast.makeText(getApplicationContext(), "Etc", Toast.LENGTH_SHORT).show();
 
-                            intent.putExtra("Sex", "Etc");
+                            intent.putExtra(USER_SEX, "Etc");
                             break;
                         }
                         default:{
@@ -253,24 +216,15 @@ public class UserInfoActivity extends AppCompatActivity {
 
                     SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
-                    userId = sharedPreferences.getString(USER_ID_NUMBER, "");
+                    userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
 
-                    String stringUrl = "https://www.korchid.com/msg-user-info";
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("userId", userId);
-                    params.put("profile", profile);
-                    params.put("sex", sex);
+                    registerUserInfo(userId, nickname, null, profile);
 
-                    Handler httpHandler = new Handler();
-
-                    HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
-                    httpPost.start();
-
-                    startActivityForResult(intent, 0);
+                    startActivityForResult(intent, 1);
                 }else{
                     Toast.makeText(this.getApplicationContext(), "Check radio button", Toast.LENGTH_SHORT).show();
                 }
-                //
+
 
                 break;
             }
@@ -289,14 +243,18 @@ public class UserInfoActivity extends AppCompatActivity {
                 if(requestCode == 0){
                     SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
+                    profile = data.getStringExtra(USER_PROFILE);
 
-                    profile = data.getStringExtra("profilePath");
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(USER_PROFILE, profile);
 
 
                     Bitmap bitmap = BitmapFactory.decodeFile(profile);
 
                     iv_profile.setImageBitmap(bitmap);
                     return;
+                }else if(requestCode == 1){
+                    finish();
                 }
 
                 Intent intent = new Intent();
@@ -309,6 +267,39 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void registerUserInfo(final int userId, final String nickname, final Date birthday, final String profile){
+        Call<Res> userCall = RestfulAdapter.getInstance().userInfo(userId, nickname, sex, null, profile);
+
+        userCall.enqueue(new Callback<Res>() {
+            @Override
+            public void onResponse(Call<Res> call, Response<Res> response) {
+                Res res = response.body();
+
+                Log.d(TAG, "res : " + res);
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putBoolean(USER_INFO_CHECK, true);
+
+                editor.putString(USER_NICKNAME, nickname);
+                editor.putString(USER_SEX, sex);
+                //editor.putString(USER_BIRTHDAY, null);
+                editor.putString(USER_PROFILE, profile);
+
+                editor.apply();
+
+            }
+
+            @Override
+            public void onFailure(Call<Res> call, Throwable t) {
+                Log.d(TAG, "onFailure");
+            }
+        });
     }
 }
 

@@ -13,6 +13,8 @@ import android.util.Log;
 // SQLite helper
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DBHelper";
+    // TODO Modify sql query code - Databases changed
+
 
     /*
     * TABLE USER

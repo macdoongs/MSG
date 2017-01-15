@@ -20,22 +20,34 @@ import android.widget.Toast;
 
 import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.User;
+import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.ui.StatusBar;
 
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 public class LoginPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "LoginPhoneActivity";
@@ -48,12 +60,26 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
     private Spinner sp_nationCode;
 
+    private int userId;
+    private String userNickname;
+    private String userSex;
+    private Date userBirthday = new Date();
+    private String userProfile;
+    private String userRole;
+    private int userMessageAlert;
+    private int userReserveEnable;
+    private int userReserveAlert;
+    private int userWeekNumber;
+    private int userReserveNumber;
+
     private String internationalPhoneNumber;
     private String phoneNumber;
     private String userPhoneNumber;
     private String nationCode = "";
     private String password;
     private int viewId;
+
+    private int requestCode = 0;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -64,8 +90,6 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_phone);
 
-        initView();
-
         final String state = getIntent().getStringExtra(USER_LOGIN_STATE);
 
         Log.d(TAG, "Login : " + state);
@@ -75,7 +99,19 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
             editor.clear();
-            editor.commit();
+            editor.apply();
+
+            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+            editor = sharedPreferences.edit();
+
+            editor.clear();
+            editor.apply();
+
+            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+            editor = sharedPreferences.edit();
+
+            editor.clear();
+            editor.apply();
 
             Intent intent = new Intent();
             intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
@@ -83,8 +119,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
             finish();
         }
 
-        et_phoneNumber.setText(userPhoneNumber);
-
+        initView();
 
     }
 
@@ -125,7 +160,33 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
         btn_findPassword.setEnabled(false);
 
         // http://egloos.zum.com/killins/v/3008925
-        TextWatcher textWatcher = new TextWatcher() {
+        TextWatcher et_phoneWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+
+                if(input.length() > 0){
+                    btn_findPassword.setEnabled(true);
+                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p);
+                }else{
+                    btn_findPassword.setEnabled(false);
+                }
+            }
+        };
+        et_phoneNumber.addTextChangedListener(et_phoneWatcher);
+
+
+        TextWatcher et_Watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -152,9 +213,14 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         };
-        et_password.addTextChangedListener(textWatcher);
+        et_password.addTextChangedListener(et_Watcher);
+
+
 
         btn_findPassword.setOnClickListener(this);
+
+
+        et_phoneNumber.setText(userPhoneNumber);
     }
 
     @Override
@@ -183,6 +249,10 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                         if(user == null){
                             Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
                         }else{
+                            int userId = user.getUser_id();
+                            String loginState = "LOGIN";
+                            requestCode = 0;
+
                             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -192,13 +262,14 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                             editor.putString(USER_PASSWORD, password);
                             editor.putInt(USER_ID_NUMBER, user.getUser_id());
                             editor.putString(USER_LOGIN_TOKEN, user.getLogin_token_ln());
-                            editor.commit(); // Apply file
+                            editor.apply(); // Apply file
 
-                            Intent intent = new Intent();
-                            intent.putExtra(USER_LOGIN_STATE, "LOGIN");
-                            intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
-                            setResult(RESULT_OK, intent);
-                            finish();
+                            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+
+                            intent.putExtra(USER_ID_NUMBER, userId);
+                            intent.putExtra(USER_LOGIN_STATE, loginState);
+
+                            startActivityForResult(intent, requestCode);
                         }
 
 
@@ -207,6 +278,8 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onFailure(Call<List<User>> call, Throwable t) {
                         Log.d(TAG, "onFailure");
+
+                        Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -214,6 +287,8 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
             }
             case R.id.btn_findPassword:{
                 phoneNumber = et_phoneNumber.getText().toString();
+
+                requestCode = 1;
 
                 if(phoneNumber.equals("")){
                     Toast.makeText(getApplicationContext(), "Please input phone number!", Toast.LENGTH_LONG).show();
@@ -230,7 +305,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                             Intent intent = new Intent(getApplicationContext(), FindPasswordActivity.class);
                             intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
                             Log.d(TAG, "internationalPhoneNumber : " + internationalPhoneNumber);
-                            startActivityForResult(intent, 0);
+                            startActivityForResult(intent, requestCode);
                         }
                     });
                     builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -276,9 +351,18 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
         switch (resultCode){
             case RESULT_OK:{
-                // find password activity
+
                 if(requestCode == 0){
+                    // Login success
+                    Log.d(TAG, "Login success");
+
+
+                    setResult(RESULT_OK, data);
+                    finish();
+                }else if(requestCode == 1){
+                    // find password activity
                     Log.d(TAG, "find password OK");
+
                     password = data.getStringExtra(USER_PASSWORD);
                     this.et_password.setText(password);
                 }

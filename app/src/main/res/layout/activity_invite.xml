@@ -15,6 +15,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp">
 
@@ -25,6 +26,7 @@
             android:textColor="#e6000000"
             android:id="@+id/btn_inviteParent"
             android:background="@drawable/rounded_button_p_2r" />
+
 
         <Button
             android:text="자녀 초대"
@@ -74,7 +76,6 @@
             android:id="@+id/btn_contactList"
             android:layout_weight="0.1"
             android:background="@drawable/ic_group_add_black_24dp"/>
-
 
 
 

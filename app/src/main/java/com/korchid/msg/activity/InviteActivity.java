@@ -12,31 +12,59 @@ import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.database.Cursor;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.api.client.util.DateTime;
 import com.kakao.kakaolink.KakaoLink;
-import com.korchid.msg.R;
+import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.http.HttpPost;
+import com.korchid.msg.retrofit.response.Res;
+import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.ui.StatusBar;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.korchid.msg.global.QuickstartPreferences.INVITATION_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_CONNECTION;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
+
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "InviteActivity";
+
+    private Spinner sp_nationCode;
 
     private Button btn_inviteParent;
     private Button btn_inviteChild;
@@ -50,7 +78,11 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     private KakaoLink kakaoLink;
 
+    private int userId;
     private String userRole = "child";
+    private String nationCode = "";
+    private String opponentUserName = "";
+    private String opponentUserPhoneNumber = "";
     private int viewId;
 
     @Override
@@ -58,7 +90,10 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
 
+        userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+
         initView();
+
 
 
 
@@ -128,6 +163,33 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         };
 
         et_phoneNumber.addTextChangedListener(textWatcher);
+
+        // Setting nation code spinner
+        final String[] option = getResources().getStringArray(R.array.spinnerNationCode);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, option);
+        sp_nationCode = (Spinner) findViewById(R.id.sp_nationCode);
+        sp_nationCode.setAdapter(arrayAdapter);
+        sp_nationCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(), option[i], Toast.LENGTH_LONG).show();
+                String content = option[i];
+                // Delete nation name
+                nationCode = content.split(" ")[0];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_CONNECTION, 0);
+        Boolean inviteCheck = sharedPreferences.getBoolean(INVITATION_CHECK, false);
+
+        if(inviteCheck){
+            btn_kakaoLink.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -137,11 +199,14 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (viewId){
             case R.id.btn_contactList:{
+                int requestCode = 0;
+
                 // Show phone contact list
                 // User pick one contact
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-                startActivityForResult(intent, 0);
+
+                startActivityForResult(intent, requestCode);
                 break;
             }
             case R.id.btn_inviteParent:{
@@ -175,72 +240,63 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 builder.setPositiveButton("네!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String nickname = et_nickname.getText().toString();
-                        String parentPhoneNumber = et_phoneNumber.getText().toString();
+                        opponentUserName = et_nickname.getText().toString();
+                        opponentUserPhoneNumber = et_phoneNumber.getText().toString();
+                        String opponentInternationalPhoneNumber = nationCode + opponentUserPhoneNumber.substring(1); // Remove phoneNumber idx 0;
+
                         String message = "혜윰 초대해요~ 연락 자주하고 싶어요!! http://www.korchid.com/dropbox-release";
 
-
+/*
                         // Temp
                         // SMS Compose
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + parentPhoneNumber));
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + opponentUserPhoneNumber));
                         intent.putExtra("sms_body", message);
-                        startActivity(intent);
-
-/*
-                        // TODO convert function
-                        // SMS Auto-sender
-                        Intent intent;
-                        SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                        startActivityForResult(intent, 1);
 */
 
-                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
-
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                        editor.putString(USER_ROLE, userRole);
-                        Log.d(TAG, "USER_ROLE : " + userRole);
-
-                        editor.commit();
-
-
-                        String userId = "2";
-                        String receiverPhoneNumber = "+821022222222";
+                        // TODO convert function
+                        // SMS Auto-sender
+                        //Intent intent;
+                        SmsManager smsManager = SmsManager.getDefault();
+                        smsManager.sendTextMessage(opponentInternationalPhoneNumber, null, message, null, null);
 
                         String inviteTime = getCurrentTimeStamp();
 
-                        String strUrl = "https://www.korchid.com/msg-wait-connection";
-                        HashMap<String, String> params = new HashMap<>();
-                        params.put("userId", userId);
-                        params.put("receiverPhoneNumber", receiverPhoneNumber);
-                        params.put("inviteTime", inviteTime);
+                        Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, opponentInternationalPhoneNumber, userRole);
 
-
-                        Handler httpHandler = new Handler(){
+                        userCall.enqueue(new Callback<Res>() {
                             @Override
-                            public void handleMessage(Message msg) {
-                                String response = msg.getData().getString("response");
+                            public void onResponse(Call<Res> call, Response<Res> response) {
+                                Res res = response.body();
 
-                                //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
+                                Log.d(TAG, "response : " + res.toString());
 
-                                String[] line = response.split("\n");
+                                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
-                                if(line[0].equals("ERROR")){
-                                    Toast.makeText(getApplicationContext(), "No ID!", Toast.LENGTH_LONG).show();
-                                }else{
-                                    Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
-                                }
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                editor.putString(USER_ROLE, userRole);
+                                Log.d(TAG, "USER_ROLE : " + userRole);
+
+                                editor.apply();
+
                             }
-                        };
 
-                        HttpPost httpPost = new HttpPost(strUrl, params, httpHandler);
-                        httpPost.start();
+                            @Override
+                            public void onFailure(Call<Res> call, Throwable t) {
+                                Log.d(TAG, "onFailure");
+                            }
+                        });
 
 
-                        intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
-                        intent.putExtra("receiverPhoneNumber", receiverPhoneNumber);
+                        Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+
+                        intent.putExtra(USER_ROLE, userRole);
+                        intent.putExtra("receiverNickname", opponentUserName);
+                        intent.putExtra("receiverPhoneNumber", opponentInternationalPhoneNumber);
                         intent.putExtra("waitTime", inviteTime);
-                        startActivity(intent);
+
+                        startActivityForResult(intent, 2);
 
                     }
                 });
@@ -260,9 +316,19 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.btn_kakaoLink:{
+                int requestCode = 1;
+
                 // Wait to connect parent, child and send Kakao link
                 Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
-                startActivity(intent);
+
+                intent.putExtra(USER_ID_NUMBER, userId);
+                intent.putExtra(USER_ROLE, userRole);
+                intent.putExtra("receiverNickname", "");
+                intent.putExtra("receiverPhoneNumber", "");
+                intent.putExtra("waitTime", "");
+
+
+                startActivityForResult(intent, requestCode);
                 break;
             }
             default:{
@@ -300,18 +366,89 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK)
-        {
-            Cursor cursor = getContentResolver().query(data.getData(),
-                    new String[]{ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                            ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
-            cursor.moveToFirst();
+        switch(resultCode){
+            case RESULT_OK:{
+                switch (requestCode){
+                    // Contact list
+                    case 0:{
+                        Cursor cursor = getContentResolver().query(data.getData(),
+                                new String[]{ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                                        ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
+                        cursor.moveToFirst();
 
-            // Set the contact in EditText
-            et_nickname.setText(cursor.getString(0));   // contact - name
-            et_phoneNumber.setText(cursor.getString(1));    // contact - phone number
-            cursor.close();
+                        // Set the contact in EditText
+                        et_nickname.setText(cursor.getString(0));   // contact - name
+                        et_phoneNumber.setText(cursor.getString(1));    // contact - phone number
+                        cursor.close();
+
+                        break;
+                    }
+                    // Send SMS message
+                    case 1:{
+                        /*
+                        String inviteTime = getCurrentTimeStamp();
+
+                        Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, opponentUserPhoneNumber, userRole);
+
+                        userCall.enqueue(new Callback<Res>() {
+                            @Override
+                            public void onResponse(Call<Res> call, Response<Res> response) {
+                                Res res = response.body();
+
+                                Log.d(TAG, "response : " + res.toString());
+
+                                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                editor.putString(USER_ROLE, userRole);
+                                Log.d(TAG, "USER_ROLE : " + userRole);
+
+                                editor.apply();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<Res> call, Throwable t) {
+                                Log.d(TAG, "onFailure");
+                            }
+                        });
+
+
+                        Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+
+                        intent.putExtra(USER_ROLE, userRole);
+                        intent.putExtra("receiverNickname", opponentUserName);
+                        intent.putExtra("receiverPhoneNumber", opponentUserPhoneNumber);
+                        intent.putExtra("waitTime", inviteTime);
+
+                        startActivityForResult(intent, 2);
+
+                        break;
+                        */
+                    }
+                    case 2:{
+                        setResult(RESULT_OK, data);
+
+                        finish();
+                    }
+                    default:{
+                        break;
+                    }
+
+                }
+
+            }
+            case RESULT_CANCELED:{
+                switch (requestCode){
+
+                }
+            }
+            default:{
+                break;
+            }
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 

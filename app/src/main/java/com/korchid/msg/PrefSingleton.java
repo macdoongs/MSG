@@ -10,6 +10,8 @@ import android.preference.PreferenceManager;
 
 // http://stackoverflow.com/questions/11552579/is-there-a-way-to-make-sharedpreferences-global-throughout-my-whole-android-app
 public class PrefSingleton {
+    // 현재 사용하지 않음
+
     private static PrefSingleton mInstance;
     private Context mContext;
 

@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Repos {
+    // 현재 사용하지 않음.
+
     @SerializedName("PhoneNumber")
     @Expose
     private String PhoneNumber;

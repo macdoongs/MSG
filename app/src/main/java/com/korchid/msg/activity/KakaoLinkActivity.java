@@ -1,5 +1,7 @@
 package com.korchid.msg.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +15,10 @@ import android.widget.Toast;
 
 import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.http.HttpGet;
+import com.korchid.msg.retrofit.response.Res;
+import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
@@ -23,8 +28,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+import static com.korchid.msg.global.QuickstartPreferences.INVITATION_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_CONNECTION;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 // Wait connecting parent and send kakao link
 public class KakaoLinkActivity extends AppCompatActivity {
@@ -35,11 +56,17 @@ public class KakaoLinkActivity extends AppCompatActivity {
     private TextView tv_parentPhoneNumber;
 
     private Button btn_kakaoLink;
+    private Button btn_confirm;
 
     private Timer inviteTimer;
     private TimerTask inviteTask;
 
+    int userId;
+    String userRole = "";
+    String receiverNickname = "";
+    String receiverPhoneNumber = "";
     private long inviteTime = 0;
+    private String strInviteTime = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,33 +75,22 @@ public class KakaoLinkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kakao_link);
 
 
-        String choosingId = "5";
-        String receiverPhoneNumber = getIntent().getStringExtra("receiverPhoneNumber");
+        userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+        userRole = getIntent().getStringExtra(USER_ROLE);
+        receiverNickname = getIntent().getStringExtra("receiverNickname");
+        receiverPhoneNumber = getIntent().getStringExtra("receiverPhoneNumber");
+        strInviteTime = getIntent().getStringExtra("waitTime");
 
         initView();
-/*
-        String strUrl = "https://www.korchid.com/msg-wait-connection/" + choosingId + "/" + receiverPhoneNumber;
-        Handler httpHandler = new Handler(){
+
+        Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, receiverPhoneNumber, userRole);
+
+        userCall.enqueue(new Callback<Res>() {
             @Override
-            public void handleMessage(Message msg) {
-                String response = msg.getData().getString("response");
+            public void onResponse(Call<Res> call, Response<Res> response) {
+                Res res = response.body();
 
-                String[] line = response.split("\n");
-
-                //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                if(line[0].equals("Error")){
-                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-
-                }else{
-                    Log.d(TAG, "line : " + line[0]);
-
-                    String[] section = line[0].split("/");
-                    String invitingId = section[0];
-                    String isConnection = section[1];
-                    String strInviteTime = section[2];
-
-
+                if(res.getAffectedRows() == 1){
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = null;
                     try {
@@ -123,15 +139,17 @@ public class KakaoLinkActivity extends AppCompatActivity {
 
                     inviteTimer = new Timer();
                     inviteTimer.schedule(inviteTask, 1000, 1000);
-
                 }
+
             }
-        };
-        HttpGet httpGet = new HttpGet(strUrl, httpHandler);
-        httpGet.start();
-*/
 
+            @Override
+            public void onFailure(Call<Res> call, Throwable t) {
+                Log.d(TAG, "onFailure");
 
+                Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -183,11 +201,36 @@ public class KakaoLinkActivity extends AppCompatActivity {
 
             }
         });
+
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_CONNECTION, 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putBoolean(INVITATION_CHECK, true);
+
+                editor.apply();
+
+                Intent intent = new Intent();
+
+                intent.putExtra(USER_ROLE, userRole);
+                intent.putExtra("receiverNickname", receiverNickname);
+                intent.putExtra("receiverPhoneNumber", receiverPhoneNumber);
+
+                setResult(RESULT_OK, intent);
+
+                finish();
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
-        inviteTimer.cancel();
+        if(inviteTimer != null){
+            inviteTimer.cancel();
+        }
         super.onDestroy();
     }
 }

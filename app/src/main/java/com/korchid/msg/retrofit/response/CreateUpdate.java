@@ -1,13 +1,13 @@
-package com.korchid.msg.retrofit;
+package com.korchid.msg.retrofit.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by mac0314 on 2017-01-11.
+ * Created by mac0314 on 2017-01-14.
  */
 
-public class Res {
+public class CreateUpdate {
     @SerializedName("fieldCount")
     @Expose
     private int fieldCount;
@@ -96,4 +96,5 @@ public class Res {
     public void setChangedRows(int changedRows) {
         this.changedRows = changedRows;
     }
+
 }

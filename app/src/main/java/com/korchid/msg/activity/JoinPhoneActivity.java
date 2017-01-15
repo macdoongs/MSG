@@ -2,9 +2,6 @@ package com.korchid.msg.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,16 +15,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.korchid.msg.adapter.RestfulAdapter;
+import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
-import java.util.HashMap;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
-import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
 // Register phone number and password
@@ -145,6 +142,21 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onClick(final DialogInterface dialog, int which) {
 
+                            Call<Res> userDataCall = RestfulAdapter.getInstance().userSignup(phoneNumber, password);
+
+                            userDataCall.enqueue(new Callback<Res>() {
+                                @Override
+                                public void onResponse(Call<Res> call, Response<Res> response) {
+                                    Log.d(TAG, "password : " + response.body());
+                                }
+
+                                @Override
+                                public void onFailure(Call<Res> call, Throwable t) {
+                                    Log.d(TAG, "onFailure");
+                                    Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            /*
                             String url = "https://www.korchid.com/msg/user/signup/";
 
                             HashMap<String, String> params = new HashMap<>();
@@ -174,14 +186,14 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                                         editor.putString(USER_PASSWORD, password);
                                         editor.commit(); // Apply file
 
-                                        /*
+
                                         // Delete preference value
                                         // 1. Remove "key" data
                                         editor.remove("key");
 
                                         // 2. Remove xml data
                                         editor.clear();
-                                        */
+
 
                                         // if sharedPreferences.getString value is 0, assign 2th parameter
                                         Log.d(TAG, "SharedPreference");
@@ -196,7 +208,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
 
                             HttpPost httpPost = new HttpPost(url, params, httpHandler);
                             httpPost.start();
-
+*/
                             Intent intent = new Intent();
                             //intent.putExtra("result_msg", "Example");
                             setResult(RESULT_OK, intent);

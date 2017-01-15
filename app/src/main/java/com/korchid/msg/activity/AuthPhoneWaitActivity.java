@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.korchid.msg.global.QuickstartPreferences.AUTH_MODE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
@@ -66,7 +67,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
 
         final String userId = getIntent().getExtras().getString(USER_PHONE_NUMBER);
 
-        mode = getIntent().getStringExtra("mode");
+        mode = getIntent().getStringExtra(AUTH_MODE);
 
         phoneNumber = userId;
 
@@ -82,7 +83,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
         IntentFilter intentFilter = new IntentFilter(SMS_RECEIVED);
         registerReceiver(smsReceiver, intentFilter);
 
-        String url = "https://www.korchid.com/msg/auth/sms/send/";
+        String url = "https://www.korchid.com/msg/auth/sms/send";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("phoneNumber", phoneNumber);

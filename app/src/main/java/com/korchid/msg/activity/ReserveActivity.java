@@ -15,20 +15,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.Res;
-import com.korchid.msg.retrofit.UserData;
+import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.MessageSetting;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_CHECK;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
+import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 
 // Register reservation message and the number of sending
@@ -167,12 +171,12 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
                 final int userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
+
                 final Boolean messageAlert = sw_pushEnable.isChecked();
                 final Boolean reserveEnable = sw_enable.isChecked();
                 final Boolean reserveAlert = sw_alert.isChecked();
+
                 final int weekNumber = np_week.getValue();
                 final int reserveNumber = np_number.getValue();
                 final String message = " ";
@@ -184,95 +188,37 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 userSettingCall.enqueue(new Callback<Res>() {
                     @Override
                     public void onResponse(Call<Res> call, Response<Res> response) {
-                        Log.d(TAG, "nickname : " + response);
+                        Log.d(TAG, "response " + response.body());
+
+                        if(response.body().getChangedRows() == 1){
+                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                            editor.putBoolean(RESERVATION_CHECK, true);
+
+                            editor.putBoolean(MESSAGE_ALERT, messageAlert);
+                            editor.putBoolean(RESERVATION_ENABLE, reserveEnable);
+                            editor.putBoolean(RESERVATION_ALERT, reserveAlert);
+
+                            editor.putInt(RESERVATION_WEEK_NUMBER, weekNumber);
+                            editor.putInt(RESERVATION_TIMES, reserveNumber);
+
+                            editor.apply();
+                        }
+
                     }
 
                     @Override
                     public void onFailure(Call<Res> call, Throwable t) {
                         Log.d(TAG, "onFailure");
+                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
 
-/*
-                String stringUrl = "https://www.korchid.com/msg-message-setting";
-                HashMap<String, String> params = new HashMap<>();
-                params.put("swEnable", swEnable);
-                params.put("swAlert", swAlert);
-                params.put("weekNum", weekNum);
-                params.put("userId", userId);
-                params.put("times", times);
-                params.put("message", message);
 
-
-                Handler httpHandler = new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING , 0);
-
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                        Log.d(TAG, "handleMessage");
-
-                        String response = msg.getData().getString("response");
-
-                        String[] line = response.split("\n");
-
-                        //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                        if (line[0].equals("OK")) {
-                            Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
-
-                            // http://mommoo.tistory.com/38
-                            // Use Environmental variable 'SharedPreference'
-
-
-                            editor.putBoolean(RESERVATION_CHECK, true);
-                            editor.putString(RESERVATION_WEEK_NUMBER, weekNum);
-                            editor.putString(RESERVATION_MESSAGE, message);
-                            editor.putString(RESERVATION_TIMES, times);
-                            editor.putString(RESERVATION_ENABLE, swEnable);
-                            editor.putString(RESERVATION_MESSAGE_ALERT, swAlert);
-
-
-                            editor.commit(); // Apply file
-
-
-                            // Delete preference value
-                            // 1. Remove "key" data
-                            //editor.remove("key");
-
-                            // 2. Remove xml data
-                            //editor.clear();
-
-
-                            // if sharedPreferences.getString value is 0, assign 2th parameter
-                            Log.d(TAG, "SharedPreference");
-                            Log.d(TAG, "USER_INFO : " + sharedPreferences.getBoolean(RESERVATION_CHECK, false));
-                            Log.d(TAG, "TIMES : " + sharedPreferences.getString(RESERVATION_TIMES, ""));
-                            Log.d(TAG, "WEEK_NUMBER : " + sharedPreferences.getString(RESERVATION_WEEK_NUMBER, ""));
-                            Log.d(TAG, "MESSAGE : " + sharedPreferences.getString(RESERVATION_MESSAGE, ""));
-                            Log.d(TAG, "ENABLE : " + sharedPreferences.getString(RESERVATION_ENABLE, "false"));
-                            Log.d(TAG, "ALERT : " + sharedPreferences.getString(RESERVATION_MESSAGE_ALERT, "false"));
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                };
-
-
-
-                HttpPost httpPost = new HttpPost(stringUrl, params, httpHandler);
-                httpPost.start();
-
-*/
-
-
-                //GlobalApplication.getGlobalApplicationContext().setWeekNum(weekNum);
-                //GlobalApplication.getGlobalApplicationContext().setTimes(times);
-
-                Log.d(TAG, "Week : " + weekNum + ", times : " + times);
                 Intent intent = new Intent();
-                setResult(RESULT_OK);
+                setResult(RESULT_OK, intent);
                 finish();
                 break;
             }

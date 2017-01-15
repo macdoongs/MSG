@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 
 public class ContactUtil {
+    // 현재 사용하지 않음/
+
     private Context context;
 
     public ContactUtil(Context context){

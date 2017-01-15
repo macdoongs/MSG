@@ -1,4 +1,4 @@
-package com.korchid.msg.retrofit;
+package com.korchid.msg.retrofit.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
