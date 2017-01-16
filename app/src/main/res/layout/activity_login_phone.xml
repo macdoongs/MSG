@@ -69,7 +69,7 @@
             android:layout_height="40dp"
             android:id="@+id/btn_login"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/rounded_button_t_50r"
+            android:background="@drawable/rounded_button_t_2r"
             />
 
     <Button
@@ -77,20 +77,9 @@
         android:layout_width="256dp"
         android:layout_height="40dp"
         android:id="@+id/btn_findPassword"
-        android:background="@drawable/rounded_button_p_50r"
+        android:background="@drawable/rounded_button_p_2r"
         android:layout_gravity="center"
         android:layout_marginTop="196dp"/>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-
-    </LinearLayout>
 
 
 </LinearLayout>

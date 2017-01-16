@@ -4,18 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.database.Cursor;
-import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,22 +22,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.api.client.util.DateTime;
 import com.kakao.kakaolink.KakaoLink;
 import com.korchid.msg.R;
 import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.retrofit.response.Res;
-import com.korchid.msg.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.ui.StatusBar;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,14 +39,7 @@ import retrofit2.Response;
 import static com.korchid.msg.global.QuickstartPreferences.INVITATION_CHECK;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_CONNECTION;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
-
-import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
-import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
-import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
-
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener{
@@ -166,10 +145,10 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                 if(isChangedEtNickname && isChangedEtPhoneNumber){
                     btn_send.setEnabled(true);
-                    btn_send.setBackgroundResource(R.color.colorPrimary);
+                    btn_send.setBackgroundResource(R.drawable.rounded_button_p_2r);
                 }else{
                     btn_send.setEnabled(false);
-                    btn_send.setBackgroundResource(R.color.colorTransparent);
+                    btn_send.setBackgroundResource(R.drawable.rounded_button_t_2r);
                 }
             }
         };

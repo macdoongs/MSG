@@ -111,11 +111,11 @@
 
     <Button
         android:text="다음"
-        android:layout_width="match_parent"
-        android:background="@color/colorTransparent"
-        android:layout_gravity="center"
+        android:layout_width="256dp"
+        android:background="@drawable/rounded_button_t_2r"
         android:id="@+id/btn_register"
-        android:layout_marginTop="50dp"
-        android:layout_height="wrap_content" />
+        android:layout_marginTop="4dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>
