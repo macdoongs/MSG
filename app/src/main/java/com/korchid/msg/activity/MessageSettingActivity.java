@@ -164,11 +164,17 @@ public class MessageSettingActivity extends AppCompatActivity {
             public void onResponse(Call<List<ReservationMessage>> call, Response<List<ReservationMessage>> response) {
                 List<ReservationMessage> reservationMessageList = response.body();
 
-                for(int i=0; i<reservationMessageList.size(); i++){
-                    int reservationMessageId = reservationMessageList.get(i).getReservation_message_id();
-                    int reservationMessageTypeId = reservationMessageList.get(i).getReservation_message_type_id();
-                    String content = reservationMessageList.get(i).getContent_txt();
+                Log.d(TAG, "response code : " + response.code());
+                Log.d(TAG, "response body : " + response.body().toString());
+                Log.d(TAG, "response body size : " + response.body().size());
+                Log.d(TAG, "response body : " + response.body().get(0).getContent_txt());
 
+                for(int i=0; i<response.body().size(); i++){
+                    int reservationMessageId = response.body().get(i).getReservation_message_id();
+                    int reservationMessageTypeId = response.body().get(i).getReservation_message_type_id();
+                    String content = response.body().get(i).getContent_txt();
+
+                    // TODO change String param to ReservationMessage class
                     MessageSetting messageSetting = new MessageSetting(reservationMessageId, "", type, content,"", false);
 
                     settingArrayList.add(messageSetting);
@@ -178,7 +184,8 @@ public class MessageSettingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ReservationMessage>> call, Throwable t) {
-                Log.d(TAG, "onFailure");
+                String message = t.getMessage();
+                Log.d(TAG, "onFailure : " + message);
             }
         });
     }

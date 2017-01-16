@@ -1,5 +1,12 @@
 package com.korchid.msg.activity;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ClipboardManager;
+import android.content.Context;
+
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,6 +31,7 @@ import android.widget.TextView;
 import com.korchid.msg.Chatting;
 import com.korchid.msg.R;
 import com.korchid.msg.adapter.ChattingAdapter;
+import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.mqtt.MqttServiceDelegate;
 import com.korchid.msg.mqtt.MqttServiceDelegate.MessageHandler;
@@ -131,7 +139,15 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 
-        Intent intent = getIntent();
+        // Cancel AlarmManager - reservation message
+        int requestCode = 0;
+        AlarmManager mManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmMatchingBroadCastReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mManager.cancel(pi);
+
+        //
+        intent = getIntent();
 
         userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
         Log.d(TAG, "userId : " + userId);
@@ -296,7 +312,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 // http://humble.tistory.com/20
 
                 Log.d(TAG, "btn_send");
-
 
                 //Test data
                 int receiverId = opponentUserId;
@@ -552,7 +567,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     public void listUpdate(){
 
-        adapter.notifyDataSetChanged(); //​리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
+        adapter.notifyDataSetChanged(); //리스트뷰 값들의 변화가 있을때 아이템들을 다시 배치 할 때 사용되는 메소드입니다.
 
     }
 
