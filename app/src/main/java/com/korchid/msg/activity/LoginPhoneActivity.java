@@ -31,23 +31,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
-import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
-import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
-import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
-import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 public class LoginPhoneActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "LoginPhoneActivity";
@@ -177,7 +168,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                 if(input.length() > 0){
                     btn_findPassword.setEnabled(true);
-                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p_50r);
+                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p_2r);
                 }else{
                     btn_findPassword.setEnabled(false);
                 }
@@ -204,9 +195,9 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                 if(input.length() > 0 && input2.length() > 0){
                     btn_login.setEnabled(true);
-                    btn_login.setBackgroundResource(R.drawable.rounded_button_p_50r);
+                    btn_login.setBackgroundResource(R.drawable.rounded_button_p_2r);
                     btn_findPassword.setEnabled(true);
-                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p_50r);
+                    btn_findPassword.setBackgroundResource(R.drawable.rounded_button_p_2r);
                 }else{
                     btn_login.setEnabled(false);
                     btn_findPassword.setEnabled(false);

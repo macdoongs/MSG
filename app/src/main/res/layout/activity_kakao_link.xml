@@ -77,6 +77,7 @@
         android:layout_height="20dp" />
 
     <Button
+        style="?android:attr/buttonStyleSmall"
         android:text="다운로드 링크 보내기"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
