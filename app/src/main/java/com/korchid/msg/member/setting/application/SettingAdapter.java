@@ -1,4 +1,4 @@
-package com.korchid.msg.setting.application;
+package com.korchid.msg.member.setting.application;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,9 +12,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.korchid.msg.setting.reservation.ReserveActivity;
+import com.korchid.msg.member.setting.reservation.ReserveActivity;
 import com.korchid.msg.ui.CheckableLinearLayout;
-import com.korchid.msg.setting.reservation.MessageSetting;
+import com.korchid.msg.member.setting.reservation.MessageSetting;
 import com.korchid.msg.R;
 import com.korchid.msg.member.invitation.InviteActivity;
 

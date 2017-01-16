@@ -1,4 +1,4 @@
-package com.korchid.msg.setting.reservation;
+package com.korchid.msg.member.setting.reservation;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
 import com.korchid.msg.storage.server.retrofit.response.ReservationMessage;
-import com.korchid.msg.setting.application.SettingAdapter;
+import com.korchid.msg.member.setting.application.SettingAdapter;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;

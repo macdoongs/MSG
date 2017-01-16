@@ -99,12 +99,12 @@
         <activity
             android:name=".member.chatting.ChattingActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".setting.reservation.MessageSettingActivity" />
-        <activity android:name=".setting.application.SettingActivity" />
+        <activity android:name=".member.setting.reservation.MessageSettingActivity" />
+        <activity android:name=".member.setting.application.SettingActivity" />
         <activity android:name=".member.invitation.InviteActivity" />
-        <activity android:name=".setting.reservation.ReserveActivity" />
+        <activity android:name=".member.setting.reservation.ReserveActivity" />
         <activity android:name=".storage.sqlite.DBTest" />
-        <activity android:name=".setting.user.ProfileActivity" />
+        <activity android:name=".member.setting.user.ProfileActivity" />
         <!-- android:configChanges="orientation|keyboardHidden" -->
         <activity android:name=".member.auth.AuthPhoneActivity" />
         <activity android:name=".member.auth.AuthPhoneWaitActivity" />
@@ -121,9 +121,9 @@
         <activity android:name=".member.invitation.KakaoLinkActivity" />
         <activity android:name=".member.JoinPhoneActivity" />
         <activity android:name=".member.LoginPhoneActivity" />
-        <activity android:name=".setting.user.UserInfoActivity" />
+        <activity android:name=".member.setting.user.UserInfoActivity" />
         <activity android:name=".member.recovery.password.RecoveryPasswordActivity" />
-        <activity android:name=".setting.reservation.InPersonMessageSettingActivity" />
+        <activity android:name=".member.setting.reservation.InPersonMessageSettingActivity" />
         <activity
             android:name=".member.SelectOpponentActivity"
             android:label="@string/title_activity_select_opponent"

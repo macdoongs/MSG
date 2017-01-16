@@ -24,7 +24,7 @@ import com.korchid.msg.member.chatting.mqtt.impl.MqttTopic;
 import com.korchid.msg.member.chatting.mqtt.service.MqttService;
 import com.korchid.msg.storage.server.retrofit.response.UserMap;
 import com.korchid.msg.R;
-import com.korchid.msg.setting.user.UserInfoActivity;
+import com.korchid.msg.member.setting.user.UserInfoActivity;
 import com.korchid.msg.storage.sqlite.DBTest;
 import com.korchid.msg.ui.StatusBar;
 

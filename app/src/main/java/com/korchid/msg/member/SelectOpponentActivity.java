@@ -40,8 +40,8 @@ import com.korchid.msg.member.chatting.ChattingActivity;
 import com.korchid.msg.member.chatting.ChattingBroadCastReceiver;
 import com.korchid.msg.member.chatting.mqtt.impl.MqttTopic;
 import com.korchid.msg.main.MainActivity;
-import com.korchid.msg.setting.reservation.ReserveActivity;
-import com.korchid.msg.setting.application.SettingActivity;
+import com.korchid.msg.member.setting.reservation.ReserveActivity;
+import com.korchid.msg.member.setting.application.SettingActivity;
 import com.korchid.msg.ui.StatusBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 

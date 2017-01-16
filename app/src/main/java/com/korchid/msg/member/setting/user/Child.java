@@ -1,4 +1,4 @@
-package com.korchid.msg.setting.user;
+package com.korchid.msg.member.setting.user;
 
 /**
  * Created by mac0314 on 2016-12-27.

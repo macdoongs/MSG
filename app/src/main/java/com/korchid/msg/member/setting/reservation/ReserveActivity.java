@@ -1,4 +1,4 @@
-package com.korchid.msg.setting.reservation;
+package com.korchid.msg.member.setting.reservation;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

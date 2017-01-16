@@ -1,4 +1,4 @@
-package com.korchid.msg.setting.application;
+package com.korchid.msg.member.setting.application;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

@@ -1,6 +1,6 @@
-package com.korchid.msg.setting.reservation;
+package com.korchid.msg.member.setting.reservation;
 
-import com.korchid.msg.setting.application.Setting;
+import com.korchid.msg.member.setting.application.Setting;
 
 /**
  * Created by Mac on 2016-12-13.

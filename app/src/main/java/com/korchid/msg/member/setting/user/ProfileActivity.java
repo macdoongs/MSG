@@ -1,4 +1,4 @@
-package com.korchid.msg.setting.user;
+package com.korchid.msg.member.setting.user;
 
 import android.content.DialogInterface;
 import android.content.Intent;

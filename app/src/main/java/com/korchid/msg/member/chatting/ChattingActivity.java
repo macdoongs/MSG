@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.korchid.msg.R;
 import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
-import com.korchid.msg.setting.application.SettingActivity;
+import com.korchid.msg.member.setting.application.SettingActivity;
 import com.korchid.msg.storage.server.http.HttpPost;
 import com.korchid.msg.member.chatting.mqtt.MqttServiceDelegate;
 import com.korchid.msg.member.chatting.mqtt.MqttServiceDelegate.MessageHandler;
