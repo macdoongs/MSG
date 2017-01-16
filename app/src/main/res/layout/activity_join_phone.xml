@@ -21,24 +21,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="전화번호"
-                android:layout_weight="4"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:id="@+id/tell" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="전화번호"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:id="@+id/tell"
+            android:layout_width="wrap_content" />
 
-            <TextView
-                android:id="@+id/tv_phoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="010-0000-0000"
-                android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tv_phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="010-0000-0000"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -46,27 +46,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_below="@+id/layout_phone_number">
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="비밀번호"
-                android:layout_weight="4"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
 
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:textSize="20sp"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:hint="*******" />
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:hint="*******"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 
@@ -75,26 +76,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_below="@+id/layout_password">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
             android:text="비밀번호확인"
-            android:textSize="20sp"
+            android:textSize="12sp"
             android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/et_passwordConfirm"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
             android:textSize="20sp"
             android:inputType="textPassword"
             android:ems="10"
             android:hint="*******"
-            android:layout_width="wrap_content" />
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 

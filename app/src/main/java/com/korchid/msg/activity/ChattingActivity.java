@@ -1,34 +1,43 @@
 package com.korchid.msg.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.os.Build;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.test.suitebuilder.TestMethod;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.korchid.msg.Chatting;
+import com.korchid.msg.R;
+import com.korchid.msg.adapter.ChattingAdapter;
+import com.korchid.msg.http.HttpPost;
+import com.korchid.msg.mqtt.MqttServiceDelegate;
+import com.korchid.msg.mqtt.MqttServiceDelegate.MessageHandler;
+import com.korchid.msg.mqtt.MqttServiceDelegate.MessageReceiver;
+import com.korchid.msg.mqtt.MqttServiceDelegate.StatusHandler;
+import com.korchid.msg.mqtt.MqttServiceDelegate.StatusReceiver;
+import com.korchid.msg.mqtt.service.MqttService;
+import com.korchid.msg.mqtt.service.MqttService.ConnectionStatus;
+import com.korchid.msg.sqlite.DBHelper;
+import com.korchid.msg.ui.CustomActionbar;
+import com.korchid.msg.ui.StatusBar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
@@ -36,31 +45,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.google.gson.JsonObject;
-import com.korchid.msg.Chatting;
-import com.korchid.msg.adapter.ChattingAdapter;
-import com.korchid.msg.http.HttpPost;
-import com.korchid.msg.sqlite.DBHelper;
-import com.korchid.msg.ui.CustomActionbar;
-import com.korchid.msg.mqtt.MqttServiceDelegate;
-import com.korchid.msg.mqtt.MqttServiceDelegate.MessageHandler;
-import com.korchid.msg.mqtt.MqttServiceDelegate.MessageReceiver;
-import com.korchid.msg.mqtt.MqttServiceDelegate.StatusHandler;
-import com.korchid.msg.mqtt.MqttServiceDelegate.StatusReceiver;
-import com.korchid.msg.R;
-import com.korchid.msg.ui.StatusBar;
-import com.korchid.msg.mqtt.service.MqttService;
-import com.korchid.msg.mqtt.service.MqttService.ConnectionStatus;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
-import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
@@ -80,7 +69,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     private Button btn_setting;
     private Button btn_menu;
-    private Button btn_plus;
+    private ImageButton btn_plus;
     private Button btn_send;
 
 
@@ -216,7 +205,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, parentName);
 
-        btn_plus = (Button)findViewById(R.id.btn_plus);
+        btn_plus = (ImageButton)findViewById(R.id.btn_plus);
 
 
         lv_message = (ListView)findViewById(R.id.lv_message);
@@ -252,9 +241,11 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 if(input.length() > 0){
                     btn_send.setEnabled(true);
                     btn_send.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    btn_send.setTypeface(null, Typeface.BOLD);
                 }else{
                     btn_send.setEnabled(false);
                     btn_send.setTextColor(getResources().getColor(R.color.colorTransparent));
+                    btn_send.setTypeface(null, Typeface.NORMAL);
                 }
             }
         };
