@@ -77,12 +77,13 @@ public class UserInfoActivity extends AppCompatActivity {
         sex = sharedPreferences.getString(USER_SEX, "");
         nickname = sharedPreferences.getString(USER_NICKNAME, "");
 
-
+/*
+        // TODO Fix Click error
         if(!profile.equals("")) {
             Bitmap bitmap = BitmapFactory.decodeFile(profile);
             iv_profile.setImageBitmap(bitmap);
         }
-
+*/
         if(sex.equals("Male")){
             rbtn_male.setChecked(true);
         }else if(sex.equals("Female")){
