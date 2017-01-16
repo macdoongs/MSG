@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.korchid.msg.mqtt.MqttServiceDelegate;
+import com.korchid.msg.member.chatting.mqtt.MqttServiceDelegate;
 
 import org.json.JSONException;
 import org.json.JSONObject;

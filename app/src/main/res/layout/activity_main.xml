@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@drawable/background2"
-    tools:context="com.korchid.msg.activity.MainActivity"
+    tools:context="com.korchid.msg.main.MainActivity"
     android:orientation="vertical">
 
 

@@ -39,7 +39,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".mqtt.ChattingBroadCastReceiver"
+            android:name=".member.chatting.ChattingBroadCastReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -48,7 +48,7 @@
         </receiver>
 
         <service
-            android:name=".mqtt.service.MqttService"
+            android:name=".member.chatting.mqtt.service.MqttService"
             android:process=":MqttSubProcess" />
 
         <!-- [START fcm_default_icon] -->
@@ -85,7 +85,7 @@
         <!-- [END firebase_iid_service] -->
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!-- android:configChanges="orientation|keyboardHidden" -->
@@ -95,22 +95,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SplashActivity" />
+        <activity android:name=".main.SplashActivity" />
         <activity
-            android:name=".activity.ChattingActivity"
+            android:name=".member.chatting.ChattingActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".activity.MessageSettingActivity" />
-        <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.InviteActivity" />
-        <activity android:name=".activity.ReserveActivity" />
-        <activity android:name=".activity.DBTest" />
-        <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".setting.reservation.MessageSettingActivity" />
+        <activity android:name=".setting.application.SettingActivity" />
+        <activity android:name=".member.invitation.InviteActivity" />
+        <activity android:name=".setting.reservation.ReserveActivity" />
+        <activity android:name=".storage.sqlite.DBTest" />
+        <activity android:name=".setting.user.ProfileActivity" />
         <!-- android:configChanges="orientation|keyboardHidden" -->
-        <activity android:name=".activity.AuthPhoneActivity" />
-        <activity android:name=".activity.AuthPhoneWaitActivity" />
+        <activity android:name=".member.auth.AuthPhoneActivity" />
+        <activity android:name=".member.auth.AuthPhoneWaitActivity" />
 
         <activity
-            android:name=".activity.MyAlert"
+            android:name=".ui.MyAlert"
             android:theme="@android:style/Theme.Dialog">
         </activity>
 
@@ -118,14 +118,14 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".activity.KakaoLinkActivity" />
-        <activity android:name=".activity.JoinPhoneActivity" />
-        <activity android:name=".activity.LoginPhoneActivity" />
-        <activity android:name=".activity.UserInfoActivity" />
-        <activity android:name=".activity.FindPasswordActivity" />
-        <activity android:name=".activity.InPersonMessageSettingActivity" />
+        <activity android:name=".member.invitation.KakaoLinkActivity" />
+        <activity android:name=".member.JoinPhoneActivity" />
+        <activity android:name=".member.LoginPhoneActivity" />
+        <activity android:name=".setting.user.UserInfoActivity" />
+        <activity android:name=".member.recovery.password.RecoveryPasswordActivity" />
+        <activity android:name=".setting.reservation.InPersonMessageSettingActivity" />
         <activity
-            android:name=".activity.SelectOpponentActivity"
+            android:name=".member.SelectOpponentActivity"
             android:label="@string/title_activity_select_opponent"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

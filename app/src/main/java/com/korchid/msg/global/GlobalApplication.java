@@ -9,7 +9,6 @@ import android.util.LruCache;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.korchid.msg.sqlite.DBHelper;
 
 /**
  * Created by mac0314 on 2016-12-11.

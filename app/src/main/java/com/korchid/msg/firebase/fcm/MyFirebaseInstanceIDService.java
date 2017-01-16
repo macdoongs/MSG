@@ -16,31 +16,21 @@
 
 package com.korchid.msg.firebase.fcm;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.korchid.msg.adapter.RestfulAdapter;
-import com.korchid.msg.retrofit.response.Res;
-import com.korchid.msg.retrofit.response.User;
-import com.korchid.msg.retrofit.response.UserData;
-
-import java.util.List;
+import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
+import com.korchid.msg.storage.server.retrofit.response.Res;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.app.Activity.RESULT_OK;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
-import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
-import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
-import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {

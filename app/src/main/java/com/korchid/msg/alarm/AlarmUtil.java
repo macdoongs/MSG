@@ -1,22 +1,11 @@
 package com.korchid.msg.alarm;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-
-import com.korchid.msg.Chatting;
-import com.korchid.msg.activity.ChattingActivity;
-import com.korchid.msg.mqtt.MqttServiceDelegate;
-import com.korchid.msg.mqtt.service.MqttService;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 
 /**
  * Created by mac0314 on 2017-01-06.
