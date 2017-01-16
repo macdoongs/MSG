@@ -36,6 +36,7 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 /**
@@ -84,16 +85,29 @@ public class SplashActivity extends Activity {
         if(loginState.equals("LOGIN")){
             duration = SPLASH_LOGIN;
 
+            // TODO modify real userId data
+            userId = 16;
             Call<List<UserData>> userDataCall = RestfulAdapter.getInstance().listLoadUserData(userId);
 
             userDataCall.enqueue(new Callback<List<UserData>>() {
                 @Override
                 public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
-                    //Log.d(TAG, "onResponse");
+                    Log.d(TAG, "onResponse");
 
                     if(response.body().isEmpty()){
                         return;
                     }else{
+                        int userRoleNumber = response.body().size();
+                        Log.d(TAG, "roleNumber : " + userRoleNumber);
+
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putInt(USER_ROLE_NUMBER, userRoleNumber);
+
+                        editor.apply();
+
                         UserData userData = response.body().get(0);
 
                         if(userData != null) {
@@ -109,15 +123,17 @@ public class SplashActivity extends Activity {
                             userWeekNumber = userData.getWeek_number();
                             userReserveNumber = userData.getReserve_number();
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+                            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor = sharedPreferences.edit();
 
                             editor.putString(USER_NICKNAME, userNickname);
                             editor.putLong(USER_BIRTHDAY, userBirthday.getTime());
                             editor.putString(USER_PROFILE, userProfile);
                             editor.putString(USER_SEX, userSex);
                             editor.putString(USER_ROLE, userRole);
+
+                            editor.apply();
 
                             sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
 
@@ -128,7 +144,6 @@ public class SplashActivity extends Activity {
                             editor.putInt(RESERVATION_ALERT, userReserveAlert);
                             editor.putInt(RESERVATION_WEEK_NUMBER, userWeekNumber);
                             editor.putInt(RESERVATION_TIMES, userReserveNumber);
-
 
                             editor.apply();
                         }
@@ -148,67 +163,6 @@ public class SplashActivity extends Activity {
 
         }else{
             duration = SPLASH_LOGOUT;
-        }
-
-
-
-
-
-        SharedPreferences sharedPreferences = getSharedPreferences("MAPPING", 0);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        String topic = sharedPreferences.getString("TOPIC", "");
-
-        // TODO if no sharedPreferences data, Load user data - web server
-        if(topic.equals("")){
-            String userId = "2";//getIntent().getStringExtra("USER_ID_NUM");
-/*
-            String stringUrl = "https://www.korchid.com/msg-user/" + userId;
-
-            Handler httpHandler = new Handler(){
-                @Override
-                public void handleMessage(Message msg) {
-                    String response = msg.getData().getString("response");
-
-                    Log.d(TAG, "response : " + response);
-
-                    String[] line = response.split("\n");
-
-                        String[] partition = line[0].split(" / ");
-                        //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                        if(line[0].equals("Error")){
-                            Toast.makeText(getApplicationContext(), "No ID! please join.", Toast.LENGTH_LONG).show();
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
-
-                            for(int i=0; i<partition.length; i++){
-                                Log.d(TAG, "partition " + i + " : " + partition[i]);
-                            }
-
-
-
-                            Intent intent = new Intent();
-                            setResult(RESULT_OK, intent);
-                            finish();
-
-
-                        }
-
-                } // Handler End
-            };
-
-
-
-            HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
-            httpGet.start();
-*/
-        }else{
-
-
-
-
         }
 
 

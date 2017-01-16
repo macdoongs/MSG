@@ -20,6 +20,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.firebase.fcm.MyFirebaseInstanceIDService;
 import com.korchid.msg.global.QuickstartPreferences;
@@ -27,6 +28,8 @@ import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.mqtt.impl.MqttTopic;
 import com.korchid.msg.mqtt.interfaces.IMqttTopic;
 import com.korchid.msg.mqtt.service.MqttService;
+import com.korchid.msg.retrofit.response.Res;
+import com.korchid.msg.retrofit.response.UserMap;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.global.GlobalApplication;
 import com.korchid.msg.R;
@@ -39,13 +42,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_ID;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_NICKNAME;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PHONENUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_TOPICS;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_WEEK_NUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_CONNECTION;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_INFO;
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_RESERVATION_SETTING;
 import static com.korchid.msg.global.QuickstartPreferences.USER_BIRTHDAY;
 import static com.korchid.msg.global.QuickstartPreferences.USER_DEVICE_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
@@ -55,13 +69,15 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_PASSWORD;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_SEX;
 
 /**
  * Created by mac0314 on 2016-11-28.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{//implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "MainActivity";
 
     public static Activity activity;
@@ -85,11 +101,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userPhoneNumber = "";
 
     private int userId = 0;
+
     private String userNickname = "";
     private String userSex = "";
     private Date userBirthday = new Date();
     private String userProfile = "";
     private String userRole = "";
+
+    private int userRoleNumber = 0;
+
     private int userMessageAlert = 0;
     private int userReserveEnable = 0;
     private int userReserveAlert = 0;
@@ -102,7 +122,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int duration = 0;
 
+    private List<UserMap> userMapList = new ArrayList<>();
+
     private ArrayList<MqttTopic> topics = new ArrayList<MqttTopic>();
+
+    private ArrayList<Integer> opponentUserId = new ArrayList<>();
+    private ArrayList<String> opponentUserNickname = new ArrayList<>();
+    private ArrayList<String> opponentUserPhoneNumber = new ArrayList<>();
+    private ArrayList<String> opponentUserProfile = new ArrayList<>();
+    private ArrayList<MqttTopic> mqttTopics = new ArrayList<>();
 
     SharedPreferences sharedPreferences;
 
@@ -123,12 +151,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Use Environmental variable 'SharedPreference'
         sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
+
+
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+/*
+        // Develop mode -------------------------------------------------------------------------------
+        // Clear SharedPreferences
+        // TODO remove
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        sharedPreferences = getSharedPreferences(SHARED_PREF_CONNECTION, 0);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        // --------------------------------------------------------------------------------------------
+*/
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+
+        userPhoneNumber = sharedPreferences.getString(USER_PHONE_NUMBER, "010-0000-0000");
+        //Log.d(TAG, "USER phone number : " + userPhoneNumber);
+        loginState = sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT");
+        userId = sharedPreferences.getInt(USER_ID_NUMBER , 0);
+
+
+
+        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+
+        userRoleNumber = sharedPreferences.getInt(USER_ROLE_NUMBER, 0);
+        userRole = sharedPreferences.getString(USER_ROLE, "");
+        Log.d(TAG, "USER_ROLE : " + userRole);
+
+
         initView();
 
 
         // Crash test
         //FirebaseCrash.report(new Exception("MSG Android non-fatal error"));
         //FirebaseCrash.log("Error report test");
+
+
 
         // If a notification message is tapped, any data accompanying the notification
         // message is available in the intent extras. In this sample the launcher
@@ -158,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
 
-
+/*
         // Test - Modify instanceId
         try {
             FirebaseInstanceId.getInstance().deleteInstanceId();
@@ -189,20 +264,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         deviceToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "3. Device Token : " + deviceToken);
 
-/*
-        // Mapping test
-        String url = "https://www.korchid.com/msg-mapping";
-        HashMap<String, String> params = new HashMap<>();
-        params.put("deviceToken", deviceToken);
 
-        HttpPost httpPost = new HttpPost(url, params, new Handler());
-        httpPost.start();
-*/
         // Log and toast
         msg = getString(R.string.msg_token_fmt, deviceToken);
         Log.d(TAG, msg);
         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-
+*/
         int id=0;
 
         Bundle extras = getIntent().getExtras();
@@ -216,14 +283,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         nm.cancel(id);
-
-
-        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
-
-        userRole = sharedPreferences.getString(USER_ROLE, "child");
-
-        Log.d(TAG, "USER_ROLE : " + userRole);
-
 
 
     }
@@ -251,28 +310,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_userInfo.setOnClickListener(this);
 
 
-/*
-        // Develop mode
-        // Clear SharedPreferences
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.clear();
-        editor.commit();
-*/
-
-        userPhoneNumber = sharedPreferences.getString(USER_PHONE_NUMBER, "010-0000-0000");
-        //Log.d(TAG, "USER phone number : " + userPhoneNumber);
-
 
 
         Intent intent = new Intent(this, SplashActivity.class);
 
 
-        loginState = sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT");
         int requestCode = 0;
 
-
-        userId = sharedPreferences.getInt(USER_ID_NUMBER , 0);
 
         intent.putExtra(USER_ID_NUMBER, userId);
         intent.putExtra(USER_LOGIN_STATE, loginState);
@@ -287,39 +331,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_userInfo.setVisibility(View.VISIBLE);
             btn_login.setText("LOGOUT");
 
-
-            if(userRole.equals("")){
+            Log.d(TAG, "userRole : " + userRole);
+            Log.d(TAG, "userRoleNumber : " + userRoleNumber);
+            if(userRoleNumber == 0){
                 btn_next.setVisibility(View.GONE);
             }else{
-                btn_next.setVisibility(View.VISIBLE);
+                loadingData(userId, userRole);
             }
 
+
             requestCode = 1;
-
-            // 객체를 parcel을 통해 전달 - 미구현, ArrayList로 임시 구현
-            MqttTopic topic = new MqttTopic("Sajouiot03");
-            topics.add(topic);
-            topic = new MqttTopic("Sajouiot02");
-            topics.add(topic);
-            topic = new MqttTopic("Sajouiot01");
-            topics.add(topic);
-
-
-
-            ArrayList<String> topicArrayList = new ArrayList<>();
-
-            topicArrayList.add("Sajouiot03");
-            topicArrayList.add("Sajouiot02");
-            topicArrayList.add("Sajouiot01");
-
-            serviceIntent = new Intent(getApplicationContext(), MqttService.class);
-            serviceIntent.putExtra("topic", topicArrayList);
-            Boolean isExected = true;
-            serviceIntent.putExtra("mode", isExected);
-            //serviceIntent.putStringArrayListExtra("topic", topicArrayList);
-
-
-            startService(serviceIntent);
 
         }else{
             // Current state : Logout
@@ -330,12 +351,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_userInfo.setVisibility(View.GONE);
 
             requestCode = 0;
-
-            if(isServiceRunningCheck()){
-                stopService(serviceIntent);
+/*
+            //TODO Fix error
+            try{
+                if(isServiceRunningCheck()){
+                    stopService(serviceIntent);
+                }
+            }catch (Exception e){
+                e.getStackTrace();
             }
+*/
         }
 
+        // Start SplashActivity
         // Loading screen
         startActivityForResult(intent, requestCode);
 
@@ -384,6 +412,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (viewId){
             case R.id.btn_next:{
+                //TODO Fix error - After SplashActivity, userRole = null
+                Log.d(TAG, "btn_next");
+                Log.d(TAG, "userRole : " + userRole);
+                // Temp data
+                userRole = "child";
                 Intent intent = new Intent(getApplicationContext(), SelectOpponentActivity.class);
 
                 intent.putExtra(USER_ID_NUMBER, userId);
@@ -398,6 +431,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra(RESERVATION_WEEK_NUMBER, userWeekNumber);
                 intent.putExtra(RESERVATION_TIMES, userReserveNumber);
                 intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+
+                intent.putExtra(OPPONENT_USER_ID, opponentUserId);
+                intent.putExtra(OPPONENT_USER_NICKNAME, opponentUserNickname);
+                intent.putExtra(OPPONENT_USER_PHONENUMBER, opponentUserPhoneNumber);
+                intent.putExtra(OPPONENT_USER_PROFILE, opponentUserProfile);
+                intent.putExtra(OPPONENT_USER_TOPICS, mqttTopics);
 
                 startActivity(intent);
                 break;
@@ -432,7 +471,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
                     intent.putExtra(USER_LOGIN_STATE, "LOGOUT");
                     requestCode = 2;
-
+                    /*
+                    // Temp data
                     ArrayList<String> topicArrayList = new ArrayList<>();
 
                     topicArrayList.add("Sajouiot03");
@@ -448,15 +488,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                     startService(serviceIntent);
+                    */
                 }else{
                     // If current state = login
                     //Log.d(TAG, "Current state : Login");
                     intent.putExtra(USER_LOGIN_STATE, "LOGIN");
                     requestCode = 3;
 
-                    if(isServiceRunningCheck()){
-                        stopService(serviceIntent);
+                    /*
+                    try{
+                        if(isServiceRunningCheck()){
+                            stopService(serviceIntent);
+                        }
+                    }catch (Exception e){
+                        e.getStackTrace();
                     }
+                    */
                 }
 
                 startActivityForResult(intent, requestCode);
@@ -509,6 +556,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         userReserveAlert= data.getIntExtra(RESERVATION_ALERT, 0);
                         userWeekNumber = data.getIntExtra(RESERVATION_WEEK_NUMBER, 0);
                         userReserveNumber = data.getIntExtra(RESERVATION_TIMES, 0);
+
+                        loadingData(userId, userRole);
 /*
 
                         // Check variables
@@ -532,6 +581,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // LoginPhoneActivity
                     case 2:{
                         // LOGIN success
+                        loadingData(userId, userRole);
 
                         loginState = data.getStringExtra(USER_LOGIN_STATE);
 
@@ -546,16 +596,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         btn_invite.setVisibility(View.VISIBLE);
                         btn_temp.setVisibility(View.VISIBLE);
                         btn_userInfo.setVisibility(View.VISIBLE);
-
+/*
+                        //TODO Fix error
                         //MqttService.mqttTopic = "Sajouiot03";
                         ArrayList<String> arrayList = new ArrayList<>();
 
                         arrayList.add("Sajouiot03");
                         arrayList.add("Sajouiot02");
                         arrayList.add("Sajouiot01");
-
+*/
                         serviceIntent = new Intent(getApplicationContext(), MqttService.class);
-                        serviceIntent.putStringArrayListExtra("topic", arrayList);
+                        serviceIntent.putExtra("topic", mqttTopics);
 
                         Boolean isExected = true;
                         serviceIntent.putExtra("mode", isExected);
@@ -578,6 +629,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         btn_temp.setVisibility(View.GONE);
                         btn_userInfo.setVisibility(View.GONE);
 
+                        //TODO Fix error
                         try {
                             if(isServiceRunningCheck()){
                                 Log.d(TAG, "Current state : Running service");
@@ -586,6 +638,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }catch(Exception e){
                             e.getStackTrace();
                         }
+
 
                         break;
                     }
@@ -611,6 +664,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
         } // End result code switch
+    }
+
+    public void loadingData(int userId, String userRole){
+        Log.d(TAG, "loadingData");
+        Log.d(TAG, "userId : " + userId + ", userRole : " + userRole);
+        // TODO Choose Role - branch
+
+
+        // TODO Change temp data to variable userId, userRole
+        Call<List<UserMap>> userMapCall = RestfulAdapter.getInstance().userMapping(16, "parent");
+
+        userMapCall.enqueue(new Callback<List<UserMap>>() {
+            @Override
+            public void onResponse(Call<List<UserMap>> call, Response<List<UserMap>> response) {
+                //Log.d(TAG, response.body().get(0).getNickname_sn());
+
+                userMapList = response.body();
+                //List<UserMap> mapList = response.body();
+
+
+                for(int i=0; i < response.body().size(); i++){
+                    UserMap userMap = response.body().get(i);
+
+                    int userMapId = userMap.getUser_id();
+                    String userMapNickname = userMap.getNickname_sn();
+                    String userMapPhoneNumber = userMap.getPhone_number_sn();
+                    String userMapProfile = userMap.getProfile_ln();
+                    String userMapTopic = userMap.getTopic_mn();
+
+                    Log.d(TAG, "userMap " + i + "th");
+                    Log.d(TAG, "id" + userMapId);
+                    Log.d(TAG, "nickname : " + userMapNickname);
+                    Log.d(TAG, "phoneNumber : " + userMapPhoneNumber);
+                    Log.d(TAG, "profile : " + userMapProfile);
+                    Log.d(TAG, "topic : " + userMapTopic);
+
+                    opponentUserId.add(i, userMapId);
+                    opponentUserNickname.add(i, userMapNickname);
+                    opponentUserPhoneNumber.add(i, userMapPhoneNumber);
+                    opponentUserProfile.add(i, userMapProfile);
+
+                    MqttTopic topic = new MqttTopic(userMapTopic);
+                    mqttTopics.add(i, topic);
+                }
+
+
+                btn_next.setVisibility(View.VISIBLE);
+
+                /*
+                //TODO Fix error
+
+                ArrayList<String> arrayList = new ArrayList<>();
+
+                arrayList.add("Sajouiot03");
+                arrayList.add("Sajouiot02");
+                arrayList.add("Sajouiot01");
+
+                serviceIntent = new Intent(getApplicationContext(), MqttService.class);
+                serviceIntent.putExtra("topic", arrayList);
+                Boolean isExected = true;
+                serviceIntent.putExtra("mode", isExected);
+                //serviceIntent.putStringArrayListExtra("topic", topicArrayList);
+
+
+                startService(serviceIntent);
+                */
+            }
+
+            @Override
+            public void onFailure(Call<List<UserMap>> call, Throwable t) {
+                Log.d(TAG, "onFailure");
+            }
+        });
     }
 
     public boolean isServiceRunningCheck() {

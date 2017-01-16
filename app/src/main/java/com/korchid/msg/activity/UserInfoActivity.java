@@ -19,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.api.client.util.DateTime;
 import com.korchid.msg.adapter.RestfulAdapter;
 import com.korchid.msg.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
@@ -61,6 +62,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private String profile = "/";
     private String sex = "";
     private String nickname = "";
+    private Date birthday = new Date();
 
 
     @Override
@@ -69,6 +71,28 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         initView();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+        profile = sharedPreferences.getString(USER_PROFILE, "");
+        sex = sharedPreferences.getString(USER_SEX, "");
+        nickname = sharedPreferences.getString(USER_NICKNAME, "");
+
+
+        if(!profile.equals("")) {
+            Bitmap bitmap = BitmapFactory.decodeFile(profile);
+            iv_profile.setImageBitmap(bitmap);
+        }
+
+        if(sex.equals("Male")){
+            rbtn_male.setChecked(true);
+        }else if(sex.equals("Female")){
+            rbtn_female.setChecked(true);
+        }else if(sex.equals("Etc")){
+            rbtn_etc.setChecked(true);
+        }
+        et_nickname.setText(nickname);
+
+        //TODO Add birthday function
 
     }
 
@@ -248,6 +272,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(USER_PROFILE, profile);
 
+                    editor.apply();
 
                     Bitmap bitmap = BitmapFactory.decodeFile(profile);
 

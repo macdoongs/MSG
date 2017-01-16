@@ -24,6 +24,8 @@ import java.util.Date;
 public class DBTest extends AppCompatActivity {
     private static final String TAG = "DBTest";
 
+    String topic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -34,18 +36,20 @@ public class DBTest extends AppCompatActivity {
 
         CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, "DB Test");
 
-        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 4);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        dbHelper.onUpgrade(db, 0, 1);
+        dbHelper.onUpgrade(db, 3, 4) ;
 
         // 테이블에 있는 모든 데이터 출력
         final TextView tv_result = (TextView) findViewById(R.id.result);
 
         final EditText et_date = (EditText) findViewById(R.id.date);
-        final EditText et_item = (EditText) findViewById(R.id.item);
-        final EditText et_price = (EditText) findViewById(R.id.price);
-
+        final EditText et_senderId = (EditText) findViewById(R.id.et_senderId);
+        final EditText et_senderNickname = (EditText) findViewById(R.id.et_senderNickname);
+        final EditText et_receiverId = (EditText) findViewById(R.id.et_receiverId);
+        final EditText et_topic = (EditText) findViewById(R.id.et_topic);
+        final EditText et_content = (EditText) findViewById(R.id.et_content);
 
         // 날짜는 현재 날짜로 고정
         // 현재 시간 구하기
@@ -61,14 +65,17 @@ public class DBTest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String date = et_date.getText().toString();
-                String item = et_item.getText().toString();
-                int price = Integer.parseInt(et_price.getText().toString());
 
-                String message = date + "/" + item + "/" + price;
 
-                dbHelper.insertMessage(message);
+                int senderId = Integer.parseInt(et_senderId.getText().toString());
+                String senderNickname = et_senderNickname.getText().toString();
+                int receiverId = Integer.parseInt(et_receiverId.getText().toString());
+                topic = et_topic.getText().toString();
+                String content = et_content.getText().toString();
 
-                tv_result.setText(message);
+                dbHelper.insertChatting(senderId, senderNickname, receiverId, topic, "message", content);
+
+                tv_result.setText(senderId + "/" + senderNickname + "/" + receiverId + "/" + topic + "/" +content);
             }
         });
 
@@ -76,7 +83,8 @@ public class DBTest extends AppCompatActivity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_result.setText(dbHelper.getMessage());
+                topic = et_topic.getText().toString();
+                tv_result.setText(dbHelper.getTableChatting(topic));
 
             }
         });

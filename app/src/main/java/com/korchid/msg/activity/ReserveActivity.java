@@ -73,9 +73,27 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve);
 
-
         initView();
 
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+
+
+        // MySQL database tinyInt type = Boolean
+        Boolean isMessageAlert = tinyIntTypeConversionBool(sharedPreferences.getInt(MESSAGE_ALERT, 1));
+        Boolean isReserveEnable = tinyIntTypeConversionBool(sharedPreferences.getInt(RESERVATION_ENABLE, 1));
+        Boolean isReserveAlert = tinyIntTypeConversionBool(sharedPreferences.getInt(RESERVATION_ALERT, 1));
+        //Log.d(TAG, "isMessageAlert : " + isMessageAlert + ", isReserveEnable : " + isReserveEnable + ", isReserveAlert : " + isReserveAlert);
+
+
+        int reserveNumber = sharedPreferences.getInt(RESERVATION_WEEK_NUMBER, 1);
+        int reserveTimes = sharedPreferences.getInt(RESERVATION_TIMES, 1);
+
+        sw_pushEnable.setChecked(isMessageAlert);
+        sw_enable.setChecked(isReserveEnable);
+        sw_alert.setChecked(isReserveAlert);
+
+        np_week.setValue(reserveNumber);
+        np_number.setValue(reserveTimes);
     }
 
     private void initView(){
@@ -317,7 +335,6 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
         switch (swId){
             case R.id.sw_pushEnable:{
-
                 Toast.makeText(this, "sw_pushEnable " + (isSWOn ? "on" : "off"),
                         Toast.LENGTH_SHORT).show();
                 if(isSWOn){
@@ -372,6 +389,15 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    public Boolean tinyIntTypeConversionBool(int type){
+        Boolean result;
 
+        if(type == 1){
+            result = true;
+        }else{
+            result = false;
+        }
+        return result;
+    }
 
 }

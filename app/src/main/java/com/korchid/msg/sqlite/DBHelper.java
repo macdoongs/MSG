@@ -166,7 +166,27 @@ public class DBHelper extends SQLiteOpenHelper {
             KEY_RESERVE_TIME + " TIMESTAMP" +
             ");";
 
+    /*
+    * TABLE chatting
+    */
+    private static final String TABLE_CHATTING = "chatting";
+    private static final String KEY_CHATTING_ID = "id";
+    private static final String KEY_CHATTING_SENDER_ID = "sender_id";
+    private static final String KEY_CHATTING_SENDER_NICKNAME = "sender_nickname";
+    private static final String KEY_CHATTING_RECEIVER_ID = "receiver_id";
+    private static final String KEY_CHATTING_TOPIC = "topic";
+    private static final String KEY_CHATTING_TYPE = "type";
+    private static final String KEY_CHATTING_CONTENT = "content";
 
+    private static final String CREATE_TABLE_CHATTING = "CREATE TABLE " + TABLE_CHATTING + "(" +
+            KEY_CHATTING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            KEY_CHATTING_SENDER_ID + " INT NOT NULL," +
+            KEY_CHATTING_SENDER_NICKNAME + " CHAR(30) NOT NULL," +
+            KEY_CHATTING_RECEIVER_ID + " INT NOT NULL," +
+            KEY_CHATTING_TOPIC + " CHAR(30) NOT NULL," +
+            KEY_CHATTING_TYPE + " CHAR(30) NOT NULL," +
+            KEY_CHATTING_CONTENT + " LONGTEXT NOT NULL" +
+            ");";
 
 
     // DBhelper constructor - DB name, version information
@@ -180,12 +200,13 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "onCreate");
         // 새로운 테이블 생성
         try{
+            /*
             db.execSQL(CREATE_TABLE_MESSAGE);
             db.execSQL(CREATE_TABLE_SEND_MESSAGE);
             db.execSQL(CREATE_TABLE_RESERVATION_MESSAGE_TYPE);
             db.execSQL(CREATE_TABLE_RESERVATION_MESSAGE);
             db.execSQL(CREATE_TABLE_RESERVE_MESSAGE);
-
+*/
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }
@@ -213,13 +234,108 @@ public class DBHelper extends SQLiteOpenHelper {
         query = dropQuery + TABLE_RESERVE_MESSAGE + ";";
         db.execSQL(query);
 
+        query = dropQuery + TABLE_CHATTING + ";";
+        db.execSQL(query);
+        /*
         db.execSQL(CREATE_TABLE_MESSAGE);
         db.execSQL(CREATE_TABLE_SEND_MESSAGE);
         db.execSQL(CREATE_TABLE_RESERVATION_MESSAGE_TYPE);
         db.execSQL(CREATE_TABLE_RESERVATION_MESSAGE);
         db.execSQL(CREATE_TABLE_RESERVE_MESSAGE);
+        */
+        db.execSQL(CREATE_TABLE_CHATTING);
+    }
+
+
+    public void insertChatting(int senderId, String senderNickname, int receiverId, String topic, String type, String content){
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+        try {
+            db.execSQL("INSERT INTO " + TABLE_CHATTING + " VALUES (null,"
+                    + senderId + ", '" + senderNickname + "', " + receiverId + ", '" + topic + "', '" + type + "', '" + content + "');");
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+
+        Log.d(TAG, "insertChatting");
+
+        db.close();
 
     }
+
+    public String explainTableChatting(){
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+        String result = "";
+
+        try {
+            // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+            Cursor cursor = db.rawQuery("EXPLAIN " + TABLE_CHATTING, null);
+
+            while (cursor.moveToNext()) {
+                result += "" + cursor.getInt(0)
+                        + " / "
+                        + cursor.getInt(1)
+                        + " / "
+                        + cursor.getString(2)
+                        + " / "
+                        + cursor.getInt(3)
+                        + " / "
+                        + cursor.getString(4)
+                        + " / "
+                        + cursor.getString(5)
+                        + " / "
+                        + cursor.getString(6)
+                        + "\n";
+            }
+
+            cursor.close();
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+        //Log.d(TAG, result);
+
+        return result;
+
+    }
+
+    public String getTableChatting(String topic) {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+        String result = "";
+
+        try {
+            // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CHATTING + " WHERE topic = '" + topic + "'", null);
+
+            while (cursor.moveToNext()) {
+                result += "" + cursor.getInt(0)
+                        + " / "
+                        + cursor.getInt(1)
+                        + " / "
+                        + cursor.getString(2)
+                        + " / "
+                        + cursor.getInt(3)
+                        + " / "
+                        + cursor.getString(4)
+                        + " / "
+                        + cursor.getString(5)
+                        + " / "
+                        + cursor.getString(6)
+                        + "\n";
+            }
+
+            cursor.close();
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+        Log.d(TAG, result);
+
+        return result;
+    }
+
+
 
     public void insertMessage(String Content) {
         // 읽고 쓰기가 가능하게 DB 열기

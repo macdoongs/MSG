@@ -46,6 +46,11 @@ import java.util.Date;
 import java.util.HashMap;
 
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_ID;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_NICKNAME;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PHONENUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_TOPICS;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
@@ -102,9 +107,11 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private int userReserveNumber;
 
 
-    private String parentName;
-    private String opponentProfile;
-    private String title;
+    private int opponentUserId;
+    private String opponentUserNickname;
+    private String opponentUserPhoneNumber;
+    private String opponentUserProfile;
+    private String mqttTopic;
 
 
     private Boolean expandedState = false;
@@ -113,17 +120,21 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private ChattingAdapter adapter;
     private static String chatMessage = new String();
 
+
+
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
-        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
+        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 4);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
 
         Intent intent = getIntent();
 
         userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+        Log.d(TAG, "userId : " + userId);
         userNickname = getIntent().getStringExtra(USER_NICKNAME);
         userSex = getIntent().getStringExtra(USER_SEX);
         userBirthday.setTime(getIntent().getLongExtra(USER_NICKNAME, 0));
@@ -135,14 +146,22 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         userWeekNumber = getIntent().getIntExtra(RESERVATION_WEEK_NUMBER, 0);
         userReserveNumber = getIntent().getIntExtra(RESERVATION_TIMES, 0);
 
-
-        parentName = intent.getStringExtra("parentName");
         userPhoneNumber = intent.getStringExtra(USER_PHONE_NUMBER);
 
 
         userProfile = null;
-        opponentProfile = intent.getStringExtra("opponentProfile");
-        title = intent.getStringExtra("topic");
+
+
+        //opponentUserNickname = intent.getStringExtra("parentName");
+        opponentUserId = intent.getIntExtra(OPPONENT_USER_ID, 0);
+        opponentUserNickname = intent.getStringExtra(OPPONENT_USER_NICKNAME);
+        opponentUserPhoneNumber = intent.getStringExtra(OPPONENT_USER_PHONENUMBER);
+        opponentUserProfile = intent.getStringExtra(OPPONENT_USER_PROFILE);
+        mqttTopic = intent.getStringExtra(OPPONENT_USER_TOPICS);
+
+        // Temp data
+        opponentUserProfile = intent.getStringExtra("opponentProfile");
+
         m_arr = new ArrayList<Chatting>();
 
 //        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
@@ -150,18 +169,25 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
         try {
-            String storedMessage = dbHelper.getMessage();
+            String storedMessage = dbHelper.getTableChatting(mqttTopic);
+            Log.d(TAG, "result : " + storedMessage);
             String[] strArr = storedMessage.split("\n");
             for (int i = 0; i < strArr.length; i++) {
-                String[] line = strArr[i].split("/");
+                String[] stringSplit = strArr[i].split(" / ");
+                int id = Integer.parseInt(stringSplit[0]);
+                int senderId = Integer.parseInt(stringSplit[1]);
+                String senderNickname = stringSplit[2];
+                int receiverId = Integer.parseInt(stringSplit[3]);
+                String topic = stringSplit[4];
+                String type = stringSplit[5];
+                String content = stringSplit[6];
+                Chatting.Type messageType = Chatting.Type.MESSAGE;
+                if(type.equals("message")){
+                    messageType = Chatting.Type.MESSAGE;
+                }
+                Log.d(TAG, "Chatting : " + senderId + "/" + senderNickname + "/" + receiverId + "/" + mqttTopic + "/" +content);
 
-                int senderId = 44;
-                int receiverId = 16;
-                String senderNickname = "TestBot";
-                Chatting.Type type = Chatting.Type.MESSAGE;
-                String message = line[3];
-
-                m_arr.add(new Chatting(senderId, receiverId, senderNickname, type, message));
+                m_arr.add(new Chatting(senderId, receiverId, senderNickname, messageType, content));
             }
         }catch (Exception e){
             Log.d(TAG, "Error : " + e.getMessage());
@@ -169,16 +195,15 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         initView();
 
-        Log.d(TAG, "Topic : " + title);
+        Log.d(TAG, "Topic : " + mqttTopic);
 
-        //Toast.makeText(getApplicationContext(), "Topic : " + title, Toast.LENGTH_LONG).show();
 
 
         // Register mqtt topic - Web server
         String url = "https://www.korchid.com/msg/user/chatting/topic/subscription";
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("topic", title);
+        params.put("topic", mqttTopic);
 
 
         HttpPost httpPost = new HttpPost(url, params, new Handler());
@@ -188,12 +213,12 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         bindStatusReceiver();
         bindMessageReceiver();
 
-        //MqttServiceDelegate.topic = title;
+        //MqttServiceDelegate.topic = mqttTopic;
 
 
 
         //Start service if not started
-        //MqttServiceDelegate.startService(this, title);
+        MqttServiceDelegate.startService(this, mqttTopic);
 
 
     }
@@ -203,12 +228,13 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private void initView(){
         StatusBar statusBar = new StatusBar(this);
 
-        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, parentName);
+        CustomActionbar customActionbar = new CustomActionbar(this, R.layout.actionbar_content, opponentUserNickname);
 
         btn_plus = (ImageButton)findViewById(R.id.btn_plus);
 
 
         lv_message = (ListView)findViewById(R.id.lv_message);
+
 
         et_message = (EditText)findViewById(R.id.et_message);
 
@@ -252,7 +278,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         et_message.addTextChangedListener(textWatcher);
 
-        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userId, opponentProfile);
+        adapter = new ChattingAdapter(ChattingActivity.this, m_arr, userId, opponentUserProfile);
         lv_message.setAdapter(adapter);
 
     }
@@ -264,7 +290,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         switch (viewId){
             case R.id.btn_send:{
-
                 String message = et_message.getText().toString();
 
                 // MQTT message - JSON format
@@ -274,7 +299,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
 
                 //Test data
-                int receiverId = 18;
+                int receiverId = opponentUserId;
                 String messageType = "message";
 
                 JSONObject obj = new JSONObject();
@@ -282,6 +307,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                     obj.put("senderId", userId);
                     obj.put("receiverId", receiverId);
                     obj.put("senderNickname", userNickname);
+                    obj.put("topic", mqttTopic);
                     obj.put("messageType", messageType);
                     obj.put("message", message);
 
@@ -292,7 +318,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 }
 
                 //TODO modify topic
-                String topic = title;
+                String topic = mqttTopic;
 
                 MqttServiceDelegate.publish(
                         ChattingActivity.this,
@@ -406,7 +432,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     {
         Log.d(TAG, "onDestroy");
 
-        //MqttServiceDelegate.stopService(this);
+        MqttServiceDelegate.stopService(this);
 
         unbindMessageReceiver();
         unbindStatusReceiver();
@@ -415,7 +441,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         String url = "https://www.korchid.com/msg/user/chatting/topic/unsubscription";
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("topic", title);
+        params.put("topic", mqttTopic);
 
 
         HttpPost httpPost = new HttpPost(url, params, new Handler());
@@ -468,10 +494,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         super.onResume();
         Log.d(TAG, "onResume");
 
-        //MqttServiceDelegate.topic = title;
+        //MqttServiceDelegate.topic = mqttTopic;
 
         //Start service if not started
-        //MqttServiceDelegate.startService(this, title);
+        //MqttServiceDelegate.startService(this, mqttTopic);
     }
 
     @Override
@@ -507,15 +533,9 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
             e.getStackTrace();
         }
 
-        String name = "";
-
-        //TODO modify topic
-        String roomTopic = title;
-
-        Log.d(TAG, topic);
         Log.d(TAG, data);
 
-        if(!topic.equals(roomTopic)){
+        if(!topic.equals(mqttTopic)){
             return;
         }
 

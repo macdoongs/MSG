@@ -48,6 +48,7 @@ import com.korchid.msg.alarm.AlarmBroadCastReciever;
 import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.alarm.AlarmUtil;
 import com.korchid.msg.http.HttpGet;
+import com.korchid.msg.mqtt.impl.MqttTopic;
 import com.korchid.msg.ui.StatusBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -59,6 +60,11 @@ import okhttp3.OkHttpClient;
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.INTENTFILTER_BROADCAST_TIMER;
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.KEY_DEFAULT;
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_ID;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_NICKNAME;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PHONENUMBER;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PROFILE;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_TOPICS;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_ENABLE;
 import static com.korchid.msg.global.QuickstartPreferences.RESERVATION_TIMES;
@@ -87,19 +93,13 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private int mPrevPosition;
     private LinearLayout mPageMark;
 
-    // Temp Data Array
-    private static ArrayList<String> parentArrayList;
-
     // Temp data
-    private static String[] opponentNickname = {"Father", "Mother", "StepMother"};
-    private static String[] phoneNum = {"010-0000-0001", "010-0000-0002", "010-0000-0003" };
-    private static String[] topic = {"Sajouiot03", "Sajouiot02", "Sajouiot01"};
     private static String[] timeReserved = {"수요일 9시경", "목요일 5시경", "금요일 8시경"};
     private static String[] message = {"아빠 뭐해?", "엄마 뭐해?", "엄마 뭐해요?"};
-    private static String[] profile = {"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/black_rubber_shoes.png"
-                                        ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_logo.png"
-                                        ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_os_loading"};
     private static int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
+    private static String[] profile = {"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/black_rubber_shoes.png"
+            ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_logo.png"
+            ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_os_loading"};
 
 
     private int viewId;
@@ -120,7 +120,15 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private static int userWeekNumber;
     private static int userReserveNumber;
 
-    private int count;
+
+    private static ArrayList<Integer> opponentUserId = new ArrayList<>();
+    private static ArrayList<String> opponentUserNickname = new ArrayList<>();
+    private static ArrayList<String> opponentUserPhoneNumber = new ArrayList<>();
+    private static ArrayList<String> opponentUserProfile = new ArrayList<>();
+    private static ArrayList<MqttTopic> mqttTopics = new ArrayList<>();
+
+
+    private int count = 0;
 
 
     /**
@@ -149,6 +157,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mainActivity.finish();
 
         userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+        Log.d(TAG, "userId : " + userId);
         userNickname = getIntent().getStringExtra(USER_NICKNAME);
         userSex = getIntent().getStringExtra(USER_SEX);
         userBirthday.setTime(getIntent().getLongExtra(USER_NICKNAME, 0));
@@ -161,56 +170,25 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         userReserveNumber = getIntent().getIntExtra(RESERVATION_TIMES, 0);
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
 
-        parentArrayList = new ArrayList<>();
+
+        opponentUserId = getIntent().getIntegerArrayListExtra(OPPONENT_USER_ID);
+        opponentUserNickname = getIntent().getStringArrayListExtra(OPPONENT_USER_NICKNAME);
+        opponentUserPhoneNumber = getIntent().getStringArrayListExtra(OPPONENT_USER_PHONENUMBER);
+        opponentUserProfile = getIntent().getStringArrayListExtra(OPPONENT_USER_PROFILE);
+        mqttTopics = (ArrayList<MqttTopic>) getIntent().getSerializableExtra(OPPONENT_USER_TOPICS);
+
+        // Check intent data
+        for(int i = 0; i<opponentUserNickname.size(); i++){
+            Log.d(TAG, "opponentUserId : " + opponentUserId.get(i));
+            Log.d(TAG, "opponentUserNickname : " + opponentUserNickname.get(i));
+            Log.d(TAG, "opponentUserPhoneNumber : " + opponentUserPhoneNumber.get(i));
+            Log.d(TAG, "opponentUserProfile : " + opponentUserProfile.get(i));
+            Log.d(TAG, "mqttTopic : " + mqttTopics.get(i).getName());
+        }
+
 
         initView();
 
-
-
-/*
-        String stringUrl = "https://www.korchid.com/msg-mapping/" + userPhoneNumber;
-
-        Handler httpHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                Log.d(TAG, "handleMessage");
-
-                String response = msg.getData().getString("response");
-
-                String[] line = response.split("\n");
-
-                Log.d(TAG, "response : " + response);
-                //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                if (line[0].equals("Error")) {
-                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-
-
-
-                } else {
-                    String topic = line[0];
-
-
-
-                    for(int i=0; i<line.length; i++){
-                        String[] dataArray = line[i].split("/");
-
-                        String[] content = dataArray[2].split(":");
-
-                        parentArrayList.add(content[1]);
-                        Log.d(TAG, "dataArray : " + dataArray[i]);
-                    }
-
-                    Toast.makeText(getApplicationContext(), "Topic : " + topic, Toast.LENGTH_LONG).show();
-
-                }
-            }
-        };
-
-
-        HttpGet httpGet = new HttpGet(stringUrl, httpHandler);
-        httpGet.start();
-  */
     }
 
     private void initView(){
@@ -263,7 +241,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(opponentNickname[0]);
+        actionBar.setTitle(opponentUserNickname.get(0));
 
         mViewPager.setCurrentItem(0);
 
@@ -277,7 +255,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             @Override
             public void onPageSelected(final int position) {
                 ActionBar actionBar = getSupportActionBar();
-                actionBar.setTitle(opponentNickname[position]);
+                actionBar.setTitle(opponentUserNickname.get(position));
 
                 // http://www.hardcopyworld.com/ngine/android/index.php/archives/164
                 //이전 페이지에 해당하는 페이지 표시 이미지 변경
@@ -299,10 +277,10 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         if (!AlarmBroadCastReciever.isLaunched) {
             AlarmUtil.setSenderId(16);
-            AlarmUtil.setReceiverId(17);
+            AlarmUtil.setReceiverId(userId);
             AlarmUtil.setUserNickname(userNickname);
             AlarmUtil.setMessage("Test message dump");
-            AlarmUtil.setTopic("Sajouiot02");
+            AlarmUtil.setTopic(mqttTopics.get(0).getName());
 
             AlarmUtil.getInstance().startMatchingAlarm(this);
         }else{
@@ -313,7 +291,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private void initPageMark(){
         mPageMark = (LinearLayout)findViewById(R.id.page_mark);
 
-        for(int i=0; i < opponentNickname.length; i++)
+        for(int i=0; i < opponentUserNickname.size(); i++)
         {
             ImageView iv = new ImageView(getApplicationContext());
             iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -351,7 +329,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
     @Override
     protected void onResume() {
-        registerReceiver(mTimeReceiver,new IntentFilter(INTENTFILTER_BROADCAST_TIMER));
+        registerReceiver(mTimeReceiver, new IntentFilter(INTENTFILTER_BROADCAST_TIMER));
         super.onResume();
     }
 
@@ -540,10 +518,10 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                 @Override
                 public void onClick(View view) {
                     //Show dial
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + phoneNum[idx]));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + opponentUserPhoneNumber.get(idx)));
 
                     //Direct call
-                    //Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum[idx]));
+                    //Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + opponentUserPhoneNumber.get(idx)));
                     startActivity(intent);
                 }
             });
@@ -552,12 +530,6 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
             b2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "Chatting btn");
-                    Log.d(TAG, "userPhoneNumber : " + userPhoneNumber);
-                    Log.d(TAG, "userId : " + userId);
-                    Log.d(TAG, "userNickname : " + userNickname);
-
-                    //Toast.makeText(getApplicationContext(), topic[position], Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), ChattingActivity.class);
 
                     intent.putExtra(USER_ID_NUMBER, userId);
@@ -573,10 +545,21 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                     intent.putExtra(RESERVATION_TIMES, userReserveNumber);
                     intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
 
+
+                    intent.putExtra(OPPONENT_USER_ID, opponentUserId.get(idx));
+                    intent.putExtra(OPPONENT_USER_NICKNAME, opponentUserNickname.get(idx));
+                    intent.putExtra(OPPONENT_USER_TOPICS, mqttTopics.get(idx).getName());
+                    intent.putExtra(OPPONENT_USER_PHONENUMBER, opponentUserPhoneNumber.get(idx));
+                    intent.putExtra(OPPONENT_USER_PROFILE, opponentUserProfile.get(idx));
+
+
+
+                    // Temp data
                     //intent.putExtra("topic", parentArrayList.get(idx));
-                    intent.putExtra("topic", topic[idx]);
-                    intent.putExtra("parentName", opponentNickname[idx]);
+                    //intent.putExtra("parentName", opponentUserNickname.get(idx));
+                    //intent.putExtra("topic", topic[idx]);
                     intent.putExtra("opponentProfile", profile[idx]);
+
 
                     startActivity(intent);
                 }
@@ -617,13 +600,13 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         @Override
         public int getCount() {
-            return opponentNickname.length;
+            return opponentUserNickname.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             Log.d(TAG, "getPageTitle");
-            return opponentNickname[position];
+            return opponentUserNickname.get(position);
         }
 
         @Override

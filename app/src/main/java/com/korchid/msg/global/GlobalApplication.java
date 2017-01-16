@@ -36,7 +36,6 @@ public class GlobalApplication extends Application {
     /**
      * see NotePad tutorial for an example implementation of DataDbAdapter
      */
-    public static DBHelper dbHelper;
 
 
     /**
@@ -50,9 +49,6 @@ public class GlobalApplication extends Application {
         instance = this;
 
         //KakaoSDK.init(new KakaoSDKAdapter());
-
-        dbHelper = new DBHelper(getApplicationContext(), "MSG.db", null, 1);
-        dbHelper.getWritableDatabase();
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -83,10 +79,6 @@ public class GlobalApplication extends Application {
         if(instance == null)
             throw new IllegalStateException("this application does not inherit com.kakao.GlobalApplication");
         return instance;
-    }
-
-    public DBHelper getDBHelper() {
-        return dbHelper;
     }
 
     public String getUserId() {
@@ -151,7 +143,6 @@ public class GlobalApplication extends Application {
     @Override
     public void onTerminate() {
         Log.d(TAG, "onTerminate");
-        dbHelper.close();
         super.onTerminate();
         instance = null;
     }
