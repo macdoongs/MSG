@@ -37,6 +37,7 @@ import com.korchid.msg.R;
 import com.korchid.msg.alarm.AlarmBroadCastReciever;
 import com.korchid.msg.alarm.AlarmUtil;
 import com.korchid.msg.member.chatting.ChattingActivity;
+import com.korchid.msg.member.chatting.ChattingBroadCastReceiver;
 import com.korchid.msg.member.chatting.mqtt.impl.MqttTopic;
 import com.korchid.msg.main.MainActivity;
 import com.korchid.msg.setting.reservation.ReserveActivity;
@@ -264,12 +265,17 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
 
         initPageMark();
 
+        ChattingBroadCastReceiver chattingBroadCastReceiver = new ChattingBroadCastReceiver();
+        chattingBroadCastReceiver.setTopics(mqttTopics);
+
         if (!AlarmBroadCastReciever.isLaunched) {
-            AlarmUtil.setSenderId(16);
-            AlarmUtil.setReceiverId(userId);
-            AlarmUtil.setUserNickname(userNickname);
-            AlarmUtil.setMessage("Test message dump");
+            // TODO change temp data to real data
+            AlarmUtil.setSenderId(18);
+            AlarmUtil.setReceiverId(16);
+            AlarmUtil.setSenderNickname(userNickname);
             AlarmUtil.setTopic(mqttTopics.get(0).getName());
+            AlarmUtil.setMessageType("message");
+            AlarmUtil.setMessage("Test message dump");
 
             AlarmUtil.getInstance().startMatchingAlarm(this);
         }else{
