@@ -47,6 +47,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_ID;
 import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PHONENUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PROFILE;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<MqttTopic> topics = new ArrayList<MqttTopic>();
 
+    private ArrayList<Integer> opponentUserId = new ArrayList<>();
     private ArrayList<String> opponentUserNickname = new ArrayList<>();
     private ArrayList<String> opponentUserPhoneNumber = new ArrayList<>();
     private ArrayList<String> opponentUserProfile = new ArrayList<>();
@@ -430,6 +432,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra(RESERVATION_TIMES, userReserveNumber);
                 intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
 
+                intent.putExtra(OPPONENT_USER_ID, opponentUserId);
                 intent.putExtra(OPPONENT_USER_NICKNAME, opponentUserNickname);
                 intent.putExtra(OPPONENT_USER_PHONENUMBER, opponentUserPhoneNumber);
                 intent.putExtra(OPPONENT_USER_PROFILE, opponentUserProfile);
@@ -601,14 +604,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         arrayList.add("Sajouiot03");
                         arrayList.add("Sajouiot02");
                         arrayList.add("Sajouiot01");
-
+*/
                         serviceIntent = new Intent(getApplicationContext(), MqttService.class);
-                        serviceIntent.putStringArrayListExtra("topic", arrayList);
+                        serviceIntent.putExtra("topic", mqttTopics);
 
                         Boolean isExected = true;
                         serviceIntent.putExtra("mode", isExected);
                         startService(serviceIntent);
-*/
+
                         break;
                     }
                     // LoginPhoneActivity
@@ -625,7 +628,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         btn_invite.setVisibility(View.GONE);
                         btn_temp.setVisibility(View.GONE);
                         btn_userInfo.setVisibility(View.GONE);
-                        /*
+
                         //TODO Fix error
                         try {
                             if(isServiceRunningCheck()){
@@ -635,7 +638,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }catch(Exception e){
                             e.getStackTrace();
                         }
-                        */
+
 
                         break;
                     }
@@ -684,17 +687,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for(int i=0; i < response.body().size(); i++){
                     UserMap userMap = response.body().get(i);
 
+                    int userMapId = userMap.getUser_id();
                     String userMapNickname = userMap.getNickname_sn();
                     String userMapPhoneNumber = userMap.getPhone_number_sn();
                     String userMapProfile = userMap.getProfile_ln();
                     String userMapTopic = userMap.getTopic_mn();
 
                     Log.d(TAG, "userMap " + i + "th");
+                    Log.d(TAG, "id" + userMapId);
                     Log.d(TAG, "nickname : " + userMapNickname);
                     Log.d(TAG, "phoneNumber : " + userMapPhoneNumber);
                     Log.d(TAG, "profile : " + userMapProfile);
                     Log.d(TAG, "topic : " + userMapTopic);
 
+                    opponentUserId.add(i, userMapId);
                     opponentUserNickname.add(i, userMapNickname);
                     opponentUserPhoneNumber.add(i, userMapPhoneNumber);
                     opponentUserProfile.add(i, userMapProfile);

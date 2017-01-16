@@ -48,7 +48,7 @@ public class QuickstartPreferences {
 
 
 
-
+    public static final String OPPONENT_USER_ID = "OPPONENT_USER_ID";
     public static final String OPPONENT_USER_NICKNAME = "OPPONENT_USER_NICKNAME";
     public static final String OPPONENT_USER_PHONENUMBER = "OPPONENT_USER_PHONENUMBER";
     public static final String OPPONENT_USER_PROFILE = "OPPONENT_USER_PROFILE";

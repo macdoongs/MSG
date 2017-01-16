@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
@@ -46,6 +47,7 @@ import com.korchid.msg.mqtt.interfaces.IMqttMessage;
 import com.korchid.msg.mqtt.interfaces.IMqttPersistence;
 import com.korchid.msg.mqtt.interfaces.IMqttTopic;
 import com.korchid.msg.service.ServiceThread;
+import com.korchid.msg.sqlite.DBHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -260,7 +262,12 @@ public class MqttService extends Service implements IMqttCallback {
     {
         Log.d(TAG, "onStartCommand : intent= "+ intent + ", flags = " + flags + ", startId = " + startId);
 
-        //mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
+        mqttTopic = intent.getStringExtra(MQTT_MSG_RECEIVED_MSG);
+        MqttTopic tempTopic = new MqttTopic(mqttTopic);
+        if(!(topics.contains(tempTopic) || mqttTopic == null)){
+            topics.add(tempTopic);
+            Log.d(TAG, "Add : topic " + tempTopic.getName());
+        }
 
         // 토픽이 여러 개
         //ArrayList<MqttTopic> topic = intent.getParcelableArrayListExtra("topic");
@@ -271,14 +278,15 @@ public class MqttService extends Service implements IMqttCallback {
         Boolean isExected = intent.getBooleanExtra("mode", false);
 
         if(isExected) {
-            ArrayList<String> topicArray = intent.getStringArrayListExtra("topic");
+            ArrayList<MqttTopic> topicArray = (ArrayList<MqttTopic>)intent.getSerializableExtra("topic");
 
             for (int i = 0; i < topicArray.size(); i++) {
-                String topic = topicArray.get(i);
+                String topic = topicArray.get(i).getName();
 
                 MqttTopic topicArrayIdx = new MqttTopic(topic);
 
-                if (!topics.contains(topicArrayIdx) && topic != null) {
+                if (!(topics.contains(topicArrayIdx) || topic == null)) {
+                    Log.d(TAG, "Add topic : " + topicArrayIdx.getName());
                     topics.add(topicArrayIdx);
                 }
             }
@@ -705,6 +713,7 @@ public class MqttService extends Service implements IMqttCallback {
 		throws Exception
     {
         Log.d(TAG, "messageArrived");
+
         // we protect against the phone switching off while we're doing this
         //  by requesting a wake lock - we request the minimum possible wake 
         //  lock - just enough to keep the CPU running until we've finished
@@ -725,17 +734,24 @@ public class MqttService extends Service implements IMqttCallback {
         {
             String strMessage = new String(message.getPayload());
 
+            String strTopic = topic.getName();
+
 			broadcastReceivedMessage(topic.getName(), message.getPayload());
-            Log.d(TAG, "messageArrived: topic = "+ topic.getName() + ", message = " + new String(message.getPayload()));
-
-
+            Log.d(TAG, "messageArrived: topic = "+ strTopic + ", message = " + new String(message.getPayload()));
 
 
             JSONObject mainObject = new JSONObject(strMessage);
-            String messageReceived = mainObject.getString("message");
-            int receiverId = mainObject.getInt("receiverId");
+
             int senderId = mainObject.getInt("senderId");
-            String senderNickname = mainObject.getString(USER_NICKNAME);
+            String senderNickname = mainObject.getString("senderNickname");
+            int receiverId = mainObject.getInt("receiverId");
+            String messageType = mainObject.getString("messageType");
+            String messageReceived = mainObject.getString("message");
+
+
+            final DBHelper dbHelper = new DBHelper(MqttService.this, "MSG.db", null, 4);
+
+            dbHelper.insertChatting(senderId, senderNickname, receiverId, strTopic, messageType, messageReceived);
 
 
             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
@@ -750,8 +766,9 @@ public class MqttService extends Service implements IMqttCallback {
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("senderId", senderId);
+                bundle.putString("senderNickname", senderNickname);
                 bundle.putInt("receiverId", receiverId);
-                bundle.putString(USER_NICKNAME, senderNickname);
+                bundle.putString("topic", topic.getName());
                 bundle.putString("message", messageReceived);
 
                 Message msg = new Message();
@@ -789,7 +806,7 @@ public class MqttService extends Service implements IMqttCallback {
 
             int senderId = bundle.getInt("senderId", 0);
             int receiverId = bundle.getInt("receiverId", 0);
-            String userNickname = bundle.getString(USER_NICKNAME);
+            String userNickname = bundle.getString("senderNickname");
             String message = bundle.getString("message");
 
             // Notification
@@ -973,19 +990,19 @@ public class MqttService extends Service implements IMqttCallback {
 
         boolean subscribed = false;
         
-        if (!isConnected())
-        {
+        if (!isConnected()) {
             // quick sanity check - don't try and subscribe if we
             //  don't have a connection
             Log.e(TAG, "Unable to subscribe as we are not connected");
         }
-        else 
-        {                                    
+        else {
             try 
             {
                 for(int i=0; i<topics.size(); i++){
                     Log.d(TAG, "Topic : " + topics.get(i).getName());
                 }
+
+                Log.d(TAG, "topics size : " + topics.size());
 
                 mqttClient.subscribe(
             		topics.toArray(new IMqttTopic[topics.size()]));
@@ -1002,8 +1019,7 @@ public class MqttService extends Service implements IMqttCallback {
             }
         }
         
-        if (subscribed == false)
-        {
+        if (subscribed == false) {
             //
             // inform the app of the failure to subscribe so that the UI can 
             //  display an error

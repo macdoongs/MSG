@@ -60,6 +60,7 @@ import okhttp3.OkHttpClient;
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.INTENTFILTER_BROADCAST_TIMER;
 import static com.korchid.msg.alarm.AlarmBroadCastReciever.KEY_DEFAULT;
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
+import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_ID;
 import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_NICKNAME;
 import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PHONENUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_PROFILE;
@@ -120,6 +121,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private static int userReserveNumber;
 
 
+    private static ArrayList<Integer> opponentUserId = new ArrayList<>();
     private static ArrayList<String> opponentUserNickname = new ArrayList<>();
     private static ArrayList<String> opponentUserPhoneNumber = new ArrayList<>();
     private static ArrayList<String> opponentUserProfile = new ArrayList<>();
@@ -155,6 +157,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         mainActivity.finish();
 
         userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+        Log.d(TAG, "userId : " + userId);
         userNickname = getIntent().getStringExtra(USER_NICKNAME);
         userSex = getIntent().getStringExtra(USER_SEX);
         userBirthday.setTime(getIntent().getLongExtra(USER_NICKNAME, 0));
@@ -168,19 +171,21 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
 
 
+        opponentUserId = getIntent().getIntegerArrayListExtra(OPPONENT_USER_ID);
         opponentUserNickname = getIntent().getStringArrayListExtra(OPPONENT_USER_NICKNAME);
         opponentUserPhoneNumber = getIntent().getStringArrayListExtra(OPPONENT_USER_PHONENUMBER);
         opponentUserProfile = getIntent().getStringArrayListExtra(OPPONENT_USER_PROFILE);
         mqttTopics = (ArrayList<MqttTopic>) getIntent().getSerializableExtra(OPPONENT_USER_TOPICS);
-/*
+
         // Check intent data
         for(int i = 0; i<opponentUserNickname.size(); i++){
+            Log.d(TAG, "opponentUserId : " + opponentUserId.get(i));
             Log.d(TAG, "opponentUserNickname : " + opponentUserNickname.get(i));
             Log.d(TAG, "opponentUserPhoneNumber : " + opponentUserPhoneNumber.get(i));
             Log.d(TAG, "opponentUserProfile : " + opponentUserProfile.get(i));
             Log.d(TAG, "mqttTopic : " + mqttTopics.get(i).getName());
         }
-*/
+
 
         initView();
 
@@ -541,6 +546,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
                     intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
 
 
+                    intent.putExtra(OPPONENT_USER_ID, opponentUserId.get(idx));
                     intent.putExtra(OPPONENT_USER_NICKNAME, opponentUserNickname.get(idx));
                     intent.putExtra(OPPONENT_USER_TOPICS, mqttTopics.get(idx).getName());
                     intent.putExtra(OPPONENT_USER_PHONENUMBER, opponentUserPhoneNumber.get(idx));

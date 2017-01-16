@@ -85,7 +85,9 @@ public class SplashActivity extends Activity {
         if(loginState.equals("LOGIN")){
             duration = SPLASH_LOGIN;
 
-            Call<List<UserData>> userDataCall = RestfulAdapter.getInstance().listLoadUserData(16);
+            // TODO modify real userId data
+            userId = 16;
+            Call<List<UserData>> userDataCall = RestfulAdapter.getInstance().listLoadUserData(userId);
 
             userDataCall.enqueue(new Callback<List<UserData>>() {
                 @Override
