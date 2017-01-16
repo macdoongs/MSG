@@ -1,5 +1,6 @@
 package com.korchid.msg.activity;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import com.google.gson.JsonObject;
 import com.korchid.msg.Chatting;
 import com.korchid.msg.adapter.ChattingAdapter;
+import com.korchid.msg.alarm.AlarmMatchingBroadCastReceiver;
 import com.korchid.msg.http.HttpPost;
 import com.korchid.msg.sqlite.DBHelper;
 import com.korchid.msg.ui.CustomActionbar;
@@ -142,7 +144,15 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 
-        Intent intent = getIntent();
+        // Cancel AlarmManager - reservation message
+        int requestCode = 0;
+        AlarmManager mManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmMatchingBroadCastReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mManager.cancel(pi);
+
+        //
+        intent = getIntent();
 
         userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
         Log.d(TAG, "userId : " + userId);
@@ -305,7 +315,6 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 // http://humble.tistory.com/20
 
                 Log.d(TAG, "btn_send");
-
 
                 //Test data
                 int receiverId = opponentUserId;
