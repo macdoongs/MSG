@@ -22,6 +22,7 @@ import com.korchid.msg.R;
 import com.korchid.msg.main.SplashActivity;
 import com.korchid.msg.member.recovery.password.RecoveryPasswordActivity;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
+import com.korchid.msg.storage.server.retrofit.response.Login;
 import com.korchid.msg.storage.server.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.ui.StatusBar;
@@ -232,44 +233,49 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                 //Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
-                Call<List<User>> userCall = RestfulAdapter.getInstance().userLogin(internationalPhoneNumber, password);
+                Call<Login> userCall = RestfulAdapter.getInstance().userLogin(internationalPhoneNumber, password);
 
-                userCall.enqueue(new Callback<List<User>>() {
+                userCall.enqueue(new Callback<Login>() {
                     @Override
-                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                        User user = response.body().get(0);
+                    public void onResponse(Call<Login> call, Response<Login> response) {
+                        Log.d(TAG, "onResponse");
+                        if(response.body().getCheck_id()) {
+                            if (response.body().getLogin()) {
+                                User user = response.body().getUser();
 
-                        if(user == null){
-                            Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
+                                int userId = user.getUser_id();
+                                String loginState = "LOGIN";
+                                requestCode = 0;
+
+                                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                editor.putString(USER_LOGIN_STATE, "LOGIN");
+                                editor.putString(USER_PHONE_NUMBER, internationalPhoneNumber);
+                                editor.putString(USER_PASSWORD, password);
+                                editor.putInt(USER_ID_NUMBER, user.getUser_id());
+                                editor.apply(); // Apply file
+
+                                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+
+                                intent.putExtra(USER_ID_NUMBER, userId);
+                                intent.putExtra(USER_LOGIN_STATE, loginState);
+
+                                Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+
+                                startActivityForResult(intent, requestCode);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "비밀 번호를 다시 한 번 확인해주세요.", Toast.LENGTH_SHORT).show();
+                            }
                         }else{
-                            int userId = user.getUser_id();
-                            String loginState = "LOGIN";
-                            requestCode = 0;
-
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
-
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            editor.putString(USER_LOGIN_STATE, "LOGIN");
-                            editor.putString(USER_PHONE_NUMBER, internationalPhoneNumber);
-                            editor.putString(USER_PASSWORD, password);
-                            editor.putInt(USER_ID_NUMBER, user.getUser_id());
-                            editor.putString(USER_LOGIN_TOKEN, user.getLogin_token_ln());
-                            editor.apply(); // Apply file
-
-                            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-
-                            intent.putExtra(USER_ID_NUMBER, userId);
-                            intent.putExtra(USER_LOGIN_STATE, loginState);
-
-                            startActivityForResult(intent, requestCode);
+                            Toast.makeText(getApplicationContext(), "아이디를 다시 한 번 확인해주세요.", Toast.LENGTH_SHORT).show();
                         }
-
 
                     }
 
                     @Override
-                    public void onFailure(Call<List<User>> call, Throwable t) {
+                    public void onFailure(Call<Login> call, Throwable t) {
                         Log.d(TAG, "onFailure");
 
                         Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();

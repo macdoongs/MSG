@@ -1,7 +1,11 @@
 package com.korchid.msg.storage.server.retrofit;
 
+import com.korchid.msg.storage.server.retrofit.response.DuplicateCheck;
+import com.korchid.msg.storage.server.retrofit.response.Load;
+import com.korchid.msg.storage.server.retrofit.response.Login;
 import com.korchid.msg.storage.server.retrofit.response.Res;
 import com.korchid.msg.storage.server.retrofit.response.ReservationMessage;
+import com.korchid.msg.storage.server.retrofit.response.Signup;
 import com.korchid.msg.storage.server.retrofit.response.User;
 import com.korchid.msg.storage.server.retrofit.response.UserAuth;
 import com.korchid.msg.storage.server.retrofit.response.UserData;
@@ -26,29 +30,30 @@ public interface ApiService {
     public static final String API_URL = "https://www.korchid.com/";
 
 
-    @POST("/msg/user/signup")
+    @POST("/msg/user/Signup")
     @FormUrlEncoded
-    Call<Res> userSignup(@Field("phoneNumber") String phoneNumber,
-                         @Field("password") String password);
+    Call<Signup> userSignup(@Field("phoneNumber") String phoneNumber,
+                            @Field("password") String password);
 
 
     @POST("/msg/user/login")
     @FormUrlEncoded
-    Call<List<User>> userLogin(@Field("phoneNumber") String phoneNumber,
-                               @Field("password") String password);
+    Call<Login> userLogin(@Field("phoneNumber") String phoneNumber,
+                          @Field("password") String password);
+
+
+    @GET("/msg/user/load/{userId}")
+    @Headers("Accept-Encoding: application/json")
+    Call<Load> listLoadUserData(@Path("userId") int userId);
+
+    @GET("/msg/user/{phoneNumber}/duplicate")
+    @Headers("Accept-Encoding: application/json")
+    Call<DuplicateCheck> listUserDuplicateCheck(@Path("phoneNumber") String phoneNumber);
 
 
     @POST("/msg/user/recovery/password")
     @FormUrlEncoded
     Call<List<UserAuth>> listRecoveryPassword(@Field("phoneNumber") String phoneNumber);
-
-    @POST("/msg/user/load")
-    @FormUrlEncoded
-    Call<List<UserData>> listLoadUserData(@Field("userId") int userId);
-
-    @GET("/msg/user/{phoneNumber}/duplicate")
-    @Headers("Accept-Encoding: application/json")
-    Call<List<User>> listUserDuplicateCheck(@Path("phoneNumber") String phoneNumber);
 
     @POST("/msg/user/setting")
     @FormUrlEncoded

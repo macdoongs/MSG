@@ -25,9 +25,6 @@ public class UserData {
     @SerializedName("profile_ln")
     @Expose
     private String profile_ln;
-    @SerializedName("role_name_sn")
-    @Expose
-    private String role_name_sn;
     @SerializedName("message_alert")
     @Expose
     private int message_alert;
@@ -43,6 +40,9 @@ public class UserData {
     @SerializedName("reserve_number")
     @Expose
     private int reserve_number;
+    @SerializedName("role_number")
+    @Expose
+    private String role_number;
 
 
     public int getUser_id() {
@@ -85,14 +85,6 @@ public class UserData {
         this.profile_ln = profile_ln;
     }
 
-    public String getRole_name_sn() {
-        return role_name_sn;
-    }
-
-    public void setRole_name_sn(String role_name_sn) {
-        this.role_name_sn = role_name_sn;
-    }
-
     public int getMessage_alert() {
         return message_alert;
     }
@@ -131,5 +123,13 @@ public class UserData {
 
     public void setReserve_number(int reserve_number) {
         this.reserve_number = reserve_number;
+    }
+
+    public String getRole_number() {
+        return role_number;
+    }
+
+    public void setRole_number(String role_number) {
+        this.role_number = role_number;
     }
 }

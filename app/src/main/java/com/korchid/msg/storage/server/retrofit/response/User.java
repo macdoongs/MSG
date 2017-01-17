@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by mac on 2017-01-10.
@@ -13,24 +14,37 @@ public class User {
     @SerializedName("user_id")
     @Expose
     private int user_id;
-    @SerializedName("phone_number_sn")
+    @SerializedName("nickname_sn")
     @Expose
-    private String phone_number_sn;
-    @SerializedName("password_sn")
+    private String nickname_sn;
+    @SerializedName("sex_sn")
     @Expose
-    private String password_sn;
-    @SerializedName("login_token_ln")
+    private String sex_sn;
+    @SerializedName("birthday_dt")
     @Expose
-    private String login_token_ln;
-    @SerializedName("device_token_ln")
+    private Date birthday_dt;
+    @SerializedName("profile_ln")
     @Expose
-    private String device_token_ln;
-    @SerializedName("create_dtm")
+    private String profile_ln;
+    @SerializedName("message_alert")
     @Expose
-    private Timestamp create_dtm;
-    @SerializedName("password_changed_dtm")
+    private int message_alert;
+    @SerializedName("reserve_enable")
     @Expose
-    private Timestamp password_changed_dtm;
+    private int reserve_enable;
+    @SerializedName("reserve_alert")
+    @Expose
+    private int reserve_alert;
+    @SerializedName("week_number")
+    @Expose
+    private int week_number;
+    @SerializedName("reserve_number")
+    @Expose
+    private int reserve_number;
+    @SerializedName("role_number")
+    @Expose
+    private int role_number;
+
 
     public int getUser_id() {
         return user_id;
@@ -40,51 +54,83 @@ public class User {
         this.user_id = user_id;
     }
 
-    public String getPhone_number_sn() {
-        return phone_number_sn;
+    public String getNickname_sn() {
+        return nickname_sn;
     }
 
-    public void setPhone_number_sn(String phone_number_sn) {
-        this.phone_number_sn = phone_number_sn;
+    public void setNickname_sn(String nickname_sn) {
+        this.nickname_sn = nickname_sn;
     }
 
-    public String getPassword_sn() {
-        return password_sn;
+    public String getSex_sn() {
+        return sex_sn;
     }
 
-    public void setPassword_sn(String password_sn) {
-        this.password_sn = password_sn;
+    public void setSex_sn(String sex_sn) {
+        this.sex_sn = sex_sn;
     }
 
-    public String getLogin_token_ln() {
-        return login_token_ln;
+    public Date getBirthday_dt() {
+        return birthday_dt;
     }
 
-    public void setLogin_token_ln(String login_token_ln) {
-        this.login_token_ln = login_token_ln;
+    public void setBirthday_dt(Date birthday_dt) {
+        this.birthday_dt = birthday_dt;
     }
 
-    public String getDevice_token_ln() {
-        return device_token_ln;
+    public String getProfile_ln() {
+        return profile_ln;
     }
 
-    public void setDevice_token_ln(String device_token_ln) {
-        this.device_token_ln = device_token_ln;
+    public void setProfile_ln(String profile_ln) {
+        this.profile_ln = profile_ln;
     }
 
-    public Timestamp getCreate_dtm() {
-        return create_dtm;
+    public int getMessage_alert() {
+        return message_alert;
     }
 
-    public void setCreate_dtm(Timestamp create_dtm) {
-        this.create_dtm = create_dtm;
+    public void setMessage_alert(int message_alert) {
+        this.message_alert = message_alert;
     }
 
-    public Timestamp getPassword_changed_dtm() {
-        return password_changed_dtm;
+    public int getReserve_enable() {
+        return reserve_enable;
     }
 
-    public void setPassword_changed_dtm(Timestamp password_changed_dtm) {
-        this.password_changed_dtm = password_changed_dtm;
+    public void setReserve_enable(int reserve_enable) {
+        this.reserve_enable = reserve_enable;
+    }
+
+    public int getReserve_alert() {
+        return reserve_alert;
+    }
+
+    public void setReserve_alert(int reserve_alert) {
+        this.reserve_alert = reserve_alert;
+    }
+
+    public int getWeek_number() {
+        return week_number;
+    }
+
+    public void setWeek_number(int week_number) {
+        this.week_number = week_number;
+    }
+
+    public int getReserve_number() {
+        return reserve_number;
+    }
+
+    public void setReserve_number(int reserve_number) {
+        this.reserve_number = reserve_number;
+    }
+
+    public int getRole_number() {
+        return role_number;
+    }
+
+    public void setRole_number(int role_number) {
+        this.role_number = role_number;
     }
 }

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.korchid.msg.R;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
 
+import com.korchid.msg.storage.server.retrofit.response.DuplicateCheck;
 import com.korchid.msg.storage.server.retrofit.response.User;
 import com.korchid.msg.ui.CustomActionbar;
 
@@ -164,32 +165,31 @@ public class AuthPhoneActivity extends AppCompatActivity{
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }else{
-                    btn_register.setBackgroundResource(R.drawable.rounded_button_p_2r);
-                    btn_register.setEnabled(true);
-
                     internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
 
                     Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
-                    Call<List<User>> userDuplicateCheck = RestfulAdapter.getInstance().listUserDuplicateCheck(internationalPhoneNumber);
+                    Call<DuplicateCheck> userDuplicateCheck = RestfulAdapter.getInstance().listUserDuplicateCheck(internationalPhoneNumber);
 
-                    userDuplicateCheck.enqueue(new Callback<List<User>>() {
+                    userDuplicateCheck.enqueue(new Callback<DuplicateCheck>() {
                         @Override
-                        public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                        public void onResponse(Call<DuplicateCheck> call, Response<DuplicateCheck> response) {
                             Log.d(TAG, "response : " + response.body());
-                            if(response.body().isEmpty()){
-                                Toast.makeText(getApplicationContext(), "This ID is available.", Toast.LENGTH_LONG).show();
-                                isDuplicate = false;
+                            isDuplicate = response.body().getDuplicate();
+                            if(isDuplicate){
+                                Toast.makeText(getApplicationContext(), "이미 가입된 번호입니다.", Toast.LENGTH_LONG).show();
                             }else{
-                                et_phoneNumber.setError("이미 가입된 번호입니다.");
-                                isDuplicate = true;
-                                Log.d(TAG, "nickname : " + response.body().get(0).getPassword_sn());
+                                Toast.makeText(getApplicationContext(), "이 아이디는 사용 가능합니다.", Toast.LENGTH_LONG).show();
+
+                                btn_register.setBackgroundResource(R.drawable.rounded_button_p_2r);
+                                btn_register.setEnabled(true);
                             }
 
                         }
 
                         @Override
-                        public void onFailure(Call<List<User>> call, Throwable t) {
+                        public void onFailure(Call<DuplicateCheck> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_LONG).show();
                             Log.d(TAG, "onFailure");
                         }
                     });

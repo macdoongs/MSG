@@ -40,7 +40,7 @@
 
 
     <TextView
-        android:text="Invite parent"
+        android:text="함께 이용할 부모님을 초대해주세요."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"

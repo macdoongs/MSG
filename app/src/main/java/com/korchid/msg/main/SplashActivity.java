@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
 import com.korchid.msg.R;
+import com.korchid.msg.storage.server.retrofit.response.Load;
+import com.korchid.msg.storage.server.retrofit.response.User;
 import com.korchid.msg.storage.server.retrofit.response.UserData;
 import com.korchid.msg.ui.StatusBar;
 
@@ -62,7 +65,7 @@ public class SplashActivity extends Activity {
     private int userReserveAlert;
     private int userWeekNumber;
     private int userReserveNumber;
-
+    private int userRoleNumber;
 
     private String loginState = "";
     private int duration = 2000;
@@ -86,18 +89,16 @@ public class SplashActivity extends Activity {
 
             // TODO modify real userId data
             userId = 16;
-            Call<List<UserData>> userDataCall = RestfulAdapter.getInstance().listLoadUserData(userId);
+            Call<Load> userDataCall = RestfulAdapter.getInstance().listLoadUserData(userId);
 
-            userDataCall.enqueue(new Callback<List<UserData>>() {
+            userDataCall.enqueue(new Callback<Load>() {
                 @Override
-                public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
+                public void onResponse(Call<Load> call, Response<Load> response) {
                     Log.d(TAG, "onResponse");
 
-                    if(response.body().isEmpty()){
-                        return;
-                    }else{
-                        int userRoleNumber = response.body().size();
-                        Log.d(TAG, "roleNumber : " + userRoleNumber);
+                    if(response.body().getLoad()){
+                        User user = response.body().getUser();
+
 
                         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
 
@@ -107,54 +108,54 @@ public class SplashActivity extends Activity {
 
                         editor.apply();
 
-                        UserData userData = response.body().get(0);
 
-                        if(userData != null) {
+                        userNickname = user.getNickname_sn();
+                        userSex = user.getSex_sn();
+                        userBirthday = user.getBirthday_dt();
+                        userProfile = user.getProfile_ln();
+                        userMessageAlert = user.getMessage_alert();
+                        userReserveEnable = user.getReserve_enable();
+                        userReserveAlert = user.getReserve_alert();
+                        userWeekNumber = user.getWeek_number();
+                        userReserveNumber = user.getReserve_number();
+                        userRoleNumber = user.getRole_number();
 
-                            userNickname = userData.getNickname_sn();
-                            userSex = userData.getSex_sn();
-                            userBirthday = userData.getBirthday_dt();
-                            userProfile = userData.getProfile_ln();
-                            userRole = userData.getRole_name_sn();
-                            userMessageAlert = userData.getMessage_alert();
-                            userReserveEnable = userData.getReserve_enable();
-                            userReserveAlert = userData.getReserve_alert();
-                            userWeekNumber = userData.getWeek_number();
-                            userReserveNumber = userData.getReserve_number();
+                        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
-                            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
+                        editor = sharedPreferences.edit();
 
-                            editor = sharedPreferences.edit();
+                        editor.putString(USER_NICKNAME, userNickname);
+                        editor.putLong(USER_BIRTHDAY, userBirthday.getTime());
+                        editor.putString(USER_PROFILE, userProfile);
+                        editor.putString(USER_SEX, userSex);
+                        editor.putString(USER_ROLE, userRole);
 
-                            editor.putString(USER_NICKNAME, userNickname);
-                            editor.putLong(USER_BIRTHDAY, userBirthday.getTime());
-                            editor.putString(USER_PROFILE, userProfile);
-                            editor.putString(USER_SEX, userSex);
-                            editor.putString(USER_ROLE, userRole);
+                        editor.apply();
 
-                            editor.apply();
+                        sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
 
-                            sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+                        editor = sharedPreferences.edit();
 
-                            editor = sharedPreferences.edit();
+                        editor.putInt(MESSAGE_ALERT, userMessageAlert);
+                        editor.putInt(RESERVATION_ENABLE, userReserveEnable);
+                        editor.putInt(RESERVATION_ALERT, userReserveAlert);
+                        editor.putInt(RESERVATION_WEEK_NUMBER, userWeekNumber);
+                        editor.putInt(RESERVATION_TIMES, userReserveNumber);
 
-                            editor.putInt(MESSAGE_ALERT, userMessageAlert);
-                            editor.putInt(RESERVATION_ENABLE, userReserveEnable);
-                            editor.putInt(RESERVATION_ALERT, userReserveAlert);
-                            editor.putInt(RESERVATION_WEEK_NUMBER, userWeekNumber);
-                            editor.putInt(RESERVATION_TIMES, userReserveNumber);
+                        editor.apply();
 
-                            editor.apply();
-                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(), "정보를 가져오지 못했습니다.", Toast.LENGTH_LONG).show();
+
                     }
 
 
                 }
 
                 @Override
-                public void onFailure(Call<List<UserData>> call, Throwable t) {
+                public void onFailure(Call<Load> call, Throwable t) {
                     Log.d(TAG, "onFailure");
-                    //Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
 

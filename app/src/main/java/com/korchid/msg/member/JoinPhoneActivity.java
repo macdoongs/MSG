@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
 import com.korchid.msg.storage.server.retrofit.response.Res;
+import com.korchid.msg.storage.server.retrofit.response.Signup;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
@@ -142,73 +143,31 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onClick(final DialogInterface dialog, int which) {
 
-                            Call<Res> userDataCall = RestfulAdapter.getInstance().userSignup(phoneNumber, password);
+                            Call<Signup> userDataCall = RestfulAdapter.getInstance().userSignup(phoneNumber, password);
 
-                            userDataCall.enqueue(new Callback<Res>() {
+                            userDataCall.enqueue(new Callback<Signup>() {
                                 @Override
-                                public void onResponse(Call<Res> call, Response<Res> response) {
-                                    Log.d(TAG, "password : " + response.body());
+                                public void onResponse(Call<Signup> call, Response<Signup> response) {
+                                    Log.d(TAG, "response : " + response.body());
+                                    if(response.body().getDuplicate()){
+                                        Toast.makeText(getApplicationContext(), "이 아이디는 이미 사용 중입니다.", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        if(response.body().getSignup()){
+                                            Toast.makeText(getApplicationContext(), "가입이 완료되었습니다.", Toast.LENGTH_LONG).show();
+                                        }else{
+                                            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+
                                 }
 
                                 @Override
-                                public void onFailure(Call<Res> call, Throwable t) {
+                                public void onFailure(Call<Signup> call, Throwable t) {
                                     Log.d(TAG, "onFailure");
                                     Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
-                            /*
-                            String url = "https://www.korchid.com/msg/user/signup/";
 
-                            HashMap<String, String> params = new HashMap<>();
-                            params.put("phoneNumber", phoneNumber);
-                            params.put("password", password);
-
-                            Handler httpHandler = new Handler(){
-                                @Override
-                                public void handleMessage(Message msg) {
-                                    String response = msg.getData().getString("response");
-
-                                    String[] line = response.split("\n");
-
-                                    //Toast.makeText(getApplicationContext(), "response : " + response, Toast.LENGTH_LONG).show();
-
-                                    if(line[0].equals("OK")){
-                                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
-
-                                        // http://mommoo.tistory.com/38
-                                        // Use Environmental variable 'SharedPreference'
-                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
-
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                                        editor.putString(USER_LOGIN_STATE, "LOGIN");
-                                        editor.putString(USER_PHONE_NUMBER, phoneNumber);
-                                        editor.putString(USER_PASSWORD, password);
-                                        editor.commit(); // Apply file
-
-
-                                        // Delete preference value
-                                        // 1. Remove "key" data
-                                        editor.remove("key");
-
-                                        // 2. Remove xml data
-                                        editor.clear();
-
-
-                                        // if sharedPreferences.getString value is 0, assign 2th parameter
-                                        Log.d(TAG, "SharedPreference");
-                                        Log.d(TAG, "USER_LOGIN : " + sharedPreferences.getString(USER_LOGIN_STATE, "LOGOUT"));
-                                        Log.d(TAG, "USER_PHONE : " + sharedPreferences.getString(USER_PHONE_NUMBER, "000-0000-0000"));
-                                        Log.d(TAG, "USER_PASSWORD : " + sharedPreferences.getString(USER_PASSWORD, "123123"));
-                                    }else{
-                                        Toast.makeText(getApplicationContext(), "Already join!", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            };
-
-                            HttpPost httpPost = new HttpPost(url, params, httpHandler);
-                            httpPost.start();
-*/
                             Intent intent = new Intent();
                             //intent.putExtra("result_msg", "Example");
                             setResult(RESULT_OK, intent);
