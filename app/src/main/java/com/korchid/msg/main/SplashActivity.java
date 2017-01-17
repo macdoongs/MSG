@@ -89,7 +89,7 @@ public class SplashActivity extends Activity {
 
             // TODO modify real userId data
             userId = 16;
-            Call<Load> userDataCall = RestfulAdapter.getInstance().listLoadUserData(userId);
+            Call<Load> userDataCall = RestfulAdapter.getInstance().loadUserData(userId);
 
             userDataCall.enqueue(new Callback<Load>() {
                 @Override

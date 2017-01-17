@@ -143,6 +143,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void onClick(final DialogInterface dialog, int which) {
 
+                            Log.d(TAG, "password : " + password);
                             Call<Signup> userDataCall = RestfulAdapter.getInstance().userSignup(phoneNumber, password);
 
                             userDataCall.enqueue(new Callback<Signup>() {

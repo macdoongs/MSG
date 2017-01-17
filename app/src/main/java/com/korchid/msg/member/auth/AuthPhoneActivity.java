@@ -54,7 +54,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
     private String internationalPhoneNumber = "";
     private String nationCode = "";
     private int viewId;
-    private boolean isDuplicate = true; // true - No check state
+    private boolean isDuplicateCheck = false; // false - No check state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class AuthPhoneActivity extends AppCompatActivity{
                 String content = option[i];
                 // Delete nation name
                 nationCode = content.split(" ")[0];
-                isDuplicate = true;
+                isDuplicateCheck = true;
             }
 
             @Override
@@ -165,21 +165,32 @@ public class AuthPhoneActivity extends AppCompatActivity{
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }else{
-                    internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+                    String fullPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
+                    String[] stringArray = fullPhoneNumber.split("-");
+                    internationalPhoneNumber = "";
+                    for(int i=0; i<stringArray.length; i++){
+                        if(stringArray[i] != null){
+                            internationalPhoneNumber += stringArray[i];
+                        }
+                    }
+                    Log.d(TAG, "internationalPhoneNumber" + internationalPhoneNumber);
 
                     Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
-                    Call<DuplicateCheck> userDuplicateCheck = RestfulAdapter.getInstance().listUserDuplicateCheck(internationalPhoneNumber);
+                    Call<DuplicateCheck> userDuplicateCheck = RestfulAdapter.getInstance().duplicateUserCheck(internationalPhoneNumber);
 
                     userDuplicateCheck.enqueue(new Callback<DuplicateCheck>() {
                         @Override
                         public void onResponse(Call<DuplicateCheck> call, Response<DuplicateCheck> response) {
                             Log.d(TAG, "response : " + response.body());
-                            isDuplicate = response.body().getDuplicate();
+                            Boolean isDuplicate = response.body().getDuplicate();
                             if(isDuplicate){
                                 Toast.makeText(getApplicationContext(), "이미 가입된 번호입니다.", Toast.LENGTH_LONG).show();
+                                isDuplicateCheck = false;
                             }else{
                                 Toast.makeText(getApplicationContext(), "이 아이디는 사용 가능합니다.", Toast.LENGTH_LONG).show();
+                                isDuplicateCheck = true;
 
                                 btn_register.setBackgroundResource(R.drawable.rounded_button_p_2r);
                                 btn_register.setEnabled(true);
@@ -204,11 +215,9 @@ public class AuthPhoneActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 // Develop mode
-                //isDuplicate = false;
+                //isDuplicateCheck = false;
 
-                if(isDuplicate){
-                    Toast.makeText(getApplicationContext(), "Please duplicate check", Toast.LENGTH_SHORT).show();
-                }else {
+                if(isDuplicateCheck){
                     phoneNumber = et_phoneNumber.getText().toString();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(AuthPhoneActivity.this);
@@ -247,6 +256,8 @@ public class AuthPhoneActivity extends AppCompatActivity{
 
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
+                }else {
+                    Toast.makeText(getApplicationContext(), "Please duplicate check", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -191,7 +191,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                                 tvTimer.cancel();
                                 Intent intent = new Intent();
                                 intent.putExtra(USER_PHONE_NUMBER, phoneNumber);
-                                intent.putExtra(USER_PASSWORD, "12345");
+                                intent.putExtra(USER_PASSWORD, "");
                                 setResult(RESULT_OK, intent);
                                 finish();
                             }

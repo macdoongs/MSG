@@ -1,6 +1,7 @@
 package com.korchid.msg.member.recovery.password;
 
 import android.content.Intent;
+import android.icu.text.LocaleDisplayNames;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.korchid.msg.R;
 import com.korchid.msg.member.auth.AuthPhoneWaitActivity;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
+import com.korchid.msg.storage.server.retrofit.response.Password;
 import com.korchid.msg.storage.server.retrofit.response.UserAuth;
 
 import java.util.List;
@@ -87,21 +89,25 @@ public class RecoveryPasswordActivity extends AppCompatActivity {
             case RESULT_OK:{
                 Log.d(TAG, "onActivityResult: " + userPhoneNumber);
 
-                Call<List<UserAuth>> userDataCall = RestfulAdapter.getInstance().listRecoveryPassword(userPhoneNumber);
+                Call<Password> userDataCall = RestfulAdapter.getInstance().recoveryPassword(userPhoneNumber);
 
-                userDataCall.enqueue(new Callback<List<UserAuth>>() {
+                userDataCall.enqueue(new Callback<Password>() {
                     @Override
-                    public void onResponse(Call<List<UserAuth>> call, Response<List<UserAuth>> response) {
-                        password = response.body().get(0).getPassword_sn();
+                    public void onResponse(Call<Password> call, Response<Password> response) {
+                        Log.d(TAG, "onResponse");
+                        if(response.body().getRecovery()){
+                            password = response.body().getPassword();
 
-                        Log.d(TAG, "password : " + password);
+                            tv_phoneNumber.setText(userPhoneNumber);
+                            tv_password.setText(password);
+                        }else{
+                            Toast.makeText(getApplicationContext(), "아이디를 다시 확인해주세요.", Toast.LENGTH_LONG).show();
+                        }
 
-                        tv_phoneNumber.setText(userPhoneNumber);
-                        tv_password.setText(password);
                     }
 
                     @Override
-                    public void onFailure(Call<List<UserAuth>> call, Throwable t) {
+                    public void onFailure(Call<Password> call, Throwable t) {
                         Log.d(TAG, "onFailure");
                         Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }

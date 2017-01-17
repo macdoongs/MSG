@@ -66,7 +66,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
     private int userWeekNumber;
     private int userReserveNumber;
 
-    private String internationalPhoneNumber;
+    private String internationalPhoneNumber = "";
     private String phoneNumber;
     private String userPhoneNumber;
     private String nationCode = "";
@@ -229,7 +229,16 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 password = et_password.getText().toString();
 
 
-                internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+                String fullPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
+                String[] stringArray = fullPhoneNumber.split("-");
+                internationalPhoneNumber = "";
+                for(int i=0; i<stringArray.length; i++){
+                    internationalPhoneNumber += stringArray[i];
+                }
+
+
+                Log.d(TAG, "internationalPhoneNumber : " + internationalPhoneNumber + ", password : " + password);
 
                 //Toast.makeText(getApplicationContext(), internationalPhoneNumber, Toast.LENGTH_SHORT).show();
 
@@ -292,7 +301,16 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 if(phoneNumber.equals("")){
                     Toast.makeText(getApplicationContext(), "Please input phone number!", Toast.LENGTH_LONG).show();
                 }else{
-                    internationalPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+                    String fullPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
+
+                    String[] stringArray = fullPhoneNumber.split("-");
+                    internationalPhoneNumber = "";
+                    for(int i=0; i<stringArray.length; i++){
+                        if(stringArray[i] != null){
+                            internationalPhoneNumber += stringArray[i];
+                        }
+                    }
+                    Log.d(TAG, "internationalPhoneNumber" + internationalPhoneNumber);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginPhoneActivity.this);
 
