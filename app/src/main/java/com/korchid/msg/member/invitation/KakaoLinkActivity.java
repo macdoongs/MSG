@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
+import com.korchid.msg.storage.server.retrofit.response.Invitation;
 import com.korchid.msg.storage.server.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
@@ -79,14 +80,14 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
         tv_opponentNickname.setText(receiverNickname);
         tv_opponentPhoneNumber.setText(receiverPhoneNumber);
 
-        Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, receiverPhoneNumber, userRole);
+        Call<Invitation> userCall = RestfulAdapter.getInstance().userInvitation(userId, receiverPhoneNumber, userRole);
 
-        userCall.enqueue(new Callback<Res>() {
+        userCall.enqueue(new Callback<Invitation>() {
             @Override
-            public void onResponse(Call<Res> call, Response<Res> response) {
-                Res res = response.body();
+            public void onResponse(Call<Invitation> call, Response<Invitation> response) {
+                Invitation invitation = response.body();
 
-                if(res.getAffectedRows() == 1){
+                if(invitation.getInvitation() && !invitation.getConnection()){
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = null;
                     try {
@@ -140,7 +141,7 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
             }
 
             @Override
-            public void onFailure(Call<Res> call, Throwable t) {
+            public void onFailure(Call<Invitation> call, Throwable t) {
                 Log.d(TAG, "onFailure");
 
                 Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.korchid.msg.member.LoginPhoneActivity;
 import com.korchid.msg.member.auth.AuthPhoneActivity;
@@ -219,6 +220,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
 
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+        Log.d(TAG, "deviceToken : " + deviceToken);
 /*
         // Test - Modify instanceId
         try {
@@ -544,7 +548,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         userReserveNumber = data.getIntExtra(RESERVATION_TIMES, 0);
 
                         loadingData(userId, userRole);
-/*
+
 
                         // Check variables
                         Log.d(TAG, "loginState : " + loginState);
@@ -560,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.d(TAG, "userReserveAlert : " + userReserveAlert);
                         Log.d(TAG, "userWeekNumber : " + userWeekNumber);
                         Log.d(TAG, "userReserveNumber : " + userReserveNumber);
-*/
+
 
                         break;
                     }

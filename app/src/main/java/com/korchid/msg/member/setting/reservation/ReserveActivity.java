@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -159,6 +160,13 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_content_complete, menu);
+        return true;
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -185,58 +193,12 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
             case R.id.btn_reserve:{
-
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
-
-                final int userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
-
-                final Boolean messageAlert = sw_pushEnable.isChecked();
-                final Boolean reserveEnable = sw_enable.isChecked();
-                final Boolean reserveAlert = sw_alert.isChecked();
-
-                final int weekNumber = np_week.getValue();
-                final int reserveNumber = np_number.getValue();
-                final String message = " ";
-
-                Log.d(TAG, "userId : " + userId);
-
-                Call<Res> userSettingCall = RestfulAdapter.getInstance().userSetting(userId, messageAlert, reserveEnable, reserveAlert, weekNumber, reserveNumber);
-
-                userSettingCall.enqueue(new Callback<Res>() {
-                    @Override
-                    public void onResponse(Call<Res> call, Response<Res> response) {
-                        Log.d(TAG, "response " + response.body());
-
-                        if(response.body().getChangedRows() == 1){
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
-
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            editor.putBoolean(RESERVATION_CHECK, true);
-
-                            editor.putBoolean(MESSAGE_ALERT, messageAlert);
-                            editor.putBoolean(RESERVATION_ENABLE, reserveEnable);
-                            editor.putBoolean(RESERVATION_ALERT, reserveAlert);
-
-                            editor.putInt(RESERVATION_WEEK_NUMBER, weekNumber);
-                            editor.putInt(RESERVATION_TIMES, reserveNumber);
-
-                            editor.apply();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Res> call, Throwable t) {
-                        Log.d(TAG, "onFailure");
-                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                reserveMessage();
 
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
+
                 break;
             }
             default:{
@@ -313,6 +275,58 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+
+    private void reserveMessage(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+
+        final int userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
+
+        final Boolean messageAlert = sw_pushEnable.isChecked();
+        final Boolean reserveEnable = sw_enable.isChecked();
+        final Boolean reserveAlert = sw_alert.isChecked();
+
+        final int weekNumber = np_week.getValue();
+        final int reserveNumber = np_number.getValue();
+        final String message = " ";
+
+        Log.d(TAG, "userId : " + userId);
+
+        Call<Res> userSettingCall = RestfulAdapter.getInstance().userSetting(userId, messageAlert, reserveEnable, reserveAlert, weekNumber, reserveNumber);
+
+        userSettingCall.enqueue(new Callback<Res>() {
+            @Override
+            public void onResponse(Call<Res> call, Response<Res> response) {
+                Log.d(TAG, "response " + response.body());
+
+                if(response.body().getChangedRows() == 1){
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_RESERVATION_SETTING, 0);
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putBoolean(RESERVATION_CHECK, true);
+
+                    editor.putBoolean(MESSAGE_ALERT, messageAlert);
+                    editor.putBoolean(RESERVATION_ENABLE, reserveEnable);
+                    editor.putBoolean(RESERVATION_ALERT, reserveAlert);
+
+                    editor.putInt(RESERVATION_WEEK_NUMBER, weekNumber);
+                    editor.putInt(RESERVATION_TIMES, reserveNumber);
+
+                    editor.apply();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Res> call, Throwable t) {
+                Log.d(TAG, "onFailure");
+                Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //ActionBar 메뉴 클릭에 대한 이벤트 처리
@@ -322,6 +336,13 @@ public class ReserveActivity extends AppCompatActivity implements View.OnClickLi
             case android.R.id.home:
                 this.finish();
                 break;
+            case R.id.itemNext:{
+                reserveMessage();
+
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
             default:
                 break;
         }

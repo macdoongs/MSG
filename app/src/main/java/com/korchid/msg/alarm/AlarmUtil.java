@@ -20,8 +20,6 @@ import java.util.TimeZone;
 // http://gogorchg.tistory.com/entry/Android-AlarmManager%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-Schedule-%EA%B4%80%EB%A6%AC
 public class AlarmUtil {
     private static final String TAG = "AlarmUtil";
-    private static final int FIVE_SECOND = 5 * 1000;
-    private static final int ONE_MINUES = 60 * 1000;
 
 
     private static int requestCode = 0;

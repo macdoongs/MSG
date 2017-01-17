@@ -149,6 +149,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
         Log.d(TAG, "userId : " + userId);
         userNickname = getIntent().getStringExtra(USER_NICKNAME);
+        Log.d(TAG, "userNickname : " + userNickname);
         userSex = getIntent().getStringExtra(USER_SEX);
         userBirthday.setTime(getIntent().getLongExtra(USER_NICKNAME, 0));
         userProfile = getIntent().getStringExtra(USER_PROFILE);

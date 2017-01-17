@@ -1,8 +1,11 @@
 package com.korchid.msg.storage.server.retrofit;
 
+import com.korchid.msg.storage.server.retrofit.response.DeviceToken;
 import com.korchid.msg.storage.server.retrofit.response.DuplicateCheck;
+import com.korchid.msg.storage.server.retrofit.response.Invitation;
 import com.korchid.msg.storage.server.retrofit.response.Load;
 import com.korchid.msg.storage.server.retrofit.response.Login;
+import com.korchid.msg.storage.server.retrofit.response.Map;
 import com.korchid.msg.storage.server.retrofit.response.Password;
 import com.korchid.msg.storage.server.retrofit.response.Res;
 import com.korchid.msg.storage.server.retrofit.response.ReservationMessage;
@@ -31,7 +34,7 @@ public interface ApiService {
     public static final String API_URL = "https://www.korchid.com/";
 
 
-    @POST("/msg/user/Signup")
+    @POST("/msg/user/signup")
     @FormUrlEncoded
     Call<Signup> userSignup(@Field("phoneNumber") String phoneNumber,
                             @Field("password") String password);
@@ -56,6 +59,16 @@ public interface ApiService {
     @Headers("Accept-Encoding: application/json")
     Call<Password> recoveryPassword(@Path("phoneNumber") String phoneNumber);
 
+
+
+    @POST("/msg/user/invitation")
+    @FormUrlEncoded
+    Call<Invitation> userInvitation(@Field("userId") int userId,
+                                    @Field("receiverPhoneNumber") String receiverPhoneNumber,
+                                    @Field("roleName") String roleName);
+
+
+
     @POST("/msg/user/setting")
     @FormUrlEncoded
     Call<Res> userSetting(@Field("userId") int userId,
@@ -73,12 +86,6 @@ public interface ApiService {
                                     @Field("birthday") String birthday,
                                     @Field("profile") String profile);
 
-    @POST("/msg/user/invitation")
-    @FormUrlEncoded
-    Call<Res> userInvitation(@Field("userId") int userId,
-                             @Field("receiverPhoneNumber") String receiverPhoneNumber,
-                             @Field("roleName") String roleName);
-
     @POST("/msg/user/reservation")
     @FormUrlEncoded
     Call<Res> userReservation(@Field("senderId") int senderId,
@@ -88,7 +95,7 @@ public interface ApiService {
 
     @POST("/msg/user/mapping")
     @FormUrlEncoded
-    Call<Res> userMapping(@Field("parentId") int parentId,
+    Call<Map> userMapping (@Field("parentId") int parentId,
                           @Field("childId") int childId,
                           @Field("deviceToken") String deviceToken) ;
 
@@ -100,8 +107,8 @@ public interface ApiService {
 
     @POST("/msg/firebase/register")
     @FormUrlEncoded
-    Call<Res> firebaseRegister(@Field("userId") int userId,
-                               @Field("deviceToken") String deviceToken);
+    Call<DeviceToken> firebaseRegister(@Field("userId") int userId,
+                                       @Field("deviceToken") String deviceToken);
 
 
     @POST("/msg/error")

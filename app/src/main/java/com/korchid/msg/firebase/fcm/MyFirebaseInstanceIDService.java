@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
+import com.korchid.msg.storage.server.retrofit.response.DeviceToken;
 import com.korchid.msg.storage.server.retrofit.response.Res;
 
 import retrofit2.Call;
@@ -30,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.korchid.msg.global.QuickstartPreferences.SHARED_PREF_USER_LOGIN;
+import static com.korchid.msg.global.QuickstartPreferences.USER_DEVICE_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 
 
@@ -48,6 +50,13 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(USER_DEVICE_TOKEN, refreshedToken);
+
+        editor.apply();
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -71,24 +80,27 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         int userId = sharedPreferences.getInt(USER_ID_NUMBER, 0);
 
-        Call<Res> userCall = RestfulAdapter.getInstance().firebaseRegister(userId, token);
+        Log.d(TAG, "userId : " + userId);
 
-        userCall.enqueue(new Callback<Res>() {
+        Call<DeviceToken> userCall = RestfulAdapter.getInstance().firebaseRegister(userId, token);
+
+        userCall.enqueue(new Callback<DeviceToken>() {
             @Override
-            public void onResponse(Call<Res> call, Response<Res> response) {
-                Res res = response.body();
+            public void onResponse(Call<DeviceToken> call, Response<DeviceToken> response) {
+                DeviceToken deviceToken = response.body();
 
-                if(res == null){
-                    Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
+                if(deviceToken.getRegister()){
+                    Log.d(TAG, "Register device token successfully");
                 }else{
-
+                    Log.d(TAG, "Registering device token fail");
                 }
 
             }
             @Override
-            public void onFailure(Call<Res> call, Throwable t) {
+            public void onFailure(Call<DeviceToken> call, Throwable t) {
                 Log.d(TAG, "onFailure");
                 //Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Fail to receive response data");
             }
         });
     }

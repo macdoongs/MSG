@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/itemNext"
-        android:title="NEXT"
+        android:title="다음"
         app:showAsAction="always"
         />
 </menu>

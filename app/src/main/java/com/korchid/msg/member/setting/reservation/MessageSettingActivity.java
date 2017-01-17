@@ -138,16 +138,20 @@ public class MessageSettingActivity extends AppCompatActivity {
 
     private void loadReservationMessage(final MessageSetting.Type type){
         int reservationMessageType = 0;
+
         if(type == MessageSetting.Type.POLITE){
             reservationMessageType = 1;
         }else if(type == MessageSetting.Type.IMPOLITE){
             reservationMessageType = 2;
         }
+
         Call<List<ReservationMessage>> reservationMessageCall = RestfulAdapter.getInstance().reservationMessage(reservationMessageType);
 
         reservationMessageCall.enqueue(new Callback<List<ReservationMessage>>() {
             @Override
             public void onResponse(Call<List<ReservationMessage>> call, Response<List<ReservationMessage>> response) {
+                Log.d(TAG, "onResponse");
+
                 List<ReservationMessage> reservationMessageList = response.body();
 
                 Log.d(TAG, "response code : " + response.code());

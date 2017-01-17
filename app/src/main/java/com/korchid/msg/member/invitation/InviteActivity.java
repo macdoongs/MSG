@@ -25,7 +25,11 @@ import android.widget.Toast;
 import com.kakao.kakaolink.KakaoLink;
 import com.korchid.msg.R;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
+import com.korchid.msg.storage.server.retrofit.response.Invitation;
+import com.korchid.msg.storage.server.retrofit.response.Map;
+import com.korchid.msg.storage.server.retrofit.response.MappingData;
 import com.korchid.msg.storage.server.retrofit.response.Res;
+import com.korchid.msg.storage.server.retrofit.response.UserMap;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.ui.StatusBar;
 
@@ -271,14 +275,14 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                         String inviteTime = getCurrentTimeStamp();
 
-                        Call<Res> userCall = RestfulAdapter.getInstance().userInvitation(userId, opponentInternationalPhoneNumber, userRole);
+                        Call<Invitation> invitationCall = RestfulAdapter.getInstance().userInvitation(userId, opponentInternationalPhoneNumber, userRole);
 
-                        userCall.enqueue(new Callback<Res>() {
+                        invitationCall.enqueue(new Callback<Invitation>() {
                             @Override
-                            public void onResponse(Call<Res> call, Response<Res> response) {
-                                Res res = response.body();
+                            public void onResponse(Call<Invitation> call, Response<Invitation> response) {
+                                Invitation invitation = response.body();
 
-                                Log.d(TAG, "response : " + res.toString());
+                                Log.d(TAG, "response : " + invitation.toString());
 
                                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
 
@@ -289,10 +293,51 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
                                 editor.apply();
 
+                                if(invitation.getConnection()){
+
+                                    Call<Map> mapCall = RestfulAdapter.getInstance().userMapping(userId, 88, userRole);
+
+                                    mapCall.enqueue(new Callback<Map>() {
+                                        @Override
+                                        public void onResponse(Call<Map> call, Response<Map> response) {
+                                            Log.d(TAG, "onResponse");
+                                            Log.d(TAG, "mapping");
+                                            Map map = response.body();
+
+
+                                            if(map.getMapping()){
+                                                // TODO Mapping
+                                                MappingData mappingData = map.getMappingData();
+
+                                                Log.d(TAG, "parentId : " + mappingData.getParentId());
+                                                Log.d(TAG, "childId : " + mappingData.getChildId());
+                                                Log.d(TAG, "topic : " + mappingData.getTopic());
+
+                                                Toast.makeText(getApplicationContext(), "대화를 시작해보세요!", Toast.LENGTH_SHORT).show();
+                                            }else{
+                                                Toast.makeText(getApplicationContext(), "유저를 기다려 주세요.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Map> call, Throwable t) {
+                                            Log.d(TAG, "onFailure");
+                                            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+
+                                }else{
+                                    if(invitation.getInvitation()){
+                                        Toast.makeText(getApplicationContext(), "링크를 보내주세요.", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                             }
 
                             @Override
-                            public void onFailure(Call<Res> call, Throwable t) {
+                            public void onFailure(Call<Invitation> call, Throwable t) {
                                 Log.d(TAG, "onFailure");
                             }
                         });

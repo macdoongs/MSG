@@ -173,6 +173,8 @@ public class UserInfoActivity extends AppCompatActivity {
                 registerUserInfo(userId, nickname, null, profile);
 
                 Intent intent = new Intent(getApplicationContext(), ReserveActivity.class);
+
+
                 startActivityForResult(intent, 1);
 
             }
@@ -297,6 +299,9 @@ public class UserInfoActivity extends AppCompatActivity {
         userCall.enqueue(new Callback<Res>() {
             @Override
             public void onResponse(Call<Res> call, Response<Res> response) {
+                Log.d(TAG, "registerUserInfo");
+                Log.d(TAG, "userId : " + userId + ", nickname : " + nickname );//+ ", birthday : " + birthday.toString() + ", profile : " + profile);
+
                 Res res = response.body();
 
                 Log.d(TAG, "res : " + res);
