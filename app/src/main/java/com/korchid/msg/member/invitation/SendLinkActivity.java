@@ -17,7 +17,6 @@ import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
 import com.korchid.msg.storage.server.retrofit.response.Invitation;
-import com.korchid.msg.storage.server.retrofit.response.Res;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
 import com.korchid.msg.ui.StatusBar;
@@ -36,8 +35,8 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 
 // Wait connecting parent and send kakao link
-public class KakaoLinkActivity extends AppCompatActivity implements View.OnClickListener{
-    private static final String TAG = "KakaoLinkActivity";
+public class SendLinkActivity extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = "SendLinkActivity";
 
     private GridLayout expandedMenu;
 
@@ -249,7 +248,7 @@ public class KakaoLinkActivity extends AppCompatActivity implements View.OnClick
                     //kakaoTalkLinkMessageBuilder.addWebLink("MSG 앱 다운로드", "http://www.korchid.com/dropbox-release");
                     //kakaoTalkLinkMessageBuilder.addWebLink("MSG 앱 다운로드", "market://details?id=com.korchid.msg");
 
-                    kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, KakaoLinkActivity.this);
+                    kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, SendLinkActivity.this);
                 }catch (Exception e){
                     Log.e(TAG, "kakaoLink Err : " + e.getMessage());
                 }

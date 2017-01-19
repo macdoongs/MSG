@@ -118,8 +118,8 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".member.invitation.KakaoLinkActivity" />
-        <activity android:name=".member.JoinPhoneActivity" />
+        <activity android:name=".member.invitation.SendLinkActivity" />
+        <activity android:name=".member.SignupPhoneActivity" />
         <activity android:name=".member.LoginPhoneActivity" />
         <activity android:name=".member.setting.user.UserInfoActivity" />
         <activity android:name=".member.recovery.password.RecoveryPasswordActivity" />

@@ -250,10 +250,9 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                         Log.d(TAG, "onResponse");
                         if(response.body().getCheck_id()) {
                             if (response.body().getLogin()) {
-                                User user = response.body().getUser();
+                                String userLoginToken = response.body().getToken();
 
-                                int userId = user.getUser_id();
-                                String loginState = "LOGIN";
+                                String userLoginState = "LOGIN";
                                 requestCode = 0;
 
                                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_LOGIN, 0);
@@ -262,14 +261,14 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
 
                                 editor.putString(USER_LOGIN_STATE, "LOGIN");
                                 editor.putString(USER_PHONE_NUMBER, internationalPhoneNumber);
-                                editor.putString(USER_PASSWORD, password);
-                                editor.putInt(USER_ID_NUMBER, user.getUser_id());
+                                editor.putString(USER_LOGIN_TOKEN, userLoginToken);
                                 editor.apply(); // Apply file
 
                                 Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
 
-                                intent.putExtra(USER_ID_NUMBER, userId);
-                                intent.putExtra(USER_LOGIN_STATE, loginState);
+                                intent.putExtra(USER_PHONE_NUMBER, internationalPhoneNumber);
+                                intent.putExtra(USER_LOGIN_STATE, userLoginState);
+                                intent.putExtra(USER_LOGIN_TOKEN, userLoginToken);
 
                                 Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
 
@@ -287,7 +286,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                     public void onFailure(Call<Login> call, Throwable t) {
                         Log.d(TAG, "onFailure");
 
-                        Toast.makeText(getApplicationContext(), "Please check your id and password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -299,7 +298,7 @@ public class LoginPhoneActivity extends AppCompatActivity implements View.OnClic
                 requestCode = 1;
 
                 if(phoneNumber.equals("")){
-                    Toast.makeText(getApplicationContext(), "Please input phone number!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "전화번호를 입력하세요.", Toast.LENGTH_LONG).show();
                 }else{
                     String fullPhoneNumber = nationCode + phoneNumber.substring(1); // Remove phoneNumber idx 0
 

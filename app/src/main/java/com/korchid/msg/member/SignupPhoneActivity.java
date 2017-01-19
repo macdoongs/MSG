@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
-import com.korchid.msg.storage.server.retrofit.response.Res;
 import com.korchid.msg.storage.server.retrofit.response.Signup;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.R;
@@ -29,8 +28,8 @@ import retrofit2.Response;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 
 // Register phone number and password
-public class JoinPhoneActivity extends AppCompatActivity implements View.OnClickListener{
-    private static final String TAG = "JoinPhoneActivity";
+public class SignupPhoneActivity extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = "SignupPhoneActivity";
 
     private TextView tv_phoneNumber;
 
@@ -107,7 +106,7 @@ public class JoinPhoneActivity extends AppCompatActivity implements View.OnClick
                 password = et_password.getText().toString();
                 passwordConfirm = et_passwordConfirm.getText().toString();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(JoinPhoneActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignupPhoneActivity.this);
 
                 if(phoneNumber.equals("")){
                     builder.setTitle("Warning");

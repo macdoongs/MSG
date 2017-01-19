@@ -8,9 +8,20 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class DeviceToken {
+    @SerializedName("phoneNumber")
+    @Expose
+    private Boolean phoneNumber;
     @SerializedName("register")
     @Expose
     private Boolean register;
+
+    public Boolean getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Boolean phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public Boolean getRegister() {
         return register;

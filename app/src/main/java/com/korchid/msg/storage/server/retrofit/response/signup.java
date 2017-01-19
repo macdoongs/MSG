@@ -17,8 +17,14 @@ public class Signup {
     @SerializedName("signup")
     @Expose
     private Boolean signup;
+    @SerializedName("setting")
+    @Expose
+    private Boolean setting;
+    @SerializedName("information")
+    @Expose
+    private Boolean information;
 
-
+    
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -41,5 +47,21 @@ public class Signup {
 
     public void setSignup(Boolean signup) {
         this.signup = signup;
+    }
+
+    public Boolean getSetting() {
+        return setting;
+    }
+
+    public void setSetting(Boolean setting) {
+        this.setting = setting;
+    }
+
+    public Boolean getInformation() {
+        return information;
+    }
+
+    public void setInformation(Boolean information) {
+        this.information = information;
     }
 }

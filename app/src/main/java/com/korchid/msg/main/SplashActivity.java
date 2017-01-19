@@ -35,7 +35,9 @@ import static com.korchid.msg.global.QuickstartPreferences.USER_BIRTHDAY;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ID_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_INFO_CHECK;
 import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_STATE;
+import static com.korchid.msg.global.QuickstartPreferences.USER_LOGIN_TOKEN;
 import static com.korchid.msg.global.QuickstartPreferences.USER_NICKNAME;
+import static com.korchid.msg.global.QuickstartPreferences.USER_PHONE_NUMBER;
 import static com.korchid.msg.global.QuickstartPreferences.USER_PROFILE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE;
 import static com.korchid.msg.global.QuickstartPreferences.USER_ROLE_NUMBER;
@@ -56,6 +58,9 @@ public class SplashActivity extends Activity {
 
     private int userId;
     private String userNickname;
+    private String userPhoneNumber;
+    private String userLoginState = "";
+    private String userLoginToken;
     private String userSex;
     private Date userBirthday;
     private String userProfile;
@@ -67,7 +72,6 @@ public class SplashActivity extends Activity {
     private int userReserveNumber;
     private int userRoleNumber;
 
-    private String loginState = "";
     private int duration = 2000;
 
 
@@ -79,12 +83,12 @@ public class SplashActivity extends Activity {
 
         initView();
 
-        loginState = getIntent().getStringExtra(USER_LOGIN_STATE);
-        userId = getIntent().getIntExtra(USER_ID_NUMBER, 0);
+        userLoginState = getIntent().getStringExtra(USER_LOGIN_STATE);
+        userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
+        userLoginToken = getIntent().getStringExtra(USER_LOGIN_TOKEN);
 
 
-
-        if(loginState.equals("LOGIN")){
+        if(userLoginState.equals("LOGIN")){
             duration = SPLASH_LOGIN;
 
             // TODO modify real userId data
@@ -173,9 +177,9 @@ public class SplashActivity extends Activity {
             public void run() {
                 Intent intent = new Intent();
 
-                if(loginState.equals("LOGIN")){
+                if(userLoginState.equals("LOGIN")){
 
-                    intent.putExtra(USER_LOGIN_STATE, loginState);
+                    intent.putExtra(USER_LOGIN_STATE, userLoginState);
 
                     SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_USER_INFO, 0);
                     Boolean isSetUserInfo = sharedPreferences.getBoolean(USER_INFO_CHECK, false);

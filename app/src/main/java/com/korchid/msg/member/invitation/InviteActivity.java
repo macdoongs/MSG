@@ -28,8 +28,6 @@ import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
 import com.korchid.msg.storage.server.retrofit.response.Invitation;
 import com.korchid.msg.storage.server.retrofit.response.Map;
 import com.korchid.msg.storage.server.retrofit.response.MappingData;
-import com.korchid.msg.storage.server.retrofit.response.Res;
-import com.korchid.msg.storage.server.retrofit.response.UserMap;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.ui.StatusBar;
 
@@ -343,7 +341,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                         });
 
 
-                        Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), SendLinkActivity.class);
 
                         intent.putExtra(USER_ROLE, userRole);
                         intent.putExtra("receiverNickname", opponentUserName);
@@ -380,7 +378,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 int requestCode = 1;
 
                 // Wait to connect parent, child and send Kakao link
-                Intent intent = new Intent(getApplicationContext(), KakaoLinkActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SendLinkActivity.class);
 
                 intent.putExtra(USER_ID_NUMBER, userId);
                 intent.putExtra(USER_ROLE, userRole);

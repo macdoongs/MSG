@@ -22,7 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.korchid.msg.member.JoinPhoneActivity;
+import com.korchid.msg.member.SignupPhoneActivity;
 import com.korchid.msg.ui.CustomActionbar;
 import com.korchid.msg.storage.server.http.HttpPost;
 import com.korchid.msg.R;
@@ -183,7 +183,7 @@ public class AuthPhoneWaitActivity extends AppCompatActivity implements View.OnC
                             if(mode.equals("join")) {
                                 btnTimer.cancel();
                                 tvTimer.cancel();
-                                Intent intent = new Intent(getApplicationContext(), JoinPhoneActivity.class);
+                                Intent intent = new Intent(getApplicationContext(), SignupPhoneActivity.class);
                                 intent.putExtra(USER_PHONE_NUMBER, phoneNumber);
                                 startActivityForResult(intent, 0);
                             }else if(mode.equals("find")){

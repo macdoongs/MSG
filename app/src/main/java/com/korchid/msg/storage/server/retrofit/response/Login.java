@@ -17,9 +17,9 @@ public class Login {
     @SerializedName("login")
     @Expose
     private Boolean login;
-    @SerializedName("user")
+    @SerializedName("token")
     @Expose
-    private User user;
+    private String token;
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -45,11 +45,11 @@ public class Login {
         this.login = login;
     }
 
-    public User getUser() {
-        return user;
+    public String getToken() {
+        return token;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
