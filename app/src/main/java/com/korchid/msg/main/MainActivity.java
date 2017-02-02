@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -18,6 +20,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    private ImageView iv_download;
 
     private Button btn_join;
     private Button btn_login;
@@ -101,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_userInfo;
 
     private Button btn_upload;
+    private Button btn_download;
 
     private String userPhoneNumber = "";
 
@@ -321,6 +327,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_upload = (Button) findViewById(R.id.btn_upload);
         btn_upload.setOnClickListener(this);
 
+        btn_download = (Button) findViewById(R.id.btn_download);
+        btn_download.setOnClickListener(this);
+
+        iv_download = (ImageView) findViewById(R.id.iv_download);
 
         Intent intent = new Intent(this, SplashActivity.class);
 
@@ -528,11 +538,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), UserInfoActivity.class));
                 break;
             }
-            case
-                R.id.btn_upload:{
+            case R.id.btn_upload:{
                 Intent pickerIntent = new Intent(Intent.ACTION_PICK);
                 pickerIntent.setType("image/*");
                 startActivityForResult(pickerIntent, REQ_PICK_CODE);
+                break;
+            }
+            case R.id.btn_download:{
+                String fileName = "her_logo.png";
+                Call<ResponseBody> userDataCall = RestfulAdapter.getInstance().downloadFile(fileName);
+
+                userDataCall.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.d(TAG, "onResponse");
+                        // display the image data in a ImageView or save it
+                        Bitmap bm = BitmapFactory.decodeStream(response.body().byteStream());
+                        iv_download.setImageBitmap(bm);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.d(TAG, "onFailure");
+                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    }
+                });
                 break;
             }
             default:{

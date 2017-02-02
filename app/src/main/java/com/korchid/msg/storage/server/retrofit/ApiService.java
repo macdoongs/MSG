@@ -20,6 +20,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -44,6 +45,11 @@ public interface ApiService {
     })
     @POST("/msg/user/repository/picture")
     Call<Upload> uploadFile(@Part MultipartBody.Part file, @Part("description") RequestBody description);
+
+
+    @GET("/msg/user/repository/picture/{pictureName}")
+    Call<ResponseBody> downloadFile(@Path("pictureName") String pictureName);
+
 
     @POST("/msg/user/signup")
     @FormUrlEncoded
