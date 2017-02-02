@@ -60,6 +60,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
+        <Button
+            android:text="Upload test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_upload"
+            android:background="@color/colorPrimary" />
+
         <!--
 
         <Button

@@ -10,6 +10,7 @@ import com.korchid.msg.storage.server.retrofit.response.Password;
 import com.korchid.msg.storage.server.retrofit.response.Res;
 import com.korchid.msg.storage.server.retrofit.response.ReservationMessage;
 import com.korchid.msg.storage.server.retrofit.response.Signup;
+import com.korchid.msg.storage.server.retrofit.response.Upload;
 import com.korchid.msg.storage.server.retrofit.response.User;
 import com.korchid.msg.storage.server.retrofit.response.UserAuth;
 import com.korchid.msg.storage.server.retrofit.response.UserData;
@@ -17,12 +18,16 @@ import com.korchid.msg.storage.server.retrofit.response.UserMap;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 /**
@@ -33,6 +38,12 @@ import retrofit2.http.Path;
 public interface ApiService {
     public static final String API_URL = "https://www.korchid.com/";
 
+    @Multipart
+    @Headers({
+            "enctype : multipart/form-data",
+    })
+    @POST("/msg/user/repository/picture")
+    Call<Upload> uploadFile(@Part MultipartBody.Part file, @Part("description") RequestBody description);
 
     @POST("/msg/user/signup")
     @FormUrlEncoded

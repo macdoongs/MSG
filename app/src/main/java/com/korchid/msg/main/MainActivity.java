@@ -3,9 +3,16 @@ package com.korchid.msg.main;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.NotificationManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,23 +26,31 @@ import com.korchid.msg.member.LoginPhoneActivity;
 import com.korchid.msg.member.auth.AuthPhoneActivity;
 import com.korchid.msg.member.SelectOpponentActivity;
 import com.korchid.msg.member.invitation.InviteActivity;
+import com.korchid.msg.storage.server.retrofit.ApiService;
 import com.korchid.msg.storage.server.retrofit.RestfulAdapter;
 import com.korchid.msg.firebase.fcm.MyFirebaseInstanceIDService;
 import com.korchid.msg.member.chatting.mqtt.impl.MqttTopic;
 import com.korchid.msg.member.chatting.mqtt.service.MqttService;
+import com.korchid.msg.storage.server.retrofit.response.Upload;
 import com.korchid.msg.storage.server.retrofit.response.UserMap;
 import com.korchid.msg.R;
 import com.korchid.msg.member.setting.user.UserInfoActivity;
 import com.korchid.msg.storage.sqlite.DBTest;
 import com.korchid.msg.ui.StatusBar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import static com.korchid.msg.global.QuickstartPreferences.MESSAGE_ALERT;
 import static com.korchid.msg.global.QuickstartPreferences.OPPONENT_USER_ID;
@@ -85,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_temp;
     private Button btn_userInfo;
 
+    private Button btn_upload;
+
     private String userPhoneNumber = "";
 
     private int userId = 0;
@@ -121,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     SharedPreferences sharedPreferences;
 
+
+    final int REQ_PICK_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,7 +318,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_userInfo = (Button) findViewById(R.id.btn_userInfo);
         btn_userInfo.setOnClickListener(this);
 
-
+        btn_upload = (Button) findViewById(R.id.btn_upload);
+        btn_upload.setOnClickListener(this);
 
 
         Intent intent = new Intent(this, SplashActivity.class);
@@ -508,6 +528,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(), UserInfoActivity.class));
                 break;
             }
+            case
+                R.id.btn_upload:{
+                Intent pickerIntent = new Intent(Intent.ACTION_PICK);
+                pickerIntent.setType("image/*");
+                startActivityForResult(pickerIntent, REQ_PICK_CODE);
+                break;
+            }
             default:{
                 break;
             }
@@ -632,6 +659,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         break;
                     }
+                    case REQ_PICK_CODE:{
+
+                        Uri uri = data.getData();
+
+                        uploadFile(uri);
+
+                        File file = new File(uri.getPath());
+                        // ImageView에 선택된 image를 설정
+                        // mImageView.setImageURI(uri);
+                        break;
+                    }
                     // InviteActivity
                     case 4:{
 
@@ -655,6 +693,141 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } // End result code switch
     }
+
+    private void uploadFile(Uri fileUri) {
+
+        String filePath = getRealPathFromUri(fileUri);
+        if (filePath != null && !filePath.isEmpty()) {
+            File file = new File(filePath);
+            if (file.exists()) {
+
+                // creates RequestBody instance from file
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                // MultipartBody.Part is used to send also the actual filename
+                MultipartBody.Part body = MultipartBody.Part.createFormData("myfile", file.getName(), requestFile);
+                // adds another part within the multipart request
+                String descriptionString = "Sample description";
+                RequestBody description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString);
+                // executes the request
+                Call<Upload> call = RestfulAdapter.getInstance().uploadFile(body, description);
+                call.enqueue(new Callback<Upload>() {
+                    @Override
+                    public void onResponse(Call<Upload> call, Response<Upload> response) {
+                        Log.i(TAG, "success");
+                        //Log.i(TAG, "response : " + response.body().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<Upload> call, Throwable t) {
+                        Log.e(TAG, t.getMessage());
+                    }
+                });
+            }
+        }
+    }
+
+    public String getRealPathFromUri(final Uri uri) {
+        // DocumentProvider
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(this, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(this, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(this, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
+            return getDataColumn(this, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    private String getDataColumn(Context context, Uri uri, String selection,
+                                 String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+
+    private boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
 
     public void loadingData(int userId, String userRole){
         Log.d(TAG, "loadingData");
