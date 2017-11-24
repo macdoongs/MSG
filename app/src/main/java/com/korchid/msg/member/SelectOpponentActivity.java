@@ -114,7 +114,7 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
     private static ArrayList<Integer> opponentUserId = new ArrayList<>();
     private static ArrayList<String> opponentUserNickname = new ArrayList<>();
     private static ArrayList<String> opponentUserPhoneNumber = new ArrayList<>();
-    private static ArrayList<String> opponentUserProfile = new ArrayList<>();
+    private static ArrayList<Integer> opponentUserProfile = new ArrayList<>();
     private static ArrayList<MqttTopic> mqttTopics = new ArrayList<>();
 
 
@@ -161,12 +161,15 @@ public class SelectOpponentActivity extends AppCompatActivity implements Navigat
         userReserveNumber = getIntent().getIntExtra(RESERVATION_TIMES, 0);
         userPhoneNumber = getIntent().getStringExtra(USER_PHONE_NUMBER);
 
+        mqttTopics = (ArrayList<MqttTopic>) getIntent().getSerializableExtra(OPPONENT_USER_TOPICS);
 
         opponentUserId = getIntent().getIntegerArrayListExtra(OPPONENT_USER_ID);
         opponentUserNickname = getIntent().getStringArrayListExtra(OPPONENT_USER_NICKNAME);
         opponentUserPhoneNumber = getIntent().getStringArrayListExtra(OPPONENT_USER_PHONENUMBER);
-        opponentUserProfile = getIntent().getStringArrayListExtra(OPPONENT_USER_PROFILE);
-        mqttTopics = (ArrayList<MqttTopic>) getIntent().getSerializableExtra(OPPONENT_USER_TOPICS);
+        // TODO change variable
+        //opponentUserProfile = getIntent().getStringArrayListExtra(OPPONENT_USER_PROFILE);
+        // TEST data
+        opponentUserProfile = getIntent().getIntegerArrayListExtra(OPPONENT_USER_PROFILE);
 
         // Check intent data
         for(int i = 0; i<opponentUserNickname.size(); i++){

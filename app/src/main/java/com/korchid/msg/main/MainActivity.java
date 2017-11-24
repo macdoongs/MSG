@@ -135,12 +135,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<UserMap> userMapList = new ArrayList<>();
 
     private ArrayList<MqttTopic> topics = new ArrayList<MqttTopic>();
+    private ArrayList<MqttTopic> mqttTopics = new ArrayList<>();
 
     private ArrayList<Integer> opponentUserId = new ArrayList<>();
     private ArrayList<String> opponentUserNickname = new ArrayList<>();
     private ArrayList<String> opponentUserPhoneNumber = new ArrayList<>();
-    private ArrayList<String> opponentUserProfile = new ArrayList<>();
-    private ArrayList<MqttTopic> mqttTopics = new ArrayList<>();
+    // TODO change variables
+    //private ArrayList<String> opponentUserProfile = new ArrayList<>();
+    // TEST data
+    private ArrayList<Integer> opponentUserProfile = new ArrayList<>();
+
 
     SharedPreferences sharedPreferences;
 
@@ -349,6 +353,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_invite.setVisibility(View.VISIBLE);
             btn_temp.setVisibility(View.VISIBLE);
             btn_userInfo.setVisibility(View.VISIBLE);
+
+            btn_upload.setVisibility(View.VISIBLE);
+            btn_download.setVisibility(View.VISIBLE);
+
             btn_login.setText("LOGOUT");
 
             Log.d(TAG, "userRole : " + userRole);
@@ -370,6 +378,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_temp.setVisibility(View.GONE);
             btn_userInfo.setVisibility(View.GONE);
 
+
+            btn_upload.setVisibility(View.GONE);
+            btn_download.setVisibility(View.GONE);
+
             requestCode = 0;
 /*
             //TODO Fix error
@@ -381,6 +393,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 e.getStackTrace();
             }
 */
+
+            btn_next.setVisibility(View.VISIBLE);
         }
 
         // Start SplashActivity
@@ -451,6 +465,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra(RESERVATION_WEEK_NUMBER, userWeekNumber);
                 intent.putExtra(RESERVATION_TIMES, userReserveNumber);
                 intent.putExtra(USER_PHONE_NUMBER, userPhoneNumber);
+
+                // TODO delete demo data
+                // TEST data
+                // Temp data
+                String[] timeReserved = {"수요일 9시경", "목요일 5시경", "금요일 8시경"};
+                String[] message = {"아빠 뭐해?", "엄마 뭐해?", "엄마 뭐해요?"};
+                String[] nickname = {"아빠", "엄마", "새엄마"};
+                String[] phoneNumber = {"010-2222-1111", "010-5511-1111", "010-1234-4321"};
+                int[] imageId = {R.drawable.tempfa, R.drawable.tempmom, R.drawable.tempstepmom};
+                String[] profile = {"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/black_rubber_shoes.png"
+                        ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_logo.png"
+                        ,"https://s3.ap-northeast-2.amazonaws.com/korchid/com.korchid.msg/image/profile/her_os_loading"};
+
+                //
+                for(int i=0; i<3; i++){
+                    opponentUserId.add(i, i);
+                    opponentUserNickname.add(i, nickname[i]);
+                    opponentUserPhoneNumber.add(i, phoneNumber[i]);
+                    opponentUserProfile.add(i, imageId[i]);
+
+                    MqttTopic topic = new MqttTopic("test");
+                    mqttTopics.add(i, topic);
+
+                }
+
 
                 intent.putExtra(OPPONENT_USER_ID, opponentUserId);
                 intent.putExtra(OPPONENT_USER_NICKNAME, opponentUserNickname);
@@ -896,7 +935,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     opponentUserId.add(i, userMapId);
                     opponentUserNickname.add(i, userMapNickname);
                     opponentUserPhoneNumber.add(i, userMapPhoneNumber);
-                    opponentUserProfile.add(i, userMapProfile);
+                    // TODO delete comment
+                    //opponentUserProfile.add(i, userMapProfile);
 
                     MqttTopic topic = new MqttTopic(userMapTopic);
                     mqttTopics.add(i, topic);
@@ -906,7 +946,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 btn_next.setVisibility(View.VISIBLE);
 
                 /*
-                //TODO Fix error
+                // TODO Fix error
+                // TEST data
 
                 ArrayList<String> arrayList = new ArrayList<>();
 
